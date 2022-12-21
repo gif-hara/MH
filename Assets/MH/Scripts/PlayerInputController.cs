@@ -19,21 +19,38 @@ namespace MH
         private float moveSpeed;
 
         [SerializeField]
+        private float rotationSpeed;
+
+        [SerializeField]
         private Vector2 cameraSpeed;
 
         [SerializeField]
-        private float cameraYMax;
+        private float followYMax;
 
         [SerializeField]
-        private float cameraYMin;
+        private float followYMin;
+
+        [SerializeField]
+        private float screenXMin;
+
+        [SerializeField]
+        private float screenXMax;
+
+        [SerializeField]
+        private float screenMoveSpeed;
 
         private MHInputActions inputActions;
 
         private CinemachineOrbitalTransposer orbitalTransposer;
 
+        private CinemachineComposer cinemachineComposer;
+
+        private Vector3 lastRotation;
+
         private void Awake()
         {
             this.orbitalTransposer = this.cinemachineVirtualCamera.GetComponentInChildren<CinemachineOrbitalTransposer>();
+            this.cinemachineComposer = this.cinemachineVirtualCamera.GetComponentInChildren<CinemachineComposer>();
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
@@ -46,26 +63,42 @@ namespace MH
 
         void Update()
         {
+            // キャラクターの移動処理
             var input = this.inputActions.Player.Move.ReadValue<Vector2>();
-            var t = this.actor.transform;
-            var rightVelocity = input.x * t.right;
-            var forwardVelocity = input.y * t.forward;
-            this.actor.OpenCharacterController.Move((rightVelocity + forwardVelocity).normalized * this.moveSpeed * Time.deltaTime);
-
-            input = this.inputActions.Player.Look.ReadValue<Vector2>();
-            var vector = new Vector3(
-                input.x * this.cameraSpeed.x,
-                input.y * this.cameraSpeed.y,
-                0.0f
-                );
-            var cameraY = Mathf.Clamp(this.orbitalTransposer.m_FollowOffset.y + vector.y * Time.deltaTime, this.cameraYMin, this.cameraYMax);
-            this.orbitalTransposer.m_FollowOffset.y = cameraY;
-            this.actor.transform.localRotation *= Quaternion.Euler(0.0f, vector.x * Time.deltaTime, 0.0f);
-
-            if (this.inputActions.Player.Fire.IsPressed())
+            var cameraTransform = this.cinemachineVirtualCamera.transform;
+            var cameraRight = Vector3.Scale(cameraTransform.right, new Vector3(1, 0, 1));
+            var cameraForward = Vector3.Scale(cameraTransform.forward, new Vector3(1, 0, 1));
+            var rightVelocity = input.x * cameraRight;
+            var forwardVelocity = input.y * cameraForward;
+            var velocity = (rightVelocity + forwardVelocity).normalized;
+            this.actor.OpenCharacterController.Move(velocity * this.moveSpeed * Time.deltaTime);
+            if (velocity.sqrMagnitude >= 0.01f)
             {
-                this.actor.MuzzleController.Fire();
+                this.lastRotation = velocity;
             }
+            if (this.lastRotation.sqrMagnitude >= 0.01f)
+            {
+                this.actor.transform.localRotation =
+                    Quaternion.Lerp(
+                        this.actor.transform.localRotation,
+                        Quaternion.LookRotation(this.lastRotation),
+                        this.rotationSpeed * Time.deltaTime
+                        );
+            }
+
+            // カメラのスクリーン値の更新
+            var screenVelocity = input.x * this.screenMoveSpeed * Time.deltaTime;
+            var screenX = Mathf.Clamp(
+                this.cinemachineComposer.m_ScreenX + screenVelocity,
+                this.screenXMin,
+                this.screenXMax
+                );
+            this.cinemachineComposer.m_ScreenX = screenX;
+
+            // カメラのY方向の回転処理
+            input = this.inputActions.Player.Look.ReadValue<Vector2>();
+            var offsetY = Mathf.Clamp(this.orbitalTransposer.m_FollowOffset.y + input.y * this.cameraSpeed.y * Time.deltaTime, this.followYMin, this.followYMax);
+            this.orbitalTransposer.m_FollowOffset.y = offsetY;
         }
     }
 }
