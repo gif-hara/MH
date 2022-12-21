@@ -11,12 +11,5 @@ namespace MH
         private OpenCharacterController openCharacterController;
 
         public OpenCharacterController OpenCharacterController => this.openCharacterController;
-        
-        public ActorMuzzleController MuzzleController { get; private set; }
-
-        void Awake()
-        {
-            this.MuzzleController = new ActorMuzzleController(this);
-        }
     }
 }
