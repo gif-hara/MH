@@ -46,7 +46,7 @@ namespace MH
         private CinemachineComposer cinemachineComposer;
 
         private Vector3 lastRotation;
-
+        
         private void Awake()
         {
             this.orbitalTransposer = this.cinemachineVirtualCamera.GetComponentInChildren<CinemachineOrbitalTransposer>();
