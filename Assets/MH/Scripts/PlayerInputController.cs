@@ -46,6 +46,9 @@ namespace MH
         [SerializeField]
         private AnimationClip waveHandClip;
 
+        [SerializeField]
+        private float blendSeconds;
+
         private MHInputActions inputActions;
 
         private CinemachineOrbitalTransposer orbitalTransposer;
@@ -109,11 +112,11 @@ namespace MH
 
             if (Keyboard.current.oKey.wasPressedThisFrame)
             {
-                this.actor.AnimationController.Play(this.idleClip);
+                this.actor.AnimationController.PlayBlend(this.idleClip, this.blendSeconds);
             }
             if (Keyboard.current.pKey.wasPressedThisFrame)
             {
-                this.actor.AnimationController.Play(this.waveHandClip);
+                this.actor.AnimationController.PlayBlend(this.waveHandClip, this.blendSeconds);
             }
         }
     }
