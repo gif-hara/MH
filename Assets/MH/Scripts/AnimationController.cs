@@ -16,9 +16,13 @@ namespace Cookie
 
         private AnimatorOverrideController overrideController;
         
-        private const string OverrideClipName = "Clip";
+        private bool overrideClipToggle = true;
 
         private readonly Subject<Unit> updateAnimation = new();
+
+        private const string OverrideClipAName = "ClipA";
+
+        private const string OverrideClipBName = "ClipB";
 
         private void Awake()
         {
@@ -35,7 +39,7 @@ namespace Cookie
 
         public IObservable<Unit> PlayAsync(AnimationClip clip)
         {
-            this.ChangeClip(clip);
+            this.ChangeClipSingle(clip);
             
             var completeStream = this.UpdateAsObservable()
                 .TakeUntil(this.updateAnimation)
@@ -65,9 +69,9 @@ namespace Cookie
             }
         }
 
-        private void ChangeClip(AnimationClip clip)
+        private void ChangeClipSingle(AnimationClip clip)
         {
-            this.overrideController[OverrideClipName] = clip;
+            this.overrideController[this.GetOverrideClipName()] = clip;
             for (var i = 0; i < this.animator.layerCount; i++)
             {
                 this.animator.Play(this.animator.GetCurrentAnimatorStateInfo(i).fullPathHash, i, 0.0f);
@@ -75,6 +79,11 @@ namespace Cookie
             
             this.animator.Update(0.0f);
             this.updateAnimation.OnNext(Unit.Default);
+        }
+
+        private string GetOverrideClipName()
+        {
+            return this.overrideClipToggle ? OverrideClipAName : OverrideClipBName;
         }
     }
 }

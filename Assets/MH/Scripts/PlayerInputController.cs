@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using StandardAssets.Characters.Physics;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace MH
 {
@@ -38,6 +39,12 @@ namespace MH
 
         [SerializeField]
         private float screenMoveSpeed;
+
+        [SerializeField]
+        private AnimationClip idleClip;
+
+        [SerializeField]
+        private AnimationClip waveHandClip;
 
         private MHInputActions inputActions;
 
@@ -99,6 +106,15 @@ namespace MH
             input = this.inputActions.Player.Look.ReadValue<Vector2>();
             var offsetY = Mathf.Clamp(this.orbitalTransposer.m_FollowOffset.y + input.y * this.cameraSpeed.y * Time.deltaTime, this.followYMin, this.followYMax);
             this.orbitalTransposer.m_FollowOffset.y = offsetY;
+
+            if (Keyboard.current.oKey.wasPressedThisFrame)
+            {
+                this.actor.AnimationController.Play(this.idleClip);
+            }
+            if (Keyboard.current.pKey.wasPressedThisFrame)
+            {
+                this.actor.AnimationController.Play(this.waveHandClip);
+            }
         }
     }
 }
