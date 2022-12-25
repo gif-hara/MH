@@ -27,11 +27,7 @@ namespace Cookie
         private const string OverrideClipAName = "ClipA";
 
         private const string OverrideClipBName = "ClipB";
-
-        private const string OverrideStateAName = "Override State A";
-
-        private const string OverrideStateBName = "Override State B";
-
+        
         private static readonly int OverrideStateA = Animator.StringToHash("Override State A");
 
         private static readonly int OverrideStateB = Animator.StringToHash("Override State B");
@@ -64,13 +60,22 @@ namespace Cookie
         /// </summary>
         public void Play(AnimationClip clip, float blendSeconds = 0.0f)
         {
+            // 前回のアニメーション処理を終了させる
             this.blendAnimationStream?.Dispose();
+            this.updateAnimation.OnNext(CompleteType.Aborted);
+
             this.overrideClipToggle = !this.overrideClipToggle;
             this.overrideController[this.GetCurrentOverrideClipName()] = clip;
             this.animator.Play(this.GetCurrentOverrideState(), this.GetCurrentOverrideLayerIndex(), 0.0f);
-            this.animator.Update(0.0f);
             this.currentBlendSeconds = 0.0f;
-            this.updateAnimation.OnNext(CompleteType.Aborted);
+            
+            // ブレンドしない場合は即座にレイヤーを更新する
+            if (blendSeconds <= 0.0f)
+            {
+                this.animator.SetLayerWeight(1, this.overrideClipToggle ? 1.0f : 0.0f);
+                this.animator.SetLayerWeight(2, this.overrideClipToggle ? 0.0f : 1.0f);
+            }
+            this.animator.Update(0.0f);
 
             if (blendSeconds > 0.0f)
             {
@@ -88,11 +93,6 @@ namespace Cookie
                             this.blendAnimationStream?.Dispose();
                         }
                     });
-            }
-            else
-            {
-                this.animator.SetLayerWeight(1, this.overrideClipToggle ? 1.0f : 0.0f);
-                this.animator.SetLayerWeight(2, this.overrideClipToggle ? 0.0f : 1.0f);
             }
         }
 
@@ -114,12 +114,7 @@ namespace Cookie
                 .Take(1)
                 .TakeUntilDestroy(this);
         }
-
-        public UniTask<CompleteType> PlayTask(AnimationClip clip, float blendSeconds = 0.0f)
-        {
-            return this.PlayAsync(clip, blendSeconds).ToUniTask();
-        }
-
+        
         public async UniTask WaitForAnimation()
         {
             while (this.animator.GetCurrentAnimatorStateInfo(this.GetCurrentOverrideLayerIndex()).normalizedTime < 1.0f)
