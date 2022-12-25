@@ -81,7 +81,7 @@ namespace MH
             var rightVelocity = input.x * cameraRight;
             var forwardVelocity = input.y * cameraForward;
             var velocity = (rightVelocity + forwardVelocity).normalized;
-            this.actor.OpenCharacterController.Move(velocity * this.moveSpeed * Time.deltaTime);
+            this.actor.MoveController.Move(velocity * this.moveSpeed * Time.deltaTime);
             if (velocity.sqrMagnitude >= 0.01f)
             {
                 this.lastRotation = velocity;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cookie;
@@ -14,8 +15,13 @@ namespace MH
         [SerializeField]
         private AnimationController animationController;
 
-        public OpenCharacterController OpenCharacterController => this.openCharacterController;
-
+        public ActorMoveController MoveController { private set; get; }
+        
         public AnimationController AnimationController => this.animationController;
+
+        private void Awake()
+        {
+            this.MoveController = new ActorMoveController(this.openCharacterController);
+        }
     }
 }
