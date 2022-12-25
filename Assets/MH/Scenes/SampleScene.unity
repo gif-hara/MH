@@ -817,7 +817,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1195086761}
-  baseClip: {fileID: 7400000, guid: 6f2598116267aaa4599d5ce0f0787ff5, type: 2}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1298,7 +1297,7 @@ MonoBehaviour:
   screenMoveSpeed: -0.2
   idleClip: {fileID: 7400000, guid: ec32a4841c4beea4680bf398cf67ea2d, type: 2}
   waveHandClip: {fileID: 7400000, guid: f3b2dc672b635c94ca44ea5840839b9b, type: 2}
-  blendSeconds: 0
+  blendSeconds: 0.2
 --- !u!4 &1167169330
 Transform:
   m_ObjectHideFlags: 0

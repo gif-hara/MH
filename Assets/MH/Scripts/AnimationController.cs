@@ -13,10 +13,7 @@ namespace Cookie
     {
         [SerializeField]
         private Animator animator;
-
-        [SerializeField]
-        private AnimationClip baseClip;
-
+        
         private AnimatorOverrideController overrideController;
         
         private bool overrideClipToggle = true;
@@ -25,7 +22,7 @@ namespace Cookie
 
         private IDisposable blendAnimationStream;
 
-        private float currentBlendSeconds = 0.0f;
+        private float currentBlendSeconds;
         
         private const string OverrideClipAName = "ClipA";
 
@@ -35,15 +32,11 @@ namespace Cookie
 
         private const string OverrideStateBName = "Override State B";
 
-        private const string BaseClipName = "Base";
-
         private void Awake()
         {
             this.overrideController = new AnimatorOverrideController();
             this.overrideController.runtimeAnimatorController = this.animator.runtimeAnimatorController;
             this.animator.runtimeAnimatorController = this.overrideController;
-
-            this.overrideController[BaseClipName] = this.baseClip;
         }
 
         /// <summary>
@@ -61,10 +54,6 @@ namespace Cookie
         public void PlayBlend(AnimationClip clip, float blendSeconds)
         {
             this.blendAnimationStream?.Dispose();
-
-            var test = "";
-            this.animator.Play(test);
-
             this.overrideController[this.GetNextOverrideClipName()] = clip;
             this.animator.Play(this.GetNextOverrideStateName(), this.GetNextOverrideLayerIndex(), 0.0f);
             this.animator.Update(0.0f);
