@@ -32,6 +32,10 @@ namespace Cookie
 
         private const string OverrideStateBName = "Override State B";
 
+        private static readonly int OverrideStateA = Animator.StringToHash("Override State A");
+
+        private static readonly int OverrideStateB = Animator.StringToHash("Override State B");
+
         /// <summary>
         /// アニメーション再生完了タイプ
         /// </summary>
@@ -54,25 +58,16 @@ namespace Cookie
             this.overrideController.runtimeAnimatorController = this.animator.runtimeAnimatorController;
             this.animator.runtimeAnimatorController = this.overrideController;
         }
-
-        /// <summary>
-        /// 単発のアニメーションを再生する
-        /// </summary>
-        public void PlaySingle(AnimationClip clip)
-        {
-            this.PlayAsync(clip)
-                .Subscribe();
-        }
-
+        
         /// <summary>
         /// 現在のアニメーションとブレンドしながら<see cref="clip"/>を再生する
         /// </summary>
-        public void PlayBlend(AnimationClip clip, float blendSeconds)
+        public void Play(AnimationClip clip, float blendSeconds = 0.0f)
         {
             this.blendAnimationStream?.Dispose();
             this.overrideClipToggle = !this.overrideClipToggle;
             this.overrideController[this.GetCurrentOverrideClipName()] = clip;
-            this.animator.Play(this.GetCurrentOverrideStateName(), this.GetCurrentOverrideLayerIndex(), 0.0f);
+            this.animator.Play(this.GetCurrentOverrideState(), this.GetCurrentOverrideLayerIndex(), 0.0f);
             this.animator.Update(0.0f);
             this.currentBlendSeconds = 0.0f;
             this.updateAnimation.OnNext(CompleteType.Aborted);
@@ -101,9 +96,9 @@ namespace Cookie
             }
         }
 
-        public IObservable<CompleteType> PlayAsync(AnimationClip clip)
+        public IObservable<CompleteType> PlayAsync(AnimationClip clip, float blendSeconds = 0.0f)
         {
-            this.PlayBlend(clip, 0.0f);
+            this.Play(clip, blendSeconds);
             
             var completeStream = this.UpdateAsObservable()
                 .TakeUntil(this.updateAnimation)
@@ -120,9 +115,9 @@ namespace Cookie
                 .TakeUntilDestroy(this);
         }
 
-        public UniTask PlayTask(AnimationClip clip)
+        public UniTask<CompleteType> PlayTask(AnimationClip clip, float blendSeconds = 0.0f)
         {
-            return this.PlayAsync(clip).ToUniTask();
+            return this.PlayAsync(clip, blendSeconds).ToUniTask();
         }
 
         public async UniTask WaitForAnimation()
@@ -138,9 +133,9 @@ namespace Cookie
             return this.overrideClipToggle ? OverrideClipAName : OverrideClipBName;
         }
         
-        private string GetCurrentOverrideStateName()
+        private int GetCurrentOverrideState()
         {
-            return this.overrideClipToggle ? OverrideStateAName : OverrideStateBName;
+            return this.overrideClipToggle ? OverrideStateA : OverrideStateB;
         }
 
         private int GetCurrentOverrideLayerIndex()

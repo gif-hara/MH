@@ -109,11 +109,11 @@ namespace MH
 
             if (Keyboard.current.oKey.wasPressedThisFrame)
             {
-                this.actor.AnimationController.PlayBlend(this.idleClip, this.blendSeconds);
+                this.actor.AnimationController.Play(this.idleClip, this.blendSeconds);
             }
             if (Keyboard.current.pKey.wasPressedThisFrame)
             {
-                this.actor.AnimationController.PlayBlend(this.waveHandClip, this.blendSeconds);
+                this.actor.AnimationController.Play(this.waveHandClip, this.blendSeconds);
             }
             if (Keyboard.current.lKey.wasPressedThisFrame)
             {
