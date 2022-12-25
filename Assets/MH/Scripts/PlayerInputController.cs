@@ -1,4 +1,5 @@
 using Cinemachine;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UniRx;
@@ -38,7 +39,13 @@ namespace MH
         private float screenMoveSpeed;
 
         [SerializeField]
-        private float dodgePower;
+        private float dodgeSpeed;
+
+        [SerializeField]
+        private float dodgeDuration;
+
+        [SerializeField]
+        private Ease dodgeEase;
         
         private MHInputActions inputActions;
 
@@ -119,7 +126,12 @@ namespace MH
                 direction = Vector3.Scale(this.actor.transform.forward, new Vector3(1, 0, 1));
             }
             MessageBroker.GetPublisher<Actor, ActorEvents.RequestDodge>()
-                .Publish(this.actor, ActorEvents.RequestDodge.Get(this.actor.transform.localPosition + direction * this.dodgePower));
+                .Publish(this.actor, ActorEvents.RequestDodge.Get(
+                    direction,
+                    this.dodgeSpeed,
+                    this.dodgeDuration,
+                    this.dodgeEase
+                    ));
         }
     }
 }

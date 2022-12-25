@@ -16,10 +16,13 @@ namespace MH
         public ActorAnimationController AnimationController => this.animationController;
         
         public ActorStateController StateController { private set; get; }
+        
+        public ActorDodgeController DodgeController { private set; get; }
 
         private void Awake()
         {
             this.StateController = new ActorStateController(this);
+            this.DodgeController = new ActorDodgeController(this);
         }
     }
 }

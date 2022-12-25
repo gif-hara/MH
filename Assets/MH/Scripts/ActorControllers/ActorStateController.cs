@@ -21,8 +21,6 @@ namespace MH
         private Actor actor;
 
         private StateController<State> stateController;
-
-        private Vector3 dodgeDestination;
         
         public ActorStateController(Actor actor)
         {
@@ -63,7 +61,12 @@ namespace MH
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
                 .Subscribe(this.actor, x =>
                 {
-                    this.dodgeDestination = x.Destination;
+                    this.actor.DodgeController.Invoke(
+                        x.Direction,
+                        x.Speed,
+                        x.Duration,
+                        x.Ease
+                        );
                     this.stateController.ChangeRequest(State.Dodge);
                 })
                 .AddTo(bag);
@@ -97,7 +100,12 @@ namespace MH
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
                 .Subscribe(this.actor, x =>
                 {
-                    this.dodgeDestination = x.Destination;
+                    this.actor.DodgeController.Invoke(
+                        x.Direction,
+                        x.Speed,
+                        x.Duration,
+                        x.Ease
+                        );
                     this.stateController.ChangeRequest(State.Dodge);
                 })
                 .AddTo(bag);
@@ -105,18 +113,6 @@ namespace MH
 
         private async void OnEnterDodge(State previousState, DisposableBagBuilder bag)
         {
-            var from = this.actor.transform.localPosition;
-            DOTween.To(
-                () => from,
-                x =>
-                {
-                    var diff = x - this.actor.transform.localPosition;
-                    this.actor.MoveController.Move(diff);
-                },
-                this.dodgeDestination,
-                0.5f
-                );
-            this.actor.MoveController.Rotate(Quaternion.LookRotation(this.dodgeDestination - from));
             await this.actor.AnimationController.PlayDodgeAsync();
             
             this.stateController.ChangeRequest(State.Idle);

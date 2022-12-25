@@ -1,3 +1,4 @@
+using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
 
@@ -47,12 +48,27 @@ namespace MH
         /// <summary>
         /// 回避のリクエストを行うメッセージ
         /// </summary>
-        public sealed class RequestDodge : Message<RequestDodge, Vector3>
+        public sealed class RequestDodge : Message<RequestDodge, Vector3, float, float, Ease>
         {
             /// <summary>
             /// 回避の目標値
             /// </summary>
-            public Vector3 Destination => this.Param1;
+            public Vector3 Direction => this.Param1;
+
+            /// <summary>
+            /// 移動速度
+            /// </summary>
+            public float Speed => this.Param2;
+
+            /// <summary>
+            /// 回避する時間（秒）
+            /// </summary>
+            public float Duration => this.Param3;
+
+            /// <summary>
+            /// イージングタイプ
+            /// </summary>
+            public Ease Ease => this.Param4;
         }
 
         public static void RegisterEvents(BuiltinContainerBuilder builder)
