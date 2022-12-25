@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
-using StandardAssets.Characters.Physics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UniRx;
 
 namespace MH
 {
@@ -117,6 +114,14 @@ namespace MH
             if (Keyboard.current.pKey.wasPressedThisFrame)
             {
                 this.actor.AnimationController.PlayBlend(this.waveHandClip, this.blendSeconds);
+            }
+            if (Keyboard.current.lKey.wasPressedThisFrame)
+            {
+                this.actor.AnimationController.PlayAsync(this.waveHandClip)
+                    .Subscribe(_ =>
+                    {
+                        Debug.Log("OK");
+                    });
             }
         }
     }

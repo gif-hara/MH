@@ -59,30 +59,40 @@ namespace Cookie
             this.animator.Play(this.GetCurrentOverrideStateName(), this.GetCurrentOverrideLayerIndex(), 0.0f);
             this.animator.Update(0.0f);
             this.currentBlendSeconds = 0.0f;
-            this.blendAnimationStream = this.UpdateAsObservable()
-                .TakeUntilDestroy(this)
-                .Subscribe(_ =>
-                {
-                    this.currentBlendSeconds = Mathf.Clamp01(this.currentBlendSeconds + Time.deltaTime);
-                    var rate = this.currentBlendSeconds / blendSeconds;
-                    this.animator.SetLayerWeight(1, this.overrideClipToggle ? rate : 1.0f - rate);
-                    this.animator.SetLayerWeight(2, this.overrideClipToggle ? 1.0f - rate : rate);
+            this.updateAnimation.OnNext(Unit.Default);
 
-                    if (rate >= 1.0f)
+            if (blendSeconds > 0.0f)
+            {
+                this.blendAnimationStream = this.UpdateAsObservable()
+                    .TakeUntilDestroy(this)
+                    .Subscribe(_ =>
                     {
-                        this.blendAnimationStream?.Dispose();
-                    }
-                });
+                        this.currentBlendSeconds = Mathf.Clamp01(this.currentBlendSeconds + Time.deltaTime);
+                        var rate = this.currentBlendSeconds / blendSeconds;
+                        this.animator.SetLayerWeight(1, this.overrideClipToggle ? rate : 1.0f - rate);
+                        this.animator.SetLayerWeight(2, this.overrideClipToggle ? 1.0f - rate : rate);
+
+                        if (rate >= 1.0f)
+                        {
+                            this.blendAnimationStream?.Dispose();
+                        }
+                    });
+            }
+            else
+            {
+                this.animator.SetLayerWeight(1, this.overrideClipToggle ? 1.0f : 0.0f);
+                this.animator.SetLayerWeight(2, this.overrideClipToggle ? 0.0f : 1.0f);
+            }
         }
 
         public IObservable<Unit> PlayAsync(AnimationClip clip)
         {
-            this.ChangeClipSingle(clip);
+            this.PlayBlend(clip, 0.0f);
             
             var completeStream = this.UpdateAsObservable()
                 .TakeUntil(this.updateAnimation)
                 .TakeUntilDestroy(this)
-                .Where(_ => this.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+                .Where(_ => this.animator.GetCurrentAnimatorStateInfo(this.GetCurrentOverrideLayerIndex()).normalizedTime >= 1.0f)
                 .Take(1)
                 .AsUnitObservable();
 
@@ -101,24 +111,12 @@ namespace Cookie
 
         public async UniTask WaitForAnimation()
         {
-            while (this.animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+            while (this.animator.GetCurrentAnimatorStateInfo(this.GetCurrentOverrideLayerIndex()).normalizedTime < 1.0f)
             {
                 await UniTask.Yield(this.GetCancellationTokenOnDestroy());
             }
         }
-
-        private void ChangeClipSingle(AnimationClip clip)
-        {
-            this.overrideController[this.GetCurrentOverrideClipName()] = clip;
-            for (var i = 0; i < this.animator.layerCount; i++)
-            {
-                this.animator.Play(this.animator.GetCurrentAnimatorStateInfo(i).fullPathHash, i, 0.0f);
-            }
-            
-            this.animator.Update(0.0f);
-            this.updateAnimation.OnNext(Unit.Default);
-        }
-
+        
         private string GetCurrentOverrideClipName()
         {
             return this.overrideClipToggle ? OverrideClipAName : OverrideClipBName;
