@@ -18,7 +18,7 @@ namespace Cookie
         
         private bool overrideClipToggle = true;
 
-        private readonly Subject<Unit> updateAnimation = new();
+        private readonly Subject<CompleteType> updateAnimation = new();
 
         private IDisposable blendAnimationStream;
 
@@ -32,6 +32,22 @@ namespace Cookie
 
         private const string OverrideStateBName = "Override State B";
 
+        /// <summary>
+        /// アニメーション再生完了タイプ
+        /// </summary>
+        public enum CompleteType
+        {
+            /// <summary>
+            /// 最後まで再生した
+            /// </summary>
+            Success,
+            
+            /// <summary>
+            /// 途中で終了した
+            /// </summary>
+            Aborted,
+        }
+        
         private void Awake()
         {
             this.overrideController = new AnimatorOverrideController();
@@ -59,7 +75,7 @@ namespace Cookie
             this.animator.Play(this.GetCurrentOverrideStateName(), this.GetCurrentOverrideLayerIndex(), 0.0f);
             this.animator.Update(0.0f);
             this.currentBlendSeconds = 0.0f;
-            this.updateAnimation.OnNext(Unit.Default);
+            this.updateAnimation.OnNext(CompleteType.Aborted);
 
             if (blendSeconds > 0.0f)
             {
@@ -85,7 +101,7 @@ namespace Cookie
             }
         }
 
-        public IObservable<Unit> PlayAsync(AnimationClip clip)
+        public IObservable<CompleteType> PlayAsync(AnimationClip clip)
         {
             this.PlayBlend(clip, 0.0f);
             
@@ -94,7 +110,7 @@ namespace Cookie
                 .TakeUntilDestroy(this)
                 .Where(_ => this.animator.GetCurrentAnimatorStateInfo(this.GetCurrentOverrideLayerIndex()).normalizedTime >= 1.0f)
                 .Take(1)
-                .AsUnitObservable();
+                .Select(_ => CompleteType.Success);
 
             return Observable.Merge(
                 completeStream,

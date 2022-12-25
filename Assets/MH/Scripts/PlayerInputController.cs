@@ -120,7 +120,7 @@ namespace MH
                 this.actor.AnimationController.PlayAsync(this.waveHandClip)
                     .Subscribe(_ =>
                     {
-                        Debug.Log("OK");
+                        Debug.Log(_);
                     });
             }
         }
