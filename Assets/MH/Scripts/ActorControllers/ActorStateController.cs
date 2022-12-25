@@ -34,8 +34,8 @@ namespace MH
         {
             this.actor.AnimationController.PlayIdle();
             
-            MessageBroker.GetSubscriber<ActorEvents.BeginMove>()
-                .Subscribe(_ =>
+            MessageBroker.GetSubscriber<Actor, ActorEvents.BeginMove>()
+                .Subscribe(this.actor, _ =>
                 {
                     this.stateController.ChangeRequest(State.Run);
                 })
@@ -46,8 +46,8 @@ namespace MH
         {
             this.actor.AnimationController.PlayRun();
             
-            MessageBroker.GetSubscriber<ActorEvents.EndMove>()
-                .Subscribe(_ =>
+            MessageBroker.GetSubscriber<Actor, ActorEvents.EndMove>()
+                .Subscribe(this.actor, _ =>
                 {
                     this.stateController.ChangeRequest(State.Idle);
                 })

@@ -9,11 +9,14 @@ namespace MH
     public sealed class ActorMoveController : MonoBehaviour
     {
         [SerializeField]
+        private Actor actor;
+        
+        [SerializeField]
         private OpenCharacterController openCharacterController;
 
         private Vector3 currentMoveVector;
 
-        private bool isMoving;
+        private bool isMoving = true;
 
         private void LateUpdate()
         {
@@ -22,8 +25,8 @@ namespace MH
                 if (!this.isMoving)
                 {
                     this.isMoving = true;
-                    MessageBroker.GetPublisher<ActorEvents.BeginMove>()
-                        .Publish(ActorEvents.BeginMove.Get());
+                    MessageBroker.GetPublisher<Actor, ActorEvents.BeginMove>()
+                        .Publish(this.actor, ActorEvents.BeginMove.Get());
                 }
 
                 this.openCharacterController.Move(this.currentMoveVector);
@@ -34,8 +37,8 @@ namespace MH
                 if (this.isMoving)
                 {
                     this.isMoving = false;
-                    MessageBroker.GetPublisher<ActorEvents.EndMove>()
-                        .Publish(ActorEvents.EndMove.Get());
+                    MessageBroker.GetPublisher<Actor, ActorEvents.EndMove>()
+                        .Publish(this.actor, ActorEvents.EndMove.Get());
                 }
             }
         }

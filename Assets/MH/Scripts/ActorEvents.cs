@@ -23,8 +23,8 @@ namespace MH
 
         public static void RegisterEvents(BuiltinContainerBuilder builder)
         {
-            builder.AddMessageBroker<BeginMove>();
-            builder.AddMessageBroker<EndMove>();
+            builder.AddMessageBroker<Actor, BeginMove>();
+            builder.AddMessageBroker<Actor, EndMove>();
         }
     }
 }
