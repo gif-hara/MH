@@ -44,6 +44,9 @@ namespace MH
         private AnimationClip waveHandClip;
 
         [SerializeField]
+        private AnimationClip runClip;
+
+        [SerializeField]
         private float blendSeconds;
 
         private MHInputActions inputActions;
