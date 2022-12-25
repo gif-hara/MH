@@ -202,7 +202,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 12393497}
-  m_LocalRotation: {x: 0.19382867, y: 0.0000000028924976, z: -5.7148647e-10, w: 0.9810354}
+  m_LocalRotation: {x: 0.19382864, y: -0.00000003549452, z: 0.00000000701285, w: 0.9810354}
   m_LocalPosition: {x: 0, y: 8.19203, z: -16.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -703,6 +703,8 @@ GameObject:
   - component: {fileID: 677322610}
   - component: {fileID: 677322614}
   - component: {fileID: 677322615}
+  - component: {fileID: 677322616}
+  - component: {fileID: 677322617}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -802,9 +804,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67c315d4cab395a4c82c9f6c88d84a2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  openCharacterController: {fileID: 677322610}
+  moveController: {fileID: 677322617}
   animationController: {fileID: 677322615}
 --- !u!114 &677322615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677322609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fa41aea3120ca84c85ccdc165a4f84c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationController: {fileID: 677322616}
+  idleClip: {fileID: 7400000, guid: ec32a4841c4beea4680bf398cf67ea2d, type: 2}
+  runClip: {fileID: 7400000, guid: 7a7cd163c014c084e811fe6dd9409011, type: 2}
+  blendSeconds: 0.1
+--- !u!114 &677322616
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -817,6 +835,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1195086761}
+--- !u!114 &677322617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677322609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae2184882dba93d42be3b136250da4a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  openCharacterController: {fileID: 677322610}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1117,7 +1148,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.19382867, y: 0.0000000028924976, z: -5.7148647e-10, w: 0.9810354}
+  m_LocalRotation: {x: 0.19382864, y: -0.00000003549452, z: 0.00000000701285, w: 0.9810354}
   m_LocalPosition: {x: 0, y: 8.19203, z: -16.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1295,9 +1326,6 @@ MonoBehaviour:
   screenXMin: 0.35
   screenXMax: 0.65
   screenMoveSpeed: -0.2
-  idleClip: {fileID: 7400000, guid: ec32a4841c4beea4680bf398cf67ea2d, type: 2}
-  waveHandClip: {fileID: 7400000, guid: f3b2dc672b635c94ca44ea5840839b9b, type: 2}
-  blendSeconds: 0.1
 --- !u!4 &1167169330
 Transform:
   m_ObjectHideFlags: 0

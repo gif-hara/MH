@@ -1,24 +1,48 @@
 using StandardAssets.Characters.Physics;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace MH
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed class ActorMoveController
+    public sealed class ActorMoveController : MonoBehaviour
     {
-        private readonly OpenCharacterController openCharacterController;
-        
-        public ActorMoveController(OpenCharacterController openCharacterController)
+        [SerializeField]
+        private OpenCharacterController openCharacterController;
+
+        private Vector3 currentMoveVector;
+
+        private bool isMoving;
+
+        private void LateUpdate()
         {
-            this.openCharacterController = openCharacterController;
+            if (this.currentMoveVector.sqrMagnitude > 0.0f)
+            {
+                if (!this.isMoving)
+                {
+                    this.isMoving = true;
+                    MessageBroker.GetPublisher<ActorEvents.BeginMove>()
+                        .Publish(ActorEvents.BeginMove.Get());
+                }
+
+                this.openCharacterController.Move(this.currentMoveVector);
+                this.currentMoveVector = Vector3.zero;
+            }
+            else
+            {
+                if (this.isMoving)
+                {
+                    this.isMoving = false;
+                    MessageBroker.GetPublisher<ActorEvents.EndMove>()
+                        .Publish(ActorEvents.EndMove.Get());
+                }
+            }
         }
 
         public void Move(Vector3 moveVector)
         {
-            this.openCharacterController.Move(moveVector);
+            this.currentMoveVector = moveVector;
         }
     }
 }

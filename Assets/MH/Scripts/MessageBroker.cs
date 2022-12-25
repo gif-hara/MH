@@ -1,7 +1,7 @@
 using System;
 using MessagePipe;
 
-namespace Cookie
+namespace MH
 {
     /// <summary>
     /// 

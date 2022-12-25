@@ -36,19 +36,7 @@ namespace MH
 
         [SerializeField]
         private float screenMoveSpeed;
-
-        [SerializeField]
-        private AnimationClip idleClip;
-
-        [SerializeField]
-        private AnimationClip waveHandClip;
-
-        [SerializeField]
-        private AnimationClip runClip;
-
-        [SerializeField]
-        private float blendSeconds;
-
+        
         private MHInputActions inputActions;
 
         private CinemachineOrbitalTransposer orbitalTransposer;
@@ -109,23 +97,6 @@ namespace MH
             input = this.inputActions.Player.Look.ReadValue<Vector2>();
             var offsetY = Mathf.Clamp(this.orbitalTransposer.m_FollowOffset.y + input.y * this.cameraSpeed.y * Time.deltaTime, this.followYMin, this.followYMax);
             this.orbitalTransposer.m_FollowOffset.y = offsetY;
-
-            if (Keyboard.current.oKey.wasPressedThisFrame)
-            {
-                this.actor.AnimationController.Play(this.idleClip, this.blendSeconds);
-            }
-            if (Keyboard.current.pKey.wasPressedThisFrame)
-            {
-                this.actor.AnimationController.Play(this.waveHandClip, this.blendSeconds);
-            }
-            if (Keyboard.current.lKey.wasPressedThisFrame)
-            {
-                this.actor.AnimationController.PlayAsync(this.waveHandClip)
-                    .Subscribe(_ =>
-                    {
-                        Debug.Log(_);
-                    });
-            }
         }
     }
 }

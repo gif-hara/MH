@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine;
 
-namespace Cookie
+namespace MH
 {
     /// <summary>
     /// ブートシステム
@@ -32,6 +32,7 @@ namespace Cookie
         {
             MessageBroker.Setup(builder =>
             {
+                ActorEvents.RegisterEvents(builder);
             });
             return UniTask.CompletedTask;
         }

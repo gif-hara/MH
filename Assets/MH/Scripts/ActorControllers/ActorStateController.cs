@@ -32,12 +32,26 @@ namespace MH
 
         private void OnEnterIdle(State previousState, DisposableBagBuilder bag)
         {
-            Debug.Log("OnEnterIdle");
+            this.actor.AnimationController.PlayIdle();
+            
+            MessageBroker.GetSubscriber<ActorEvents.BeginMove>()
+                .Subscribe(_ =>
+                {
+                    this.stateController.ChangeRequest(State.Run);
+                })
+                .AddTo(bag);
         }
 
         private void OnEnterRun(State previousState, DisposableBagBuilder bag)
         {
-            Debug.Log("OnEnterRun");
+            this.actor.AnimationController.PlayRun();
+            
+            MessageBroker.GetSubscriber<ActorEvents.EndMove>()
+                .Subscribe(_ =>
+                {
+                    this.stateController.ChangeRequest(State.Idle);
+                })
+                .AddTo(bag);
         }
     }
 }

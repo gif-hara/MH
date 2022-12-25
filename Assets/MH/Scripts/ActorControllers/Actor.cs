@@ -1,4 +1,3 @@
-using Cookie;
 using StandardAssets.Characters.Physics;
 using UnityEngine;
 
@@ -7,20 +6,19 @@ namespace MH
     public class Actor : MonoBehaviour
     {
         [SerializeField]
-        private OpenCharacterController openCharacterController;
+        private ActorMoveController moveController;
 
         [SerializeField]
-        private AnimationController animationController;
+        private ActorAnimationController animationController;
 
-        public ActorMoveController MoveController { private set; get; }
+        public ActorMoveController MoveController => this.moveController;
         
-        public AnimationController AnimationController => this.animationController;
+        public ActorAnimationController AnimationController => this.animationController;
         
         public ActorStateController StateController { private set; get; }
 
         private void Awake()
         {
-            this.MoveController = new ActorMoveController(this.openCharacterController);
             this.StateController = new ActorStateController(this);
         }
     }
