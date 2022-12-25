@@ -36,6 +36,9 @@ namespace MH
 
         [SerializeField]
         private float screenMoveSpeed;
+
+        [SerializeField]
+        private float dodgePower;
         
         private MHInputActions inputActions;
 
@@ -56,6 +59,7 @@ namespace MH
         void Start()
         {
             this.inputActions = new MHInputActions();
+            this.inputActions.Player.Dodge.performed += PerformedDodge;
             this.inputActions.Enable();
         }
 
@@ -69,19 +73,21 @@ namespace MH
             var rightVelocity = input.x * cameraRight;
             var forwardVelocity = input.y * cameraForward;
             var velocity = (rightVelocity + forwardVelocity).normalized;
-            this.actor.MoveController.Move(velocity * this.moveSpeed * Time.deltaTime);
+            MessageBroker.GetPublisher<Actor, ActorEvents.RequestMove>()
+                .Publish(this.actor, ActorEvents.RequestMove.Get(velocity * this.moveSpeed * Time.deltaTime));
             if (velocity.sqrMagnitude >= 0.01f)
             {
                 this.lastRotation = velocity;
             }
             if (this.lastRotation.sqrMagnitude >= 0.01f)
             {
-                this.actor.transform.localRotation =
-                    Quaternion.Lerp(
-                        this.actor.transform.localRotation,
-                        Quaternion.LookRotation(this.lastRotation),
-                        this.rotationSpeed * Time.deltaTime
-                        );
+                var rotation = Quaternion.Lerp(
+                    this.actor.transform.localRotation,
+                    Quaternion.LookRotation(this.lastRotation),
+                    this.rotationSpeed * Time.deltaTime
+                    );
+                MessageBroker.GetPublisher<Actor, ActorEvents.RequestRotation>()
+                    .Publish(this.actor, ActorEvents.RequestRotation.Get(rotation));
             }
 
             // カメラのスクリーン値の更新
@@ -97,6 +103,23 @@ namespace MH
             input = this.inputActions.Player.Look.ReadValue<Vector2>();
             var offsetY = Mathf.Clamp(this.orbitalTransposer.m_FollowOffset.y + input.y * this.cameraSpeed.y * Time.deltaTime, this.followYMin, this.followYMax);
             this.orbitalTransposer.m_FollowOffset.y = offsetY;
+        }
+
+        private void PerformedDodge(InputAction.CallbackContext context)
+        {
+            var input = this.inputActions.Player.Move.ReadValue<Vector2>();
+            var cameraTransform = this.cinemachineVirtualCamera.transform;
+            var cameraRight = Vector3.Scale(cameraTransform.right, new Vector3(1, 0, 1));
+            var cameraForward = Vector3.Scale(cameraTransform.forward, new Vector3(1, 0, 1));
+            var rightVelocity = input.x * cameraRight;
+            var forwardVelocity = input.y * cameraForward;
+            var direction = (rightVelocity + forwardVelocity).normalized;
+            if (direction.sqrMagnitude <= 0.0f)
+            {
+                direction = Vector3.Scale(this.actor.transform.forward, new Vector3(1, 0, 1));
+            }
+            MessageBroker.GetPublisher<Actor, ActorEvents.RequestDodge>()
+                .Publish(this.actor, ActorEvents.RequestDodge.Get(this.actor.transform.localPosition + direction * this.dodgePower));
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace MH
@@ -17,6 +18,9 @@ namespace MH
         private AnimationClip runClip;
 
         [SerializeField]
+        private AnimationClip dodgeClip;
+
+        [SerializeField]
         private float blendSeconds;
 
         public void PlayIdle()
@@ -27,6 +31,11 @@ namespace MH
         public void PlayRun()
         {
             this.animationController.Play(this.runClip, this.blendSeconds);
+        }
+
+        public IObservable<AnimationController.CompleteType> PlayDodgeAsync()
+        {
+            return this.animationController.PlayAsync(this.dodgeClip, this.blendSeconds);
         }
     }
 }

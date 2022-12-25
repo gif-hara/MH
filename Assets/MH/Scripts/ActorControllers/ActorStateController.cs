@@ -1,6 +1,7 @@
+using DG.Tweening;
 using MessagePipe;
+using UniRx;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace MH
 {
@@ -14,11 +15,14 @@ namespace MH
             Invalid,
             Idle,
             Run,
+            Dodge,
         }
 
         private Actor actor;
 
         private StateController<State> stateController;
+
+        private Vector3 dodgeDestination;
         
         public ActorStateController(Actor actor)
         {
@@ -26,6 +30,7 @@ namespace MH
             this.stateController = new StateController<State>(State.Invalid);
             this.stateController.Set(State.Idle, OnEnterIdle, null);
             this.stateController.Set(State.Run, OnEnterRun, null);
+            this.stateController.Set(State.Dodge, OnEnterDodge, null);
             
             this.stateController.ChangeRequest(State.Idle);
         }
@@ -40,6 +45,28 @@ namespace MH
                     this.stateController.ChangeRequest(State.Run);
                 })
                 .AddTo(bag);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestMove>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.actor.MoveController.Move(x.Velocity);
+                })
+                .AddTo(bag);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestRotation>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.actor.MoveController.Rotate(x.Rotation);
+                })
+                .AddTo(bag);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.dodgeDestination = x.Destination;
+                    this.stateController.ChangeRequest(State.Dodge);
+                })
+                .AddTo(bag);
         }
 
         private void OnEnterRun(State previousState, DisposableBagBuilder bag)
@@ -52,6 +79,47 @@ namespace MH
                     this.stateController.ChangeRequest(State.Idle);
                 })
                 .AddTo(bag);
+            
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestMove>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.actor.MoveController.Move(x.Velocity);
+                })
+                .AddTo(bag);
+            
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestRotation>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.actor.MoveController.Rotate(x.Rotation);
+                })
+                .AddTo(bag);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.dodgeDestination = x.Destination;
+                    this.stateController.ChangeRequest(State.Dodge);
+                })
+                .AddTo(bag);
+        }
+
+        private async void OnEnterDodge(State previousState, DisposableBagBuilder bag)
+        {
+            var from = this.actor.transform.localPosition;
+            DOTween.To(
+                () => from,
+                x =>
+                {
+                    var diff = x - this.actor.transform.localPosition;
+                    this.actor.MoveController.Move(diff);
+                },
+                this.dodgeDestination,
+                0.5f
+                );
+            this.actor.MoveController.Rotate(Quaternion.LookRotation(this.dodgeDestination - from));
+            await this.actor.AnimationController.PlayDodgeAsync();
+            
+            this.stateController.ChangeRequest(State.Idle);
         }
     }
 }
