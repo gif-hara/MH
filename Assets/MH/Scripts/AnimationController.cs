@@ -54,10 +54,10 @@ namespace Cookie
         public void PlayBlend(AnimationClip clip, float blendSeconds)
         {
             this.blendAnimationStream?.Dispose();
-            this.overrideController[this.GetNextOverrideClipName()] = clip;
-            this.animator.Play(this.GetNextOverrideStateName(), this.GetNextOverrideLayerIndex(), 0.0f);
-            this.animator.Update(0.0f);
             this.overrideClipToggle = !this.overrideClipToggle;
+            this.overrideController[this.GetCurrentOverrideClipName()] = clip;
+            this.animator.Play(this.GetCurrentOverrideStateName(), this.GetCurrentOverrideLayerIndex(), 0.0f);
+            this.animator.Update(0.0f);
             this.currentBlendSeconds = 0.0f;
             this.blendAnimationStream = this.UpdateAsObservable()
                 .TakeUntilDestroy(this)
@@ -109,7 +109,7 @@ namespace Cookie
 
         private void ChangeClipSingle(AnimationClip clip)
         {
-            this.overrideController[this.GetOverrideClipName()] = clip;
+            this.overrideController[this.GetCurrentOverrideClipName()] = clip;
             for (var i = 0; i < this.animator.layerCount; i++)
             {
                 this.animator.Play(this.animator.GetCurrentAnimatorStateInfo(i).fullPathHash, i, 0.0f);
@@ -119,24 +119,19 @@ namespace Cookie
             this.updateAnimation.OnNext(Unit.Default);
         }
 
-        private string GetOverrideClipName()
+        private string GetCurrentOverrideClipName()
         {
             return this.overrideClipToggle ? OverrideClipAName : OverrideClipBName;
         }
-
-        private string GetNextOverrideClipName()
+        
+        private string GetCurrentOverrideStateName()
         {
-            return this.overrideClipToggle ? OverrideClipBName : OverrideClipAName;
+            return this.overrideClipToggle ? OverrideStateAName : OverrideStateBName;
         }
 
-        private string GetNextOverrideStateName()
+        private int GetCurrentOverrideLayerIndex()
         {
-            return this.overrideClipToggle ? OverrideStateBName : OverrideStateAName;
-        }
-
-        private int GetNextOverrideLayerIndex()
-        {
-            return this.overrideClipToggle ? 2 : 1;
+            return this.overrideClipToggle ? 1 : 2;
         }
     }
 }
