@@ -13,6 +13,9 @@ namespace MH
         private Actor playerPrefab;
 
         [SerializeField]
+        private ActorSpawnData playerSpawnData;
+
+        [SerializeField]
         private PlayerInputController playerInputControllerPrefab;
 
         [SerializeField]
@@ -24,7 +27,7 @@ namespace MH
 
             Instantiate(this.playerInputControllerPrefab, this.transform);
 
-            var player = Instantiate(this.playerPrefab, this.playerSpawnPoint.position, this.playerSpawnPoint.rotation);
+            var player = this.playerPrefab.Spawn(this.playerSpawnData, this.playerSpawnPoint);
             MessageBroker.GetPublisher<ActorEvents.SpawnedPlayer>()
                 .Publish(ActorEvents.SpawnedPlayer.Get(player));
         }

@@ -1,5 +1,7 @@
 using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
+using MessagePipe;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -18,9 +20,7 @@ namespace MH
         
         private bool overrideClipToggle = true;
 
-        private readonly Subject<CompleteType> updateAnimation = new();
-
-        private IDisposable blendAnimationStream;
+        private CancellationTokenDisposable animationCancelToken;
 
         private float currentBlendSeconds;
         
@@ -54,15 +54,20 @@ namespace MH
             this.overrideController.runtimeAnimatorController = this.animator.runtimeAnimatorController;
             this.animator.runtimeAnimatorController = this.overrideController;
         }
-        
+
+        private void OnDestroy()
+        {
+            this.animationCancelToken?.Dispose();
+        }
+
         /// <summary>
         /// 現在のアニメーションとブレンドしながら<see cref="clip"/>を再生する
         /// </summary>
         public void Play(AnimationClip clip, float blendSeconds = 0.0f)
         {
             // 前回のアニメーション処理を終了させる
-            this.blendAnimationStream?.Dispose();
-            this.updateAnimation.OnNext(CompleteType.Aborted);
+            this.animationCancelToken?.Dispose();
+            this.animationCancelToken = new CancellationTokenDisposable();
 
             this.overrideClipToggle = !this.overrideClipToggle;
             this.overrideController[this.GetCurrentOverrideClipName()] = clip;
@@ -79,42 +84,70 @@ namespace MH
 
             if (blendSeconds > 0.0f)
             {
-                this.blendAnimationStream = this.UpdateAsObservable()
-                    .TakeUntilDestroy(this)
-                    .Subscribe(_ =>
-                    {
-                        this.currentBlendSeconds = Mathf.Clamp01(this.currentBlendSeconds + Time.deltaTime);
-                        var rate = this.currentBlendSeconds / blendSeconds;
-                        this.animator.SetLayerWeight(1, this.overrideClipToggle ? rate : 1.0f - rate);
-                        this.animator.SetLayerWeight(2, this.overrideClipToggle ? 1.0f - rate : rate);
-
-                        if (rate >= 1.0f)
-                        {
-                            this.blendAnimationStream?.Dispose();
-                        }
-                    });
+                this.StartBlendAsync(blendSeconds, this.animationCancelToken.Token).Forget();
             }
         }
 
-        public IObservable<CompleteType> PlayAsync(AnimationClip clip, float blendSeconds = 0.0f)
+        public void Play(AnimationBlendData data)
         {
-            this.Play(clip, blendSeconds);
-            
-            var completeStream = this.UpdateAsObservable()
-                .TakeUntil(this.updateAnimation)
-                .TakeUntilDestroy(this)
-                .Where(_ => this.animator.GetCurrentAnimatorStateInfo(this.GetCurrentOverrideLayerIndex()).normalizedTime >= 1.0f)
-                .Take(1)
-                .Select(_ => CompleteType.Success);
-
-            return Observable.Merge(
-                completeStream,
-                this.updateAnimation
-                )
-                .Take(1)
-                .TakeUntilDestroy(this);
+            this.Play(data.animationClip, data.blendSeconds);
         }
         
+        public UniTask<CompleteType> PlayTask(AnimationClip clip, float blendSeconds = 0.0f)
+        {
+            this.Play(clip, blendSeconds);
+            return this.GetCompleteAnimationTask(this.animationCancelToken.Token);
+        }
+
+        public UniTask<CompleteType> PlayTask(AnimationBlendData blendData)
+        {
+            return this.PlayTask(blendData.animationClip, blendData.blendSeconds);
+        }
+
+        private async UniTask<CompleteType> GetCompleteAnimationTask(CancellationToken token)
+        {
+            if (token.IsCancellationRequested)
+            {
+                return CompleteType.Aborted;
+            }
+            
+            while (this.animator.GetCurrentAnimatorStateInfo(this.GetCurrentOverrideLayerIndex()).normalizedTime < 1.0f)
+            {
+                if (token.IsCancellationRequested)
+                {
+                    return CompleteType.Aborted;
+                }
+                
+                await UniTask.Yield(PlayerLoopTiming.Update);
+            }
+
+            return CompleteType.Success;
+        }
+        
+        private async UniTask StartBlendAsync(float blendSeconds, CancellationToken token)
+        {
+            if (token.IsCancellationRequested)
+            {
+                return;
+            }
+            
+            this.currentBlendSeconds += Time.deltaTime;
+            var rate = this.currentBlendSeconds / blendSeconds;
+            while (rate < 1.0f)
+            {
+                if (token.IsCancellationRequested)
+                {
+                    return;
+                }
+                
+                this.animator.SetLayerWeight(1, this.overrideClipToggle ? rate : 1.0f - rate);
+                this.animator.SetLayerWeight(2, this.overrideClipToggle ? 1.0f - rate : rate);
+                await UniTask.Yield(PlayerLoopTiming.Update, this.animationCancelToken.Token);
+                this.currentBlendSeconds += Time.deltaTime;
+                rate = this.currentBlendSeconds / blendSeconds;
+            }
+        }
+
         public async UniTask WaitForAnimation()
         {
             while (this.animator.GetCurrentAnimatorStateInfo(this.GetCurrentOverrideLayerIndex()).normalizedTime < 1.0f)

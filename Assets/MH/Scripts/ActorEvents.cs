@@ -72,6 +72,20 @@ namespace MH
         }
 
         /// <summary>
+        /// 攻撃のリクエストを行うメッセージ
+        /// </summary>
+        public sealed class RequestAttack : Message<RequestAttack>
+        {
+        }
+
+        /// <summary>
+        /// 攻撃が終了した際のメッセージ
+        /// </summary>
+        public sealed class EndAttack : Message<EndAttack>
+        {
+        }
+
+        /// <summary>
         /// プレイヤーが生成された際のメッセージ
         /// </summary>
         public sealed class SpawnedPlayer : Message<SpawnedPlayer, Actor>
@@ -89,6 +103,8 @@ namespace MH
             builder.AddMessageBroker<Actor, RequestMove>();
             builder.AddMessageBroker<Actor, RequestRotation>();
             builder.AddMessageBroker<Actor, RequestDodge>();
+            builder.AddMessageBroker<Actor, RequestAttack>();
+            builder.AddMessageBroker<Actor, EndAttack>();
             builder.AddMessageBroker<SpawnedPlayer>();
         }
     }

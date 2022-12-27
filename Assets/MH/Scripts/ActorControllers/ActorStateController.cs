@@ -16,6 +16,7 @@ namespace MH
             Idle,
             Run,
             Dodge,
+            Attack,
         }
 
         private Actor actor;
@@ -29,6 +30,7 @@ namespace MH
             this.stateController.Set(State.Idle, OnEnterIdle, null);
             this.stateController.Set(State.Run, OnEnterRun, null);
             this.stateController.Set(State.Dodge, OnEnterDodge, null);
+            this.stateController.Set(State.Attack, OnEnterAttack, null);
             
             this.stateController.ChangeRequest(State.Idle);
         }
@@ -70,6 +72,13 @@ namespace MH
                     this.stateController.ChangeRequest(State.Dodge);
                 })
                 .AddTo(bag);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.stateController.ChangeRequest(State.Attack);
+                })
+                .AddTo(bag);
         }
 
         private void OnEnterRun(State previousState, DisposableBagBuilder bag)
@@ -109,11 +118,25 @@ namespace MH
                     this.stateController.ChangeRequest(State.Dodge);
                 })
                 .AddTo(bag);
+            
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.stateController.ChangeRequest(State.Attack);
+                })
+                .AddTo(bag);
         }
 
         private async void OnEnterDodge(State previousState, DisposableBagBuilder bag)
         {
             await this.actor.AnimationController.PlayDodgeAsync();
+            
+            this.stateController.ChangeRequest(State.Idle);
+        }
+
+        private async void OnEnterAttack(State previousState, DisposableBagBuilder bag)
+        {
+            await this.actor.AttackController.Invoke();
             
             this.stateController.ChangeRequest(State.Idle);
         }

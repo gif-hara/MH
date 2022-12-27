@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace MH
@@ -33,9 +34,19 @@ namespace MH
             this.animationController.Play(this.runClip, this.blendSeconds);
         }
 
-        public IObservable<AnimationController.CompleteType> PlayDodgeAsync()
+        public void Play(AnimationBlendData data)
         {
-            return this.animationController.PlayAsync(this.dodgeClip, this.blendSeconds);
+            this.animationController.Play(data);
+        }
+
+        public UniTask<AnimationController.CompleteType> PlayTask(AnimationBlendData data)
+        {
+            return this.animationController.PlayTask(data);
+        }
+
+        public UniTask<AnimationController.CompleteType> PlayDodgeAsync()
+        {
+            return this.animationController.PlayTask(this.dodgeClip, this.blendSeconds);
         }
     }
 }

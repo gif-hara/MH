@@ -79,6 +79,7 @@ namespace MH
 
             this.inputActions = new MHInputActions();
             this.inputActions.Player.Dodge.performed += PerformedDodge;
+            this.inputActions.Player.Fire.performed += PerformedFire;
             this.inputActions.Enable();
             this.enabled = false;
 
@@ -152,6 +153,12 @@ namespace MH
                     this.dodgeDuration,
                     this.dodgeEase
                     ));
+        }
+        
+        private void PerformedFire(InputAction.CallbackContext obj)
+        {
+            MessageBroker.GetPublisher<Actor, ActorEvents.RequestAttack>()
+                .Publish(this.actor, ActorEvents.RequestAttack.Get());
         }
     }
 }

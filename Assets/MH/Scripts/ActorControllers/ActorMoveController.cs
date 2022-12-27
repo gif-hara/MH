@@ -45,7 +45,7 @@ namespace MH
 
         public void Move(Vector3 moveVector)
         {
-            this.currentMoveVector = moveVector;
+            this.currentMoveVector += moveVector;
         }
 
         public void Rotate(Quaternion rotation)

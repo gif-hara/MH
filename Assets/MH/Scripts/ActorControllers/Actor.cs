@@ -1,5 +1,7 @@
+using System;
 using StandardAssets.Characters.Physics;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace MH
 {
@@ -18,11 +20,22 @@ namespace MH
         public ActorStateController StateController { private set; get; }
         
         public ActorDodgeController DodgeController { private set; get; }
-
-        private void Awake()
+        
+        public ActorAttackController AttackController { private set; get; }
+        
+        public Actor Spawn(ActorSpawnData data, Vector3 position, Quaternion rotation)
         {
-            this.StateController = new ActorStateController(this);
-            this.DodgeController = new ActorDodgeController(this);
+            var instance = Instantiate(this, position, rotation);
+            instance.StateController = new ActorStateController(instance);
+            instance.DodgeController = new ActorDodgeController(instance);
+            instance.AttackController = new ActorAttackController(instance, data.attackData);
+
+            return instance;
+        }
+
+        public Actor Spawn(ActorSpawnData data, Transform spawnPoint)
+        {
+            return Spawn(data, spawnPoint.position, spawnPoint.rotation);
         }
     }
 }
