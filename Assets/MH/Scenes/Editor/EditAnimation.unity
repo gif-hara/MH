@@ -460,7 +460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87d6867cc157e19499886795d265597c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: SampleScene
+  sceneName: Battle
 --- !u!1001 &1939754278
 PrefabInstance:
   m_ObjectHideFlags: 0
