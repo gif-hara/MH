@@ -1,8 +1,10 @@
+using System;
 using Cinemachine;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UniRx;
+using MessagePipe;
 
 namespace MH
 {
@@ -54,20 +56,30 @@ namespace MH
         private CinemachineComposer cinemachineComposer;
 
         private Vector3 lastRotation;
+
+        private IDisposable disposable;
         
         private void Awake()
         {
-            this.orbitalTransposer = this.cinemachineVirtualCamera.GetComponentInChildren<CinemachineOrbitalTransposer>();
-            this.cinemachineComposer = this.cinemachineVirtualCamera.GetComponentInChildren<CinemachineComposer>();
+            var bag = DisposableBag.CreateBuilder();
+            MessageBroker.GetSubscriber<ActorEvents.SpawnedPlayer>()
+                .Subscribe(x =>
+                {
+                    this.actor = x.Player;
+                    this.orbitalTransposer = this.actor.GetComponentInChildren<CinemachineOrbitalTransposer>();
+                    this.cinemachineComposer = this.actor.GetComponentInChildren<CinemachineComposer>();
+                    this.enabled = true;
+                })
+                .AddTo(bag);
+            
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-        }
-
-        void Start()
-        {
             this.inputActions = new MHInputActions();
             this.inputActions.Player.Dodge.performed += PerformedDodge;
             this.inputActions.Enable();
+            this.enabled = false;
+
+            this.disposable = bag.Build();
         }
 
         void Update()
@@ -110,6 +122,11 @@ namespace MH
             input = this.inputActions.Player.Look.ReadValue<Vector2>();
             var offsetY = Mathf.Clamp(this.orbitalTransposer.m_FollowOffset.y + input.y * this.cameraSpeed.y * Time.deltaTime, this.followYMin, this.followYMax);
             this.orbitalTransposer.m_FollowOffset.y = offsetY;
+        }
+
+        private void OnDestroy()
+        {
+            this.disposable.Dispose();
         }
 
         private void PerformedDodge(InputAction.CallbackContext context)

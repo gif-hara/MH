@@ -13,7 +13,7 @@ namespace MH.DebugSystems
         [SerializeField]
         private string sceneName;
         
-        private void Start()
+        private async void Start()
         {
             SceneManager.LoadScene(this.sceneName);
         }

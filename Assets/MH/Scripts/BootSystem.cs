@@ -12,9 +12,9 @@ namespace MH
         public static UniTask IsReady { get; private set; }
 
         private static readonly DisposableBagBuilder bag = DisposableBag.CreateBuilder();
-            
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        private static void Setup()
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
+        private static void InitializeOnBeforeSplashScreen()
         {
             IsReady = SetupInternal();
         }

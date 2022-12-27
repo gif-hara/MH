@@ -71,6 +71,17 @@ namespace MH
             public Ease Ease => this.Param4;
         }
 
+        /// <summary>
+        /// プレイヤーが生成された際のメッセージ
+        /// </summary>
+        public sealed class SpawnedPlayer : Message<SpawnedPlayer, Actor>
+        {
+            /// <summary>
+            /// 生成されたプレイヤー
+            /// </summary>
+            public Actor Player => this.Param1;
+        }
+
         public static void RegisterEvents(BuiltinContainerBuilder builder)
         {
             builder.AddMessageBroker<Actor, BeginMove>();
@@ -78,6 +89,7 @@ namespace MH
             builder.AddMessageBroker<Actor, RequestMove>();
             builder.AddMessageBroker<Actor, RequestRotation>();
             builder.AddMessageBroker<Actor, RequestDodge>();
+            builder.AddMessageBroker<SpawnedPlayer>();
         }
     }
 }
