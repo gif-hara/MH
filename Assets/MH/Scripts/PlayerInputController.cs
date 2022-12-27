@@ -66,14 +66,17 @@ namespace MH
                 .Subscribe(x =>
                 {
                     this.actor = x.Player;
-                    this.orbitalTransposer = this.actor.GetComponentInChildren<CinemachineOrbitalTransposer>();
-                    this.cinemachineComposer = this.actor.GetComponentInChildren<CinemachineComposer>();
+                    this.cinemachineVirtualCamera.Follow = this.actor.transform;
+                    this.cinemachineVirtualCamera.LookAt = this.actor.transform;
                     this.enabled = true;
                 })
                 .AddTo(bag);
             
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
+            this.orbitalTransposer = this.cinemachineVirtualCamera.GetComponentInChildren<CinemachineOrbitalTransposer>();
+            this.cinemachineComposer = this.cinemachineVirtualCamera.GetComponentInChildren<CinemachineComposer>();
+
             this.inputActions = new MHInputActions();
             this.inputActions.Player.Dodge.performed += PerformedDodge;
             this.inputActions.Enable();
