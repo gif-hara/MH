@@ -929,10 +929,11 @@ MonoBehaviour:
   playerSpawnData:
     attackData:
       motionDataList:
-      - animationBlendData:
+      - motionName: WeakAttack.First
+        animationBlendData:
           animationClip: {fileID: 7400000, guid: f3b2dc672b635c94ca44ea5840839b9b, type: 2}
           blendSeconds: 0.1
-        nextMotionIndex: -1
+        nextMotionName: 
   playerInputControllerPrefab: {fileID: 5100394250428141442, guid: 6d1edebb2d4fef34bb8650676303d165, type: 3}
   playerSpawnPoint: {fileID: 915631917}
 --- !u!1 &1344185545

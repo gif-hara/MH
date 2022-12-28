@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace MH
 {
@@ -16,15 +14,17 @@ namespace MH
         [Serializable]
         public class MotionData
         {
+            public string motionName;
+            
             public AnimationBlendData animationBlendData;
 
             /// <summary>
-            /// 次に再生できるモーションのインデックス
+            /// 次に再生できるモーションの名前
             /// </summary>
             /// <remarks>
-            /// <c>-1</c>の場合はそこでコンボ終了
+            /// 空文字の場合はそこでコンボ終了
             /// </remarks>
-            public int nextMotionIndex;
+            public string nextMotionName;
         }
     }
 }

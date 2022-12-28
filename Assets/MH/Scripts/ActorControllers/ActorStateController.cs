@@ -1,8 +1,4 @@
-using System;
-using DG.Tweening;
 using MessagePipe;
-using UniRx;
-using UnityEngine;
 
 namespace MH
 {
@@ -17,12 +13,12 @@ namespace MH
             Idle,
             Run,
             Dodge,
-            Attack,
+            WeakAttack,
         }
 
-        private Actor actor;
+        private readonly Actor actor;
 
-        private StateController<State> stateController;
+        private readonly StateController<State> stateController;
         
         public ActorStateController(Actor actor)
         {
@@ -31,12 +27,12 @@ namespace MH
             this.stateController.Set(State.Idle, OnEnterIdle, null);
             this.stateController.Set(State.Run, OnEnterRun, null);
             this.stateController.Set(State.Dodge, OnEnterDodge, null);
-            this.stateController.Set(State.Attack, OnEnterAttack, null);
+            this.stateController.Set(State.WeakAttack, OnEnterWeakAttack, null);
             
             this.stateController.ChangeRequest(State.Idle);
         }
 
-        private void OnEnterIdle(State previousState, DisposableBagBuilder bag)
+        private void OnEnterIdle(State previousState, DisposableBagBuilder scope)
         {
             this.actor.AnimationController.PlayIdle();
             
@@ -45,21 +41,21 @@ namespace MH
                 {
                     this.stateController.ChangeRequest(State.Run);
                 })
-                .AddTo(bag);
+                .AddTo(scope);
 
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestMove>()
                 .Subscribe(this.actor, x =>
                 {
                     this.actor.PostureController.Move(x.Velocity);
                 })
-                .AddTo(bag);
+                .AddTo(scope);
 
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestRotation>()
                 .Subscribe(this.actor, x =>
                 {
                     this.actor.PostureController.Rotate(x.Rotation);
                 })
-                .AddTo(bag);
+                .AddTo(scope);
 
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
                 .Subscribe(this.actor, x =>
@@ -72,17 +68,17 @@ namespace MH
                         );
                     this.stateController.ChangeRequest(State.Dodge);
                 })
-                .AddTo(bag);
+                .AddTo(scope);
 
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
                 .Subscribe(this.actor, x =>
                 {
-                    this.stateController.ChangeRequest(State.Attack);
+                    this.stateController.ChangeRequest(State.WeakAttack);
                 })
-                .AddTo(bag);
+                .AddTo(scope);
         }
 
-        private void OnEnterRun(State previousState, DisposableBagBuilder bag)
+        private void OnEnterRun(State previousState, DisposableBagBuilder scope)
         {
             this.actor.AnimationController.PlayRun();
             
@@ -91,21 +87,21 @@ namespace MH
                 {
                     this.stateController.ChangeRequest(State.Idle);
                 })
-                .AddTo(bag);
+                .AddTo(scope);
             
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestMove>()
                 .Subscribe(this.actor, x =>
                 {
                     this.actor.PostureController.Move(x.Velocity);
                 })
-                .AddTo(bag);
+                .AddTo(scope);
             
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestRotation>()
                 .Subscribe(this.actor, x =>
                 {
                     this.actor.PostureController.Rotate(x.Rotation);
                 })
-                .AddTo(bag);
+                .AddTo(scope);
 
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
                 .Subscribe(this.actor, x =>
@@ -118,26 +114,26 @@ namespace MH
                         );
                     this.stateController.ChangeRequest(State.Dodge);
                 })
-                .AddTo(bag);
+                .AddTo(scope);
             
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
                 .Subscribe(this.actor, x =>
                 {
-                    this.stateController.ChangeRequest(State.Attack);
+                    this.stateController.ChangeRequest(State.WeakAttack);
                 })
-                .AddTo(bag);
+                .AddTo(scope);
         }
 
-        private async void OnEnterDodge(State previousState, DisposableBagBuilder bag)
+        private async void OnEnterDodge(State previousState, DisposableBagBuilder scope)
         {
             await this.actor.AnimationController.PlayDodgeAsync();
             
             this.stateController.ChangeRequest(State.Idle);
         }
         
-        private async void OnEnterAttack(State previousState, DisposableBagBuilder bag)
+        private async void OnEnterWeakAttack(State previousState, DisposableBagBuilder scope)
         {
-            await this.actor.AttackController.InvokeAsync();
+            await this.actor.AttackController.InvokeAsync(ActorAttackController.AttackType.WeakAttack);
             
             this.stateController.ChangeRequest(State.Idle);
         }
