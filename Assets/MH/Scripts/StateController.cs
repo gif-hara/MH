@@ -86,6 +86,7 @@ namespace MH
 
         public void Dispose()
         {
+            this.scope.Clear();
         }
     }
 }
