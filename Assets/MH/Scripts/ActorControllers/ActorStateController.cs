@@ -19,6 +19,11 @@ namespace MH
         private readonly Actor actor;
 
         private readonly StateController<State> stateController;
+
+        /// <summary>
+        /// 攻撃時の回転処理を行えるか
+        /// </summary>
+        private bool onAttackCanRotate = false;
         
         public ActorStateController(Actor actor)
         {
@@ -133,6 +138,34 @@ namespace MH
         
         private async void OnEnterWeakAttack(State previousState, DisposableBagBuilder scope)
         {
+            this.onAttackCanRotate = false;
+            
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestRotation>()
+                .Subscribe(this.actor, x =>
+                {
+                    if (!this.onAttackCanRotate)
+                    {
+                        return;
+                    }
+                    
+                    this.actor.PostureController.Rotate(x.Rotation);
+                })
+                .AddTo(scope);
+            
+            MessageBroker.GetSubscriber<Actor, ActorEvents.AcceptRequestRotation>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.onAttackCanRotate = true;
+                })
+                .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.CloseRequestRotation>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.onAttackCanRotate = false;
+                })
+                .AddTo(scope);
+            
             await this.actor.AttackController.InvokeAsync(ActorAttackController.AttackType.WeakAttack);
             
             this.stateController.ChangeRequest(State.Idle);

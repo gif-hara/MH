@@ -38,8 +38,6 @@ namespace MH
 
         private ActorAttackData.MotionData currentMotionData;
 
-        private IDisposable invokeScope;
-
         public ActorAttackController(Actor actor, ActorAttackData data)
         {
             this.actor = actor;
@@ -83,44 +81,12 @@ namespace MH
                 return;
             }
 
-            this.invokeScope?.Dispose();
             this.canRotate = false;
             var animationBlendData = this.currentMotionData.animationBlendData;
             
-            var scope = DisposableBag.CreateBuilder();
-            
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestRotation>()
-                .Subscribe(this.actor, x =>
-                {
-                    if (!this.canRotate)
-                    {
-                        return;
-                    }
-                    
-                    this.actor.PostureController.Rotate(x.Rotation);
-                })
-                .AddTo(scope);
-            
-            MessageBroker.GetSubscriber<Actor, ActorEvents.AcceptRequestRotation>()
-                .Subscribe(this.actor, _ =>
-                {
-                    this.canRotate = true;
-                })
-                .AddTo(scope);
-
-            MessageBroker.GetSubscriber<Actor, ActorEvents.CloseRequestRotation>()
-                .Subscribe(this.actor, _ =>
-                {
-                    this.canRotate = false;
-                })
-                .AddTo(scope);
-
-            this.invokeScope = scope.Build();
-
             await this.actor.AnimationController.PlayTask(animationBlendData);
 
             this.currentAttackType = AttackType.None;
-            this.invokeScope?.Dispose();
             MessageBroker.GetPublisher<Actor, ActorEvents.EndAttack>()
                 .Publish(this.actor, ActorEvents.EndAttack.Get());
         }
