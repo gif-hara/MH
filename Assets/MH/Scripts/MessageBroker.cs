@@ -4,12 +4,10 @@ using MessagePipe;
 namespace MH
 {
     /// <summary>
-    /// 
+    /// メッセージの仲介を行うクラス
     /// </summary>
-    public sealed class MessageBroker
+    public static class MessageBroker
     {
-        public static MessageBroker Instance;
-        
         public static void Setup(Action<BuiltinContainerBuilder> builderSetupAction)
         {
             var builder = new BuiltinContainerBuilder();
