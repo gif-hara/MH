@@ -20,10 +20,28 @@ namespace MH
             Assert.IsNotNull(this.animator);
         }
 
-        public void BeginRotation()
+        /// <summary>
+        /// 回転のリクエストの受付を開始する
+        /// </summary>
+        /// <remarks>
+        /// この関数はアニメーションイベントで実行されます
+        /// </remarks>
+        public void AcceptRequestRotation()
         {
             MessageBroker.GetPublisher<Actor, ActorEvents.AcceptRequestRotation>()
                 .Publish(this.actor, ActorEvents.AcceptRequestRotation.Get());
+        }
+
+        /// <summary>
+        /// 回転のリクエストの受付を終了する
+        /// </summary>
+        /// <remarks>
+        /// この関数はアニメーションイベントで実行されます
+        /// </remarks>
+        public void CloseRequestRotation()
+        {
+            MessageBroker.GetPublisher<Actor, ActorEvents.CloseRequestRotation>()
+                .Publish(this.actor, ActorEvents.CloseRequestRotation.Get());
         }
     }
 }

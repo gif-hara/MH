@@ -64,6 +64,13 @@ namespace MH
                 })
                 .AddTo(scope);
 
+            MessageBroker.GetSubscriber<Actor, ActorEvents.CloseRequestRotation>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.canRotate = false;
+                })
+                .AddTo(scope);
+
             this.invokeScope = scope.Build();
 
             await this.actor.AnimationController.PlayTask(animationBlendData);
