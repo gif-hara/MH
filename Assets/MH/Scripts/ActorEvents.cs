@@ -46,6 +46,16 @@ namespace MH
         }
 
         /// <summary>
+        /// 回転のリクエストを受け付けられるようになるメッセージ
+        /// </summary>
+        /// <remarks>
+        /// 攻撃アニメーションのとあるタイミングで回転入力を受け付ける時に利用しています
+        /// </remarks>
+        public sealed class AcceptRequestRotation : Message<AcceptRequestRotation>
+        {
+        }
+
+        /// <summary>
         /// 回避のリクエストを行うメッセージ
         /// </summary>
         public sealed class RequestDodge : Message<RequestDodge, Vector3, float, float, Ease>
@@ -102,6 +112,7 @@ namespace MH
             builder.AddMessageBroker<Actor, EndMove>();
             builder.AddMessageBroker<Actor, RequestMove>();
             builder.AddMessageBroker<Actor, RequestRotation>();
+            builder.AddMessageBroker<Actor, AcceptRequestRotation>();
             builder.AddMessageBroker<Actor, RequestDodge>();
             builder.AddMessageBroker<Actor, RequestAttack>();
             builder.AddMessageBroker<Actor, EndAttack>();

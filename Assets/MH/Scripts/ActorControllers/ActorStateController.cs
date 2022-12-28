@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using MessagePipe;
 using UniRx;
@@ -133,10 +134,10 @@ namespace MH
             
             this.stateController.ChangeRequest(State.Idle);
         }
-
+        
         private async void OnEnterAttack(State previousState, DisposableBagBuilder bag)
         {
-            await this.actor.AttackController.Invoke();
+            await this.actor.AttackController.InvokeAsync();
             
             this.stateController.ChangeRequest(State.Idle);
         }
