@@ -96,10 +96,10 @@ namespace MH
             var rightVelocity = input.x * cameraRight;
             var forwardVelocity = input.y * cameraForward;
             var velocity = (rightVelocity + forwardVelocity).normalized;
-            MessageBroker.GetPublisher<Actor, ActorEvents.RequestMove>()
-                .Publish(this.actor, ActorEvents.RequestMove.Get(velocity * this.moveSpeed * Time.deltaTime));
             if (velocity.sqrMagnitude >= 0.01f)
             {
+                MessageBroker.GetPublisher<Actor, ActorEvents.RequestMove>()
+                    .Publish(this.actor, ActorEvents.RequestMove.Get(velocity * this.moveSpeed * Time.deltaTime));
                 this.lastRotation = velocity;
             }
             if (this.lastRotation.sqrMagnitude >= 0.01f)

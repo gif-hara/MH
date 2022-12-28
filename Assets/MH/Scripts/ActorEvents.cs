@@ -104,6 +104,13 @@ namespace MH
         public sealed class EndAttack : Message<EndAttack>
         {
         }
+        
+        /// <summary>
+        /// 次の行動を選択可能な状態にするメッセージ
+        /// </summary>
+        public sealed class AcceptNextState : Message<AcceptNextState>
+        {
+        }
 
         /// <summary>
         /// プレイヤーが生成された際のメッセージ
@@ -127,6 +134,7 @@ namespace MH
             builder.AddMessageBroker<Actor, RequestDodge>();
             builder.AddMessageBroker<Actor, RequestAttack>();
             builder.AddMessageBroker<Actor, EndAttack>();
+            builder.AddMessageBroker<Actor, AcceptNextState>();
             builder.AddMessageBroker<SpawnedPlayer>();
         }
     }

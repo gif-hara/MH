@@ -86,14 +86,19 @@ namespace MH
             {
                 await this.actor.AnimationController.PlayAsync(animationBlendData);
             
-                this.currentAttackType = AttackType.None;
-                this.currentMotionData = null;
+                this.Reset();
                 MessageBroker.GetPublisher<Actor, ActorEvents.EndAttack>()
                     .Publish(this.actor, ActorEvents.EndAttack.Get());
             }
             catch (OperationCanceledException)
             {
             }
+        }
+
+        public void Reset()
+        {
+            this.currentAttackType = AttackType.None;
+            this.currentMotionData = null;
         }
 
         /// <summary>

@@ -938,7 +938,7 @@ MonoBehaviour:
         animationBlendData:
           animationClip: {fileID: 7400000, guid: 21cf87df0bf7f844fa897953d084176d, type: 2}
           blendSeconds: 0.1
-        nextMotionName: 
+        nextMotionName: WeakAttack.0
   playerInputControllerPrefab: {fileID: 5100394250428141442, guid: 6d1edebb2d4fef34bb8650676303d165, type: 3}
   playerSpawnPoint: {fileID: 915631917}
 --- !u!1 &1344185545
@@ -968,9 +968,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1344185545}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.22, y: 0.7828994, z: 5.02}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 6.29, y: 2.61, z: 6.42}
+  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2083692479}
   m_RootOrder: -1
@@ -1201,7 +1201,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2099141985}
   m_LocalRotation: {x: -0, y: 0.20396262, z: -0, w: 0.9789787}
-  m_LocalPosition: {x: -0.6055131, y: 1.6, z: 7.99}
+  m_LocalPosition: {x: -10.69, y: 1.6, z: 12.38}
   m_LocalScale: {x: 7.5373106, y: 4.1201, z: 1.8454341}
   m_ConstrainProportionsScale: 0
   m_Children: []

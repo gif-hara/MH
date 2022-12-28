@@ -43,5 +43,17 @@ namespace MH
             MessageBroker.GetPublisher<Actor, ActorEvents.CloseRequestRotation>()
                 .Publish(this.actor, ActorEvents.CloseRequestRotation.Get());
         }
+
+        /// <summary>
+        /// 次の状態を選択可能な状態にする
+        /// </summary>
+        /// <remarks>
+        /// この関数はアニメーションイベントで実行されます
+        /// </remarks>
+        public void AcceptNextState()
+        {
+            MessageBroker.GetPublisher<Actor, ActorEvents.AcceptNextState>()
+                .Publish(this.actor, ActorEvents.AcceptNextState.Get());
+        }
     }
 }

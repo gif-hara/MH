@@ -169,11 +169,29 @@ namespace MH
                     this.onAttackCanRotate = false;
                 })
                 .AddTo(scope);
-            
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.AcceptNextState>()
                 .Subscribe(this.actor, _ =>
                 {
-                    this.stateController.ChangeRequest(State.WeakAttack);
+                    MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
+                        .Subscribe(this.actor, _ =>
+                        {
+                            this.stateController.ChangeRequest(State.WeakAttack);
+                        })
+                        .AddTo(scope);
+                    MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
+                        .Subscribe(this.actor, x =>
+                        {
+                            this.actor.AttackController.Reset();
+                            this.actor.DodgeController.Invoke(
+                                x.Direction,
+                                x.Speed,
+                                x.Duration,
+                                x.Ease
+                                );
+                            this.stateController.ChangeRequest(State.Dodge);
+                        })
+                        .AddTo(scope);
                 })
                 .AddTo(scope);
 
