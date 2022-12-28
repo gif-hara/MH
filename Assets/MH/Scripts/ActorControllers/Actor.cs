@@ -8,12 +8,12 @@ namespace MH
     public class Actor : MonoBehaviour
     {
         [SerializeField]
-        private ActorMoveController moveController;
+        private ActorPostureController postureController;
 
         [SerializeField]
         private ActorAnimationController animationController;
 
-        public ActorMoveController MoveController => this.moveController;
+        public ActorPostureController PostureController => this.postureController;
         
         public ActorAnimationController AnimationController => this.animationController;
         

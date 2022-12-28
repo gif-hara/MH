@@ -22,7 +22,7 @@ namespace MH
         
         private void OnAnimatorMove()
         {
-            this.actor.MoveController.Move(this.animator.deltaPosition);
+            this.actor.PostureController.Move(this.animator.deltaPosition);
         }
     }
 }

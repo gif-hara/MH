@@ -4,9 +4,9 @@ using UnityEngine;
 namespace MH
 {
     /// <summary>
-    /// 
+    /// <see cref="Actor"/>の姿勢を制御するクラス
     /// </summary>
-    public sealed class ActorMoveController : MonoBehaviour
+    public sealed class ActorPostureController : MonoBehaviour
     {
         [SerializeField]
         private Actor actor;

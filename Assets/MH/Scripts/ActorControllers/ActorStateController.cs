@@ -50,14 +50,14 @@ namespace MH
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestMove>()
                 .Subscribe(this.actor, x =>
                 {
-                    this.actor.MoveController.Move(x.Velocity);
+                    this.actor.PostureController.Move(x.Velocity);
                 })
                 .AddTo(bag);
 
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestRotation>()
                 .Subscribe(this.actor, x =>
                 {
-                    this.actor.MoveController.Rotate(x.Rotation);
+                    this.actor.PostureController.Rotate(x.Rotation);
                 })
                 .AddTo(bag);
 
@@ -96,14 +96,14 @@ namespace MH
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestMove>()
                 .Subscribe(this.actor, x =>
                 {
-                    this.actor.MoveController.Move(x.Velocity);
+                    this.actor.PostureController.Move(x.Velocity);
                 })
                 .AddTo(bag);
             
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestRotation>()
                 .Subscribe(this.actor, x =>
                 {
-                    this.actor.MoveController.Rotate(x.Rotation);
+                    this.actor.PostureController.Rotate(x.Rotation);
                 })
                 .AddTo(bag);
 

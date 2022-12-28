@@ -53,7 +53,7 @@ namespace MH
                         return;
                     }
                     
-                    this.actor.MoveController.Rotate(x.Rotation);
+                    this.actor.PostureController.Rotate(x.Rotation);
                 })
                 .AddTo(scope);
             

@@ -23,12 +23,12 @@ namespace MH
             Ease ease
             )
         {
-            this.actor.MoveController.Rotate(Quaternion.LookRotation(direction));
+            this.actor.PostureController.Rotate(Quaternion.LookRotation(direction));
             DOTween.To(
                     () => speed,
                     x =>
                     {
-                        this.actor.MoveController.Move(direction * x * Time.deltaTime);
+                        this.actor.PostureController.Move(direction * x * Time.deltaTime);
                     },
                     0.0f,
                     duration
