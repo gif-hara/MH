@@ -277,7 +277,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67c315d4cab395a4c82c9f6c88d84a2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveController: {fileID: 1689262406764164034}
+  postureController: {fileID: 1689262406764164034}
   animationController: {fileID: 1689262406764164044}
 --- !u!114 &1689262406764164044
 MonoBehaviour:
