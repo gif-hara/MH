@@ -1,4 +1,8 @@
+using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using MessagePipe;
+using UnityEngine;
 
 namespace MH
 {
@@ -166,9 +170,21 @@ namespace MH
                 })
                 .AddTo(scope);
             
-            await this.actor.AttackController.InvokeAsync(ActorAttackController.AttackType.WeakAttack);
-            
-            this.stateController.ChangeRequest(State.Idle);
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.stateController.ChangeRequest(State.WeakAttack);
+                })
+                .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.EndAttack>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.stateController.ChangeRequest(State.Idle);
+                })
+                .AddTo(scope);
+
+            this.actor.AttackController.Invoke(ActorAttackController.AttackType.WeakAttack);
         }
     }
 }

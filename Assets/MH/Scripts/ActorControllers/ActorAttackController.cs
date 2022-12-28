@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UniRx;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace MH
@@ -48,15 +50,11 @@ namespace MH
         /// <summary>
         /// 攻撃を実行する
         /// </summary>
-        public async UniTask InvokeAsync(AttackType attackType)
+        public async void Invoke(AttackType attackType)
         {
-            if (this.IsAttacking && this.currentMotionData == null)
-            {
-                return;
-            }
-
             string motionName;
             
+            // 攻撃していなかった場合はタイプから初回の攻撃を算出する
             if (this.currentAttackType == AttackType.None)
             {
                 this.currentAttackType = attackType;
@@ -75,7 +73,7 @@ namespace MH
                     motionName = this.currentMotionData.motionName;
                 }
             }
-
+            
             if (motionName == "")
             {
                 return;
@@ -83,12 +81,19 @@ namespace MH
 
             this.canRotate = false;
             var animationBlendData = this.currentMotionData.animationBlendData;
-            
-            await this.actor.AnimationController.PlayTask(animationBlendData);
 
-            this.currentAttackType = AttackType.None;
-            MessageBroker.GetPublisher<Actor, ActorEvents.EndAttack>()
-                .Publish(this.actor, ActorEvents.EndAttack.Get());
+            try
+            {
+                await this.actor.AnimationController.PlayAsync(animationBlendData);
+            
+                this.currentAttackType = AttackType.None;
+                this.currentMotionData = null;
+                MessageBroker.GetPublisher<Actor, ActorEvents.EndAttack>()
+                    .Publish(this.actor, ActorEvents.EndAttack.Get());
+            }
+            catch (OperationCanceledException)
+            {
+            }
         }
 
         /// <summary>
@@ -104,9 +109,9 @@ namespace MH
             switch (attackType)
             {
                 case AttackType.WeakAttack:
-                    return "WeakAttack.First";
+                    return "WeakAttack.0";
                 case AttackType.DodgeAttack:
-                    return "DodgeAttack.First";
+                    return "DodgeAttack.0";
                 case AttackType.None:
                 default:
                     Assert.IsTrue(false, $"{attackType} is not supported.");

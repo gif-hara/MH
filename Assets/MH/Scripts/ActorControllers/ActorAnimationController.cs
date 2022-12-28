@@ -39,7 +39,7 @@ namespace MH
             this.animationController.Play(data);
         }
 
-        public UniTask<AnimationController.CompleteType> PlayTask(AnimationBlendData data)
+        public UniTask<AnimationController.CompleteType> PlayAsync(AnimationBlendData data)
         {
             return this.animationController.PlayAsync(data);
         }
