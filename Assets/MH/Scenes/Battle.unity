@@ -932,7 +932,7 @@ MonoBehaviour:
       - motionName: WeakAttack.0
         animationBlendData:
           animationClip: {fileID: 7400000, guid: f3b2dc672b635c94ca44ea5840839b9b, type: 2}
-          blendSeconds: 0.1
+          blendSeconds: 0.05
         nextMotionName: WeakAttack.1
       - motionName: WeakAttack.1
         animationBlendData:
