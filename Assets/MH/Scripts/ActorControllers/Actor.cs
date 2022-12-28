@@ -13,6 +13,9 @@ namespace MH
         [SerializeField]
         private ActorAnimationController animationController;
 
+        [SerializeField]
+        private ActorModelController modelController;
+
         public ActorPostureController PostureController => this.postureController;
         
         public ActorAnimationController AnimationController => this.animationController;
@@ -22,6 +25,8 @@ namespace MH
         public ActorDodgeController DodgeController { private set; get; }
         
         public ActorAttackController AttackController { private set; get; }
+
+        public ActorModelController ModelController => this.modelController;
         
         public Actor Spawn(ActorSpawnData data, Vector3 position, Quaternion rotation)
         {
@@ -30,6 +35,11 @@ namespace MH
             instance.DodgeController = new ActorDodgeController(instance);
             instance.AttackController = new ActorAttackController(instance, data.attackData);
 
+            foreach (var prefab in data.extensionPrefabs)
+            {
+                var extensionObject = Instantiate(prefab, instance.transform);
+                extensionObject.GetComponent<IActorAttachable>().Attach(instance);
+            }
             return instance;
         }
 

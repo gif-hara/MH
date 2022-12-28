@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace MH
 {
@@ -9,5 +11,13 @@ namespace MH
     public sealed class ActorSpawnData
     {
         public ActorAttackData attackData;
+
+        /// <summary>
+        /// <see cref="Actor"/>にアタッチするプレハブリスト
+        /// </summary>
+        /// <remarks>
+        /// <see cref="IActorAttachable"/>がアタッチされているプレハブを想定しています
+        /// </remarks>
+        public List<GameObject> extensionPrefabs;
     }
 }

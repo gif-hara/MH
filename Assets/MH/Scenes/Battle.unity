@@ -939,6 +939,8 @@ MonoBehaviour:
           animationClip: {fileID: 7400000, guid: 21cf87df0bf7f844fa897953d084176d, type: 2}
           blendSeconds: 0.1
         nextMotionName: WeakAttack.0
+    extensionPrefabs:
+    - {fileID: 861369732887970459, guid: 2536a8a0eb6693246912d987b86456a2, type: 3}
   playerInputControllerPrefab: {fileID: 5100394250428141442, guid: 6d1edebb2d4fef34bb8650676303d165, type: 3}
   playerSpawnPoint: {fileID: 915631917}
 --- !u!1 &1344185545
