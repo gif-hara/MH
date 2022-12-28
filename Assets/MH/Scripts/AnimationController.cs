@@ -122,7 +122,7 @@ namespace MH
                     return CompleteType.Aborted;
                 }
                 
-                await UniTask.Yield(PlayerLoopTiming.Update);
+                await UniTask.NextFrame(PlayerLoopTiming.Update, token);
             }
 
             return CompleteType.Success;
@@ -146,7 +146,7 @@ namespace MH
                 
                 this.animator.SetLayerWeight(LayerAIndex, this.currentLayerIndex == LayerAIndex ? rate : 1.0f - rate);
                 this.animator.SetLayerWeight(LayerBIndex, this.currentLayerIndex == LayerBIndex ? rate : 1.0f - rate);
-                await UniTask.Yield(PlayerLoopTiming.Update, this.animationCancelToken.Token);
+                await UniTask.NextFrame(PlayerLoopTiming.Update, token);
                 this.currentBlendSeconds += Time.deltaTime;
                 rate = this.currentBlendSeconds / blendSeconds;
             }
