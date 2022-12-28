@@ -41,12 +41,12 @@ namespace MH
 
         public UniTask<AnimationController.CompleteType> PlayTask(AnimationBlendData data)
         {
-            return this.animationController.PlayTask(data);
+            return this.animationController.PlayAsync(data);
         }
 
         public UniTask<AnimationController.CompleteType> PlayDodgeAsync()
         {
-            return this.animationController.PlayTask(this.dodgeClip, this.blendSeconds);
+            return this.animationController.PlayAsync(this.dodgeClip, this.blendSeconds);
         }
     }
 }

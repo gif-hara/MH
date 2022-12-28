@@ -97,15 +97,15 @@ namespace MH
             this.Play(data.animationClip, data.blendSeconds);
         }
         
-        public UniTask<CompleteType> PlayTask(AnimationClip clip, float blendSeconds = 0.0f)
+        public UniTask<CompleteType> PlayAsync(AnimationClip clip, float blendSeconds = 0.0f)
         {
             this.Play(clip, blendSeconds);
             return this.GetCompleteAnimationTask(this.animationCancelToken.Token);
         }
 
-        public UniTask<CompleteType> PlayTask(AnimationBlendData blendData)
+        public UniTask<CompleteType> PlayAsync(AnimationBlendData blendData)
         {
-            return this.PlayTask(blendData.animationClip, blendData.blendSeconds);
+            return this.PlayAsync(blendData.animationClip, blendData.blendSeconds);
         }
 
         private async UniTask<CompleteType> GetCompleteAnimationTask(CancellationToken token)
