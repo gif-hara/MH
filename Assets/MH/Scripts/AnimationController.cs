@@ -18,7 +18,7 @@ namespace MH
         
         private AnimatorOverrideController overrideController;
         
-        private bool overrideClipToggle = true;
+        private int currentLayerIndex = LayerAIndex;
 
         private CancellationTokenDisposable animationCancelToken;
 
@@ -31,6 +31,10 @@ namespace MH
         private static readonly int OverrideStateA = Animator.StringToHash("Override State A");
 
         private static readonly int OverrideStateB = Animator.StringToHash("Override State B");
+
+        private const int LayerAIndex = 1;
+
+        private const int LayerBIndex = 2;
 
         /// <summary>
         /// アニメーション再生完了タイプ
@@ -69,16 +73,16 @@ namespace MH
             this.animationCancelToken?.Dispose();
             this.animationCancelToken = new CancellationTokenDisposable();
 
-            this.overrideClipToggle = !this.overrideClipToggle;
+            this.currentLayerIndex = this.currentLayerIndex == LayerAIndex ? LayerBIndex : LayerAIndex;
             this.overrideController[this.GetCurrentOverrideClipName()] = clip;
-            this.animator.Play(this.GetCurrentOverrideState(), this.GetCurrentOverrideLayerIndex(), 0.0f);
+            this.animator.Play(this.GetCurrentOverrideState(), this.currentLayerIndex, 0.0f);
             this.currentBlendSeconds = 0.0f;
             
             // ブレンドしない場合は即座にレイヤーを更新する
             if (blendSeconds <= 0.0f)
             {
-                this.animator.SetLayerWeight(1, this.overrideClipToggle ? 1.0f : 0.0f);
-                this.animator.SetLayerWeight(2, this.overrideClipToggle ? 0.0f : 1.0f);
+                this.animator.SetLayerWeight(LayerAIndex, this.currentLayerIndex == LayerAIndex ? 1.0f : 0.0f);
+                this.animator.SetLayerWeight(LayerBIndex, this.currentLayerIndex == LayerBIndex ? 1.0f : 0.0f);
             }
             this.animator.Update(0.0f);
 
@@ -111,7 +115,7 @@ namespace MH
                 return CompleteType.Aborted;
             }
             
-            while (this.animator.GetCurrentAnimatorStateInfo(this.GetCurrentOverrideLayerIndex()).normalizedTime < 1.0f)
+            while (this.animator.GetCurrentAnimatorStateInfo(this.currentLayerIndex).normalizedTime < 1.0f)
             {
                 if (token.IsCancellationRequested)
                 {
@@ -140,8 +144,8 @@ namespace MH
                     return;
                 }
                 
-                this.animator.SetLayerWeight(1, this.overrideClipToggle ? rate : 1.0f - rate);
-                this.animator.SetLayerWeight(2, this.overrideClipToggle ? 1.0f - rate : rate);
+                this.animator.SetLayerWeight(LayerAIndex, this.currentLayerIndex == LayerAIndex ? rate : 1.0f - rate);
+                this.animator.SetLayerWeight(LayerBIndex, this.currentLayerIndex == LayerBIndex ? rate : 1.0f - rate);
                 await UniTask.Yield(PlayerLoopTiming.Update, this.animationCancelToken.Token);
                 this.currentBlendSeconds += Time.deltaTime;
                 rate = this.currentBlendSeconds / blendSeconds;
@@ -150,7 +154,7 @@ namespace MH
 
         public async UniTask WaitForAnimation()
         {
-            while (this.animator.GetCurrentAnimatorStateInfo(this.GetCurrentOverrideLayerIndex()).normalizedTime < 1.0f)
+            while (this.animator.GetCurrentAnimatorStateInfo(this.currentLayerIndex).normalizedTime < 1.0f)
             {
                 await UniTask.Yield(this.GetCancellationTokenOnDestroy());
             }
@@ -158,17 +162,12 @@ namespace MH
         
         private string GetCurrentOverrideClipName()
         {
-            return this.overrideClipToggle ? OverrideClipAName : OverrideClipBName;
+            return this.currentLayerIndex == LayerAIndex ? OverrideClipAName : OverrideClipBName;
         }
         
         private int GetCurrentOverrideState()
         {
-            return this.overrideClipToggle ? OverrideStateA : OverrideStateB;
-        }
-
-        private int GetCurrentOverrideLayerIndex()
-        {
-            return this.overrideClipToggle ? 1 : 2;
+            return this.currentLayerIndex == LayerAIndex ? OverrideStateA : OverrideStateB;
         }
     }
 }
