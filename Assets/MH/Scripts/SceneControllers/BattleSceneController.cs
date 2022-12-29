@@ -13,6 +13,9 @@ namespace MH
         private Actor playerPrefab;
 
         [SerializeField]
+        private Actor enemyPrefab;
+
+        [SerializeField]
         private ActorSpawnData playerSpawnData;
 
         [SerializeField]
@@ -20,6 +23,9 @@ namespace MH
 
         [SerializeField]
         private Transform playerSpawnPoint;
+
+        [SerializeField]
+        private Transform enemySpawnPoint;
 
         private async void Start()
         {
@@ -30,6 +36,8 @@ namespace MH
             var player = this.playerPrefab.Spawn(this.playerSpawnData, this.playerSpawnPoint);
             MessageBroker.GetPublisher<ActorEvents.SpawnedPlayer>()
                 .Publish(ActorEvents.SpawnedPlayer.Get(player));
+
+            this.enemyPrefab.Spawn(this.playerSpawnData, this.enemySpawnPoint);
         }
     }
 }
