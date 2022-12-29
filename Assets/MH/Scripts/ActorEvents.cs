@@ -123,6 +123,28 @@ namespace MH
             public Actor Player => this.Param1;
         }
 
+        /// <summary>
+        /// 攻撃判定の有効化を行うメッセージ
+        /// </summary>
+        public sealed class ValidationAttackCollider : Message<ValidationAttackCollider, string>
+        {
+            /// <summary>
+            /// 有効にする攻撃判定の名前
+            /// </summary>
+            public string ColliderName => this.Param1;
+        }
+
+        /// <summary>
+        /// 攻撃判定の有効化を行うメッセージ
+        /// </summary>
+        public sealed class InvalidationAttackCollider : Message<InvalidationAttackCollider, string>
+        {
+            /// <summary>
+            /// 無効にする攻撃判定の名前
+            /// </summary>
+            public string ColliderName => this.Param1;
+        }
+
         public static void RegisterEvents(BuiltinContainerBuilder builder)
         {
             builder.AddMessageBroker<Actor, BeginMove>();
@@ -136,6 +158,8 @@ namespace MH
             builder.AddMessageBroker<Actor, EndAttack>();
             builder.AddMessageBroker<Actor, AcceptNextState>();
             builder.AddMessageBroker<SpawnedPlayer>();
+            builder.AddMessageBroker<Actor, ValidationAttackCollider>();
+            builder.AddMessageBroker<Actor, InvalidationAttackCollider>();
         }
     }
 }

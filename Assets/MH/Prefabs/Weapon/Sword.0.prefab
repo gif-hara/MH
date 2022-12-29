@@ -1,5 +1,70 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &570501184804022271
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 764315254974067345}
+  - component: {fileID: 4346181032865450910}
+  - component: {fileID: 7925318252828390787}
+  m_Layer: 0
+  m_Name: SetTrailEmitting
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &764315254974067345
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 570501184804022271}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7465969378787072456}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4346181032865450910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 570501184804022271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8374dbf6e1458b4a952bd88abb933b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actor: {fileID: 0}
+  targetDataList:
+  - target: {fileID: 8674820520383184924}
+    emitting: 1
+--- !u!114 &7925318252828390787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 570501184804022271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2aec2fa95aecb1c43a0b9e785d9555ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actor: {fileID: 0}
+  targetDataList:
+  - target: {fileID: 8674820520383184924}
+    emitting: 0
 --- !u!1 &1663420326846333741
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,6 +368,38 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 0
   m_ApplyActiveColorSpace: 1
+--- !u!1 &5941764121748970871
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7465969378787072456}
+  m_Layer: 0
+  m_Name: Events
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7465969378787072456
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5941764121748970871}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 764315254974067345}
+  m_Father: {fileID: 3586754380753736604}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &8834774286792792385
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -318,7 +415,7 @@ PrefabInstance:
     - target: {fileID: 2607834637685943344, guid: 94a681fb628261a4888d41400f9b0f3e, type: 3}
       propertyPath: colliders.Array.data[0]
       value: 
-      objectReference: {fileID: 7702005032153562335}
+      objectReference: {fileID: 1663420326846333741}
     - target: {fileID: 3548777528074979117, guid: 94a681fb628261a4888d41400f9b0f3e, type: 3}
       propertyPath: m_Name
       value: Sword.0
@@ -378,6 +475,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5430736954514541277, guid: 94a681fb628261a4888d41400f9b0f3e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5531807057286148561}
+    - targetCorrespondingSourceObject: {fileID: 5430736954514541277, guid: 94a681fb628261a4888d41400f9b0f3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7465969378787072456}
   m_SourcePrefab: {fileID: 100100000, guid: 94a681fb628261a4888d41400f9b0f3e, type: 3}
 --- !u!4 &3586754380753736604 stripped
 Transform:

@@ -38,7 +38,10 @@ namespace MH
             foreach (var prefab in data.extensionPrefabs)
             {
                 var extensionObject = Instantiate(prefab, instance.transform);
-                extensionObject.GetComponent<IActorAttachable>().Attach(instance);
+                foreach (var i in extensionObject.GetComponentsInChildren<IActorAttachable>())
+                {
+                    i.Attach(instance);
+                }
             }
             return instance;
         }

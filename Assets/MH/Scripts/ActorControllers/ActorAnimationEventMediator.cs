@@ -55,5 +55,29 @@ namespace MH
             MessageBroker.GetPublisher<Actor, ActorEvents.AcceptNextState>()
                 .Publish(this.actor, ActorEvents.AcceptNextState.Get());
         }
+
+        /// <summary>
+        /// 攻撃判定を有効化する
+        /// </summary>
+        /// <remarks>
+        /// この関数はアニメーションイベントで実行されます
+        /// </remarks>
+        public void ValidationAttackCollider(string colliderName)
+        {
+            MessageBroker.GetPublisher<Actor, ActorEvents.ValidationAttackCollider>()
+                .Publish(this.actor, ActorEvents.ValidationAttackCollider.Get(colliderName));
+        }
+
+        /// <summary>
+        /// 攻撃判定を無効化する
+        /// </summary>
+        /// <remarks>
+        /// この関数はアニメーションイベントで実行されます
+        /// </remarks>
+        public void InvalidationAttackCollider(string colliderName)
+        {
+            MessageBroker.GetPublisher<Actor, ActorEvents.InvalidationAttackCollider>()
+                .Publish(this.actor, ActorEvents.InvalidationAttackCollider.Get(colliderName));
+        }
     }
 }
