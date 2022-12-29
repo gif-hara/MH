@@ -13,6 +13,12 @@ namespace MH
     public sealed class ActorWeaponController : MonoBehaviour, IActorAttachable
     {
         [SerializeField]
+        private float hitStopTimeScale;
+
+        [SerializeField]
+        private float hitStopSeconds;
+        
+        [SerializeField]
         private List<GameObject> colliders;
         
         private Actor actor;
@@ -69,7 +75,7 @@ namespace MH
                 return;
             }
             
-            Debug.Log(other, other);
+            this.actor.TimeController.BeginHitStop(this.hitStopTimeScale, this.hitStopSeconds);
         }
     }
 }

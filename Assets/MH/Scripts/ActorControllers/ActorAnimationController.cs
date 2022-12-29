@@ -30,12 +30,12 @@ namespace MH
 
         private void Start()
         {
-            this.animationController.Time = this.actor.Time;
-            this.animationController.SetSpeed(this.actor.Time.totalTimeScale);
+            this.animationController.Time = this.actor.TimeController.Time;
+            this.animationController.SetSpeed(this.actor.TimeController.Time.totalTimeScale);
             MessageBroker.GetSubscriber<Time, TimeEvents.UpdatedTimeScale>()
-                .Subscribe(this.actor.Time, x =>
+                .Subscribe(this.actor.TimeController.Time, x =>
                 {
-                    this.animationController.SetSpeed(this.actor.Time.totalTimeScale);
+                    this.animationController.SetSpeed(this.actor.TimeController.Time.totalTimeScale);
                 });
         }
 

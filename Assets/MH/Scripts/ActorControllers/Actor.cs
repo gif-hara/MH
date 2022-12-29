@@ -28,7 +28,8 @@ namespace MH
 
         public ActorModelController ModelController => this.modelController;
         
-        public Time Time { private set; get; }
+        public ActorTimeController TimeController { private set; get; }
+        
         
         public Actor Spawn(ActorSpawnData data, Vector3 position, Quaternion rotation)
         {
@@ -36,7 +37,7 @@ namespace MH
             instance.StateController = new ActorStateController(instance);
             instance.DodgeController = new ActorDodgeController(instance);
             instance.AttackController = new ActorAttackController(instance, data.attackData);
-            instance.Time = TimeManager.Create(TimeManager.Game);
+            instance.TimeController = new ActorTimeController();
 
             foreach (var prefab in data.extensionPrefabs)
             {

@@ -8,10 +8,5 @@ namespace MH
         public static readonly Time System = new ();
 
         public static readonly Time Game = new (System);
-
-        public static Time Create(Time parent = null)
-        {
-            return new Time(parent);
-        }
     }
 }

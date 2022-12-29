@@ -89,7 +89,7 @@ namespace MH
         void Update()
         {
             // キャラクターの移動処理
-            var deltaTime = this.actor.Time.deltaTime;
+            var deltaTime = this.actor.TimeController.Time.deltaTime;
             var input = this.inputActions.Player.Move.ReadValue<Vector2>();
             var cameraTransform = this.cinemachineVirtualCamera.transform;
             var cameraRight = Vector3.Scale(cameraTransform.right, new Vector3(1, 0, 1));
