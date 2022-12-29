@@ -956,8 +956,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45c2058f0a05bb42863192e99831ab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 1689262406764164045, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
-  enemyPrefab: {fileID: 1689262406764164045, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
+  playerPrefab: {fileID: 6321397659681280986, guid: b75c59ac30827e149842ceba11d840f0, type: 3}
+  enemyPrefab: {fileID: 6321397659681280986, guid: b75c59ac30827e149842ceba11d840f0, type: 3}
   playerSpawnData:
     attackData:
       motionDataList:
