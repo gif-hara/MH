@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -8,8 +10,13 @@ namespace MH
     /// </summary>
     public sealed class ActorWeaponController : MonoBehaviour, IActorAttachable
     {
-        private Actor actor;
+        [SerializeField]
+        private List<Collider> colliders;
         
+        private Actor actor;
+
+        private Dictionary<string, Collider> colliderDictionary;
+
         public void Attach(Actor actor)
         {
             this.actor = actor;
@@ -17,6 +24,7 @@ namespace MH
             t.SetParent(this.actor.ModelController.BoneHolder.RightHand, false);
             t.localPosition = Vector3.zero;
             t.localRotation = Quaternion.identity;
+            this.colliderDictionary = this.colliders.ToDictionary(x => x.name);
         }
     }
 }
