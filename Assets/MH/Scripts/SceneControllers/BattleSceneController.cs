@@ -19,6 +19,9 @@ namespace MH
         private ActorSpawnData playerSpawnData;
 
         [SerializeField]
+        private ActorSpawnData enemySpawnData;
+
+        [SerializeField]
         private PlayerInputController playerInputControllerPrefab;
 
         [SerializeField]
@@ -37,7 +40,7 @@ namespace MH
             MessageBroker.GetPublisher<ActorEvents.SpawnedPlayer>()
                 .Publish(ActorEvents.SpawnedPlayer.Get(player));
 
-            this.enemyPrefab.Spawn(this.playerSpawnData, this.enemySpawnPoint);
+            this.enemyPrefab.Spawn(this.enemySpawnData, this.enemySpawnPoint);
         }
     }
 }

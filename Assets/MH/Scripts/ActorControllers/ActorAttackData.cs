@@ -9,6 +9,11 @@ namespace MH
     [Serializable]
     public sealed class ActorAttackData
     {
+        /// <summary>
+        /// 基本攻撃力
+        /// </summary>
+        public int baseStrength;
+        
         public List<MotionData> motionDataList;
 
         [Serializable]

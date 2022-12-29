@@ -1792,6 +1792,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2684247860661789161, guid: 2391362baec99414ab96c8c75c163a53, type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2684247860661789161, guid: 2391362baec99414ab96c8c75c163a53, type: 3}
       propertyPath: m_Name
       value: Player.0
       objectReference: {fileID: 0}
