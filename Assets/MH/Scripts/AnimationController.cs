@@ -135,7 +135,7 @@ namespace MH
                 return;
             }
             
-            this.currentBlendSeconds += Time.deltaTime;
+            this.currentBlendSeconds += UnityEngine.Time.deltaTime;
             var rate = this.currentBlendSeconds / blendSeconds;
             while (rate < 1.0f)
             {
@@ -147,7 +147,7 @@ namespace MH
                 this.animator.SetLayerWeight(LayerAIndex, this.currentLayerIndex == LayerAIndex ? rate : 1.0f - rate);
                 this.animator.SetLayerWeight(LayerBIndex, this.currentLayerIndex == LayerBIndex ? rate : 1.0f - rate);
                 await UniTask.NextFrame(PlayerLoopTiming.Update, token);
-                this.currentBlendSeconds += Time.deltaTime;
+                this.currentBlendSeconds += UnityEngine.Time.deltaTime;
                 rate = this.currentBlendSeconds / blendSeconds;
             }
         }

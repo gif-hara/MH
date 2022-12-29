@@ -89,6 +89,7 @@ namespace MH
         void Update()
         {
             // キャラクターの移動処理
+            var deltaTime = this.actor.Time.deltaTime;
             var input = this.inputActions.Player.Move.ReadValue<Vector2>();
             var cameraTransform = this.cinemachineVirtualCamera.transform;
             var cameraRight = Vector3.Scale(cameraTransform.right, new Vector3(1, 0, 1));
@@ -99,7 +100,7 @@ namespace MH
             if (velocity.sqrMagnitude >= 0.01f)
             {
                 MessageBroker.GetPublisher<Actor, ActorEvents.RequestMove>()
-                    .Publish(this.actor, ActorEvents.RequestMove.Get(velocity * this.moveSpeed * Time.deltaTime));
+                    .Publish(this.actor, ActorEvents.RequestMove.Get(velocity * this.moveSpeed * deltaTime));
                 this.lastRotation = velocity;
             }
             if (this.lastRotation.sqrMagnitude >= 0.01f)
@@ -107,14 +108,14 @@ namespace MH
                 var rotation = Quaternion.Lerp(
                     this.actor.transform.localRotation,
                     Quaternion.LookRotation(this.lastRotation),
-                    this.rotationSpeed * Time.deltaTime
+                    this.rotationSpeed * deltaTime
                     );
                 MessageBroker.GetPublisher<Actor, ActorEvents.RequestRotation>()
                     .Publish(this.actor, ActorEvents.RequestRotation.Get(rotation));
             }
 
             // カメラのスクリーン値の更新
-            var screenVelocity = input.x * this.screenMoveSpeed * Time.deltaTime;
+            var screenVelocity = input.x * this.screenMoveSpeed * deltaTime;
             var screenX = Mathf.Clamp(
                 this.cinemachineComposer.m_ScreenX + screenVelocity,
                 this.screenXMin,
@@ -124,7 +125,7 @@ namespace MH
 
             // カメラのY方向の回転処理
             input = this.inputActions.Player.Look.ReadValue<Vector2>();
-            var offsetY = Mathf.Clamp(this.orbitalTransposer.m_FollowOffset.y + input.y * this.cameraSpeed.y * Time.deltaTime, this.followYMin, this.followYMax);
+            var offsetY = Mathf.Clamp(this.orbitalTransposer.m_FollowOffset.y + input.y * this.cameraSpeed.y * deltaTime, this.followYMin, this.followYMax);
             this.orbitalTransposer.m_FollowOffset.y = offsetY;
         }
 

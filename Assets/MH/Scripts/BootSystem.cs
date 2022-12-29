@@ -33,6 +33,7 @@ namespace MH
             MessageBroker.Setup(builder =>
             {
                 ActorEvents.RegisterEvents(builder);
+                TimeEvents.RegisterEvents(builder);
             });
             return UniTask.CompletedTask;
         }

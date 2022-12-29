@@ -28,12 +28,15 @@ namespace MH
 
         public ActorModelController ModelController => this.modelController;
         
+        public Time Time { private set; get; }
+        
         public Actor Spawn(ActorSpawnData data, Vector3 position, Quaternion rotation)
         {
             var instance = Instantiate(this, position, rotation);
             instance.StateController = new ActorStateController(instance);
             instance.DodgeController = new ActorDodgeController(instance);
             instance.AttackController = new ActorAttackController(instance, data.attackData);
+            instance.Time = TimeManager.Create(TimeManager.Game);
 
             foreach (var prefab in data.extensionPrefabs)
             {

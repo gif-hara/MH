@@ -145,6 +145,9 @@ namespace MH
             public string ColliderName => this.Param1;
         }
 
+        /// <summary>
+        /// イベントの登録を行う
+        /// </summary>
         public static void RegisterEvents(BuiltinContainerBuilder builder)
         {
             builder.AddMessageBroker<Actor, BeginMove>();

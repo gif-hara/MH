@@ -28,7 +28,7 @@ namespace MH
                     () => speed,
                     x =>
                     {
-                        this.actor.PostureController.Move(direction * x * Time.deltaTime);
+                        this.actor.PostureController.Move(direction * x * this.actor.Time.deltaTime);
                     },
                     0.0f,
                     duration
