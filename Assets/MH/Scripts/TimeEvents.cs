@@ -12,12 +12,8 @@ namespace MH
         /// <summary>
         /// タイムスケールに更新があった際のメッセージ
         /// </summary>
-        public sealed class UpdatedTimeScale : Message<UpdatedTimeScale, float>
+        public sealed class UpdatedTimeScale : Message<UpdatedTimeScale>
         {
-            /// <summary>
-            /// 新しいタイムスケール
-            /// </summary>
-            public float NewTimeScale => this.Param1;
         }
         
         /// <summary>

@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using MessagePipe;
 
 namespace MH
 {
@@ -9,6 +10,9 @@ namespace MH
     /// </summary>
     public sealed class ActorAnimationController : MonoBehaviour
     {
+        [SerializeField]
+        private Actor actor;
+        
         [SerializeField]
         private AnimationController animationController;
 
@@ -23,6 +27,17 @@ namespace MH
 
         [SerializeField]
         private float blendSeconds;
+
+        private void Start()
+        {
+            this.animationController.Time = this.actor.Time;
+            this.animationController.SetSpeed(this.actor.Time.totalTimeScale);
+            MessageBroker.GetSubscriber<Time, TimeEvents.UpdatedTimeScale>()
+                .Subscribe(this.actor.Time, x =>
+                {
+                    this.animationController.SetSpeed(this.actor.Time.totalTimeScale);
+                });
+        }
 
         public void PlayIdle()
         {

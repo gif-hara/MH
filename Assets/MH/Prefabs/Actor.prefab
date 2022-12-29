@@ -293,6 +293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fa41aea3120ca84c85ccdc165a4f84c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actor: {fileID: 1689262406764164045}
   animationController: {fileID: 1689262406764164035}
   idleClip: {fileID: 7400000, guid: ec32a4841c4beea4680bf398cf67ea2d, type: 2}
   runClip: {fileID: 7400000, guid: 7a7cd163c014c084e811fe6dd9409011, type: 2}

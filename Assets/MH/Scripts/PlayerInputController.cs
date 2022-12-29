@@ -127,6 +127,28 @@ namespace MH
             input = this.inputActions.Player.Look.ReadValue<Vector2>();
             var offsetY = Mathf.Clamp(this.orbitalTransposer.m_FollowOffset.y + input.y * this.cameraSpeed.y * deltaTime, this.followYMin, this.followYMax);
             this.orbitalTransposer.m_FollowOffset.y = offsetY;
+
+            if (Keyboard.current.vKey.wasPressedThisFrame)
+            {
+                this.actor.Time.timeScale = 0.5f;
+                Debug.Log(this.actor.Time.totalTimeScale);
+            }
+            if (Keyboard.current.bKey.wasPressedThisFrame)
+            {
+                this.actor.Time.timeScale = 1;
+                Debug.Log(this.actor.Time.totalTimeScale);
+            }
+
+            if (Keyboard.current.nKey.wasPressedThisFrame)
+            {
+                TimeManager.Game.timeScale = 0.5f;
+                Debug.Log(TimeManager.Game.totalTimeScale);
+            }
+            if (Keyboard.current.mKey.wasPressedThisFrame)
+            {
+                TimeManager.Game.timeScale = 1;
+                Debug.Log(TimeManager.Game.totalTimeScale);
+            }
         }
 
         private void OnDestroy()

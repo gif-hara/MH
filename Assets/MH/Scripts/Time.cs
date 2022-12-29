@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace MH
 {
     /// <summary>
@@ -7,6 +9,8 @@ namespace MH
     {
         private readonly Time parent;
 
+        private readonly List<Time> children = new();
+
         private float _timeScale = 1.0f;
 
         public float timeScale
@@ -15,7 +19,12 @@ namespace MH
             {
                 this._timeScale = value;
                 MessageBroker.GetPublisher<Time, TimeEvents.UpdatedTimeScale>()
-                    .Publish(this, TimeEvents.UpdatedTimeScale.Get(value));
+                    .Publish(this, TimeEvents.UpdatedTimeScale.Get());
+                foreach (var child in this.children)
+                {
+                    MessageBroker.GetPublisher<Time, TimeEvents.UpdatedTimeScale>()
+                        .Publish(child, TimeEvents.UpdatedTimeScale.Get());
+                }
             }
             get => this._timeScale;
         }
@@ -39,6 +48,12 @@ namespace MH
         public Time(Time parent = null)
         {
             this.parent = parent;
+            this.parent?.children.Add(this);
+        }
+
+        ~Time()
+        {
+            this.parent?.children.Remove(this);
         }
     }
 }
