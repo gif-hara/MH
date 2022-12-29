@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 1689262406764164035}
   - component: {fileID: 1689262406764164034}
   - component: {fileID: 8571845875620172789}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Actor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -256,7 +256,7 @@ MonoBehaviour:
   m_Height: 2.6
   m_CollisionLayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 65
   m_IsLocalHuman: 1
   m_SlideAlongCeiling: 1
   m_SlowAgainstWalls: 1

@@ -21,6 +21,16 @@ namespace MH
 
         private IDisposable scope;
 
+        private void Awake()
+        {
+            foreach (var i in this.colliders)
+            {
+                i.SetActive(false);
+            }
+            
+            this.colliderDictionary = this.colliders.ToDictionary(x => x.name);
+        }
+
         public void Attach(Actor actor)
         {
             this.actor = actor;
@@ -28,7 +38,6 @@ namespace MH
             t.SetParent(this.actor.ModelController.BoneHolder.RightHand, false);
             t.localPosition = Vector3.zero;
             t.localRotation = Quaternion.identity;
-            this.colliderDictionary = this.colliders.ToDictionary(x => x.name);
             var bag = DisposableBag.CreateBuilder();
             
             MessageBroker.GetSubscriber<Actor, ActorEvents.ValidationAttackCollider>()
@@ -51,6 +60,16 @@ namespace MH
         private void OnDestroy()
         {
             this.scope?.Dispose();
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (this.actor.gameObject == other.gameObject)
+            {
+                return;
+            }
+            
+            Debug.Log(other, other);
         }
     }
 }

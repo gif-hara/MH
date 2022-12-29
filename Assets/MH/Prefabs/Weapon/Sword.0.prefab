@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 764315254974067345}
   - component: {fileID: 4346181032865450910}
   - component: {fileID: 7925318252828390787}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SetTrailEmitting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -75,7 +75,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3896142438899866445}
   - component: {fileID: 7702005032153562335}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Common
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 6419842246508447267}
   - component: {fileID: 5129555765403362776}
   - component: {fileID: 7203659456825661401}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -202,7 +202,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5531807057286148561}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,7 +235,7 @@ GameObject:
   m_Component:
   - component: {fileID: 143798029161616562}
   - component: {fileID: 8674820520383184924}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -377,7 +377,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7465969378787072456}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Events
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -419,6 +419,10 @@ PrefabInstance:
     - target: {fileID: 3548777528074979117, guid: 94a681fb628261a4888d41400f9b0f3e, type: 3}
       propertyPath: m_Name
       value: Sword.0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3548777528074979117, guid: 94a681fb628261a4888d41400f9b0f3e, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5430736954514541277, guid: 94a681fb628261a4888d41400f9b0f3e, type: 3}
       propertyPath: m_RootOrder
