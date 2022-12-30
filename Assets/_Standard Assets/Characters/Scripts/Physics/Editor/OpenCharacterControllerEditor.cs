@@ -3,6 +3,7 @@ using StandardAssets.Characters.Physics;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 namespace StandardAssets.Characters.Editor
 {
 	/// <summary>
@@ -61,3 +62,4 @@ namespace StandardAssets.Characters.Editor
 		}
 	}
 }
+#endif

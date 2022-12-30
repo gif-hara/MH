@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using StandardAssets.Characters.Helpers;
 
+#if UNITY_EDITOR
 namespace StandardAssets.Characters.Editor
 {
 	/// <summary>
@@ -59,3 +60,4 @@ namespace StandardAssets.Characters.Editor
 		}
 	}
 }
+#endif
