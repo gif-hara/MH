@@ -529,6 +529,10 @@ PrefabInstance:
       value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2607834637685943344, guid: 94a681fb628261a4888d41400f9b0f3e, type: 3}
+      propertyPath: hitEffectPrefab
+      value: 
+      objectReference: {fileID: 1347330118340980, guid: a270d4b31a4d11a4b8302acf069f853a, type: 3}
+    - target: {fileID: 2607834637685943344, guid: 94a681fb628261a4888d41400f9b0f3e, type: 3}
       propertyPath: hitStopTimeScale
       value: 0
       objectReference: {fileID: 0}

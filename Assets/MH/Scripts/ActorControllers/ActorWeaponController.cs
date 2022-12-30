@@ -20,6 +20,9 @@ namespace MH
         
         [SerializeField]
         private List<GameObject> colliders;
+
+        [SerializeField]
+        private GameObject hitEffectPrefab;
         
         private Actor actor;
 
@@ -74,6 +77,17 @@ namespace MH
             {
                 return;
             }
+
+            var hitData = new HitData
+            {
+                position = other.ClosestPoint(this.transform.position),
+                rotation = this.transform.rotation,
+            };
+
+            Instantiate(this.hitEffectPrefab, hitData.position, hitData.rotation);
+            
+            MessageBroker.GetPublisher<ActorEvents.HitAttack>()
+                .Publish(ActorEvents.HitAttack.Get(hitData));
             
             this.actor.TimeController.BeginHitStop(this.hitStopTimeScale, this.hitStopSeconds);
         }

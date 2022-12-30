@@ -135,7 +135,7 @@ namespace MH
         }
 
         /// <summary>
-        /// 攻撃判定の有効化を行うメッセージ
+        /// 攻撃判定の無効化を行うメッセージ
         /// </summary>
         public sealed class InvalidationAttackCollider : Message<InvalidationAttackCollider, string>
         {
@@ -143,6 +143,17 @@ namespace MH
             /// 無効にする攻撃判定の名前
             /// </summary>
             public string ColliderName => this.Param1;
+        }
+
+        /// <summary>
+        /// 攻撃が当たった際のメッセージ
+        /// </summary>
+        public sealed class HitAttack : Message<HitAttack, HitData>
+        {
+            /// <summary>
+            /// ヒットデータ
+            /// </summary>
+            public HitData HitData => this.Param1;
         }
 
         /// <summary>
@@ -163,6 +174,7 @@ namespace MH
             builder.AddMessageBroker<SpawnedPlayer>();
             builder.AddMessageBroker<Actor, ValidationAttackCollider>();
             builder.AddMessageBroker<Actor, InvalidationAttackCollider>();
+            builder.AddMessageBroker<HitAttack>();
         }
     }
 }
