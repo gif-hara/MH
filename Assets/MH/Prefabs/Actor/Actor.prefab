@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Height: 2.6
   m_CollisionLayerMask:
     serializedVersion: 2
-    m_Bits: 65
+    m_Bits: 321
   m_IsLocalHuman: 1
   m_SlideAlongCeiling: 1
   m_SlowAgainstWalls: 1
@@ -194,6 +194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actor: {fileID: 1689262406764164045}
   openCharacterController: {fileID: 1689262406764164041}
+  gravity: {x: 0, y: -0.03, z: 0}
 --- !u!114 &8571845875620172789
 MonoBehaviour:
   m_ObjectHideFlags: 0

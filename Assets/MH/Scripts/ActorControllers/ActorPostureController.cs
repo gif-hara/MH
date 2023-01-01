@@ -14,6 +14,11 @@ namespace MH
         [SerializeField]
         private OpenCharacterController openCharacterController;
 
+        [SerializeField]
+        private Vector3 gravity;
+
+        private Vector3 currentGravity;
+
         private Vector3 currentMoveVector;
         
         private bool isMoving = true;
@@ -28,9 +33,6 @@ namespace MH
                     MessageBroker.GetPublisher<Actor, ActorEvents.BeginMove>()
                         .Publish(this.actor, ActorEvents.BeginMove.Get());
                 }
-
-                this.openCharacterController.Move(this.currentMoveVector);
-                this.currentMoveVector = Vector3.zero;
             }
             else
             {
@@ -40,6 +42,18 @@ namespace MH
                     MessageBroker.GetPublisher<Actor, ActorEvents.EndMove>()
                         .Publish(this.actor, ActorEvents.EndMove.Get());
                 }
+            }
+            
+            this.currentGravity += this.gravity * this.actor.TimeController.Time.deltaTime;
+
+            var totalVector = this.currentMoveVector + this.currentGravity;
+
+            this.openCharacterController.Move(totalVector);
+            this.currentMoveVector = Vector3.zero;
+
+            if (this.openCharacterController.isGrounded)
+            {
+                this.currentGravity = Vector3.zero;
             }
         }
 

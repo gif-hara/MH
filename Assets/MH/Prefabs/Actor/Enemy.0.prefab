@@ -57,7 +57,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5506118298701763247}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1.1, z: 0}
   m_LocalScale: {x: 2.2, y: 2, z: 3.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -181,21 +181,25 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 1689262406736378763, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1689262406764164035, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
       propertyPath: animator
       value: 
       objectReference: {fileID: 2437312893447660205}
     - target: {fileID: 1689262406764164041, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
       propertyPath: m_Height
-      value: 3.9
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 1689262406764164041, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
       propertyPath: m_Radius
-      value: 1.14
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 1689262406764164041, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
       propertyPath: m_Center.y
-      value: 1.9
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 1689262406764164042, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
       propertyPath: m_Icon
@@ -251,15 +255,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1689262406764164047, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
       propertyPath: m_Height
-      value: 3.8
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 1689262406764164047, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
       propertyPath: m_Radius
-      value: 1.14
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 1689262406764164047, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
       propertyPath: m_Center.y
-      value: 1.9
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 8571845875620172789, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
       propertyPath: boneHolder
