@@ -36,7 +36,7 @@ namespace MH
             this.stateController.Set(State.Idle, OnEnterIdle, null);
             this.stateController.Set(State.Run, OnEnterRun, null);
             this.stateController.Set(State.Dodge, OnEnterDodge, null);
-            this.stateController.Set(State.Attack, OnEnterWeakAttack, null);
+            this.stateController.Set(State.Attack, OnEnterAttack, null);
             
             this.stateController.ChangeRequest(State.Idle);
         }
@@ -170,7 +170,7 @@ namespace MH
             this.actor.DodgeController.Invoke();
         }
         
-        private void OnEnterWeakAttack(State previousState, DisposableBagBuilder scope)
+        private void OnEnterAttack(State previousState, DisposableBagBuilder scope)
         {
             this.onAttackCanRotate = false;
             
