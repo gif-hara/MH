@@ -1047,6 +1047,11 @@ MonoBehaviour:
         animationBlendData:
           animationClip: {fileID: 7400000, guid: 21cf87df0bf7f844fa897953d084176d, type: 2}
           blendSeconds: 0.1
+        nextMotionName: WeakAttack.2
+      - motionName: WeakAttack.2
+        animationBlendData:
+          animationClip: {fileID: 7400000, guid: ac13d65b24a4b26439ad3278062a88ed, type: 2}
+          blendSeconds: 0.1
         nextMotionName: WeakAttack.0
       - motionName: DodgeAttack
         animationBlendData:
