@@ -133,7 +133,7 @@ namespace MH
                 .AddTo(scope);
         }
 
-        private async void OnEnterDodge(State previousState, DisposableBagBuilder scope)
+        private void OnEnterDodge(State previousState, DisposableBagBuilder scope)
         {
             MessageBroker.GetSubscriber<Actor, ActorEvents.AcceptNextState>()
                 .Subscribe(this.actor, _ =>
