@@ -36,7 +36,7 @@ namespace MH
             this.stateController.Set(State.Idle, OnEnterIdle, null);
             this.stateController.Set(State.Run, OnEnterRun, null);
             this.stateController.Set(State.Dodge, OnEnterDodge, null);
-            this.stateController.Set(State.Attack, OnEnterAttack, null);
+            this.stateController.Set(State.Attack, OnEnterAttack, OnExitAttack);
             
             this.stateController.ChangeRequest(State.Idle);
         }
@@ -147,7 +147,6 @@ namespace MH
                     MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
                         .Subscribe(this.actor, x =>
                         {
-                            this.actor.AttackController.Reset();
                             this.actor.DodgeController.Ready(
                                 x.Direction,
                                 x.Speed,
@@ -212,7 +211,6 @@ namespace MH
                     MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
                         .Subscribe(this.actor, x =>
                         {
-                            this.actor.AttackController.Reset();
                             this.actor.DodgeController.Ready(
                                 x.Direction,
                                 x.Speed,
@@ -236,6 +234,16 @@ namespace MH
                 ? ActorAttackController.AttackType.DodgeAttack
                 : ActorAttackController.AttackType.WeakAttack;
             this.actor.AttackController.Invoke(attackType);
+        }
+        
+        private void OnExitAttack(State nextState)
+        {
+            if (nextState == State.Attack)
+            {
+                return;
+            }
+            
+            this.actor.AttackController.Reset();
         }
     }
 }
