@@ -92,6 +92,13 @@ namespace MH
         }
 
         /// <summary>
+        /// 回避が終了した際のメッセージ
+        /// </summary>
+        public sealed class EndDodge : Message<EndDodge>
+        {
+        }
+
+        /// <summary>
         /// 攻撃のリクエストを行うメッセージ
         /// </summary>
         public sealed class RequestAttack : Message<RequestAttack>
@@ -168,6 +175,7 @@ namespace MH
             builder.AddMessageBroker<Actor, AcceptRequestRotation>();
             builder.AddMessageBroker<Actor, CloseRequestRotation>();
             builder.AddMessageBroker<Actor, RequestDodge>();
+            builder.AddMessageBroker<Actor, EndDodge>();
             builder.AddMessageBroker<Actor, RequestAttack>();
             builder.AddMessageBroker<Actor, EndAttack>();
             builder.AddMessageBroker<Actor, AcceptNextState>();

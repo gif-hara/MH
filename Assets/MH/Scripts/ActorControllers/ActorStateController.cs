@@ -69,7 +69,7 @@ namespace MH
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
                 .Subscribe(this.actor, x =>
                 {
-                    this.actor.DodgeController.Invoke(
+                    this.actor.DodgeController.Ready(
                         x.Direction,
                         x.Speed,
                         x.Duration,
@@ -115,7 +115,7 @@ namespace MH
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
                 .Subscribe(this.actor, x =>
                 {
-                    this.actor.DodgeController.Invoke(
+                    this.actor.DodgeController.Ready(
                         x.Direction,
                         x.Speed,
                         x.Duration,
@@ -135,9 +135,39 @@ namespace MH
 
         private async void OnEnterDodge(State previousState, DisposableBagBuilder scope)
         {
-            await this.actor.AnimationController.PlayDodgeAsync();
+            MessageBroker.GetSubscriber<Actor, ActorEvents.AcceptNextState>()
+                .Subscribe(this.actor, _ =>
+                {
+                    MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
+                        .Subscribe(this.actor, _ =>
+                        {
+                            this.stateController.ChangeRequest(State.WeakAttack);
+                        })
+                        .AddTo(scope);
+                    MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
+                        .Subscribe(this.actor, x =>
+                        {
+                            this.actor.AttackController.Reset();
+                            this.actor.DodgeController.Ready(
+                                x.Direction,
+                                x.Speed,
+                                x.Duration,
+                                x.Ease
+                                );
+                            this.stateController.ChangeRequest(State.Dodge);
+                        })
+                        .AddTo(scope);
+                })
+                .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.EndDodge>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.stateController.ChangeRequest(State.Idle);
+                })
+                .AddTo(scope);
             
-            this.stateController.ChangeRequest(State.Idle);
+            this.actor.DodgeController.Invoke();
         }
         
         private async void OnEnterWeakAttack(State previousState, DisposableBagBuilder scope)
@@ -183,7 +213,7 @@ namespace MH
                         .Subscribe(this.actor, x =>
                         {
                             this.actor.AttackController.Reset();
-                            this.actor.DodgeController.Invoke(
+                            this.actor.DodgeController.Ready(
                                 x.Direction,
                                 x.Speed,
                                 x.Duration,
