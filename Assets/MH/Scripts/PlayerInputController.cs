@@ -79,7 +79,8 @@ namespace MH
 
             this.inputActions = new MHInputActions();
             this.inputActions.Player.Dodge.performed += PerformedDodge;
-            this.inputActions.Player.Fire.performed += PerformedFire;
+            this.inputActions.Player.AttackWeak.performed += PerformedAttackWeak;
+            this.inputActions.Player.AttackStrong.performed += PerformedAttackStrong;
             this.inputActions.Enable();
             this.enabled = false;
 
@@ -156,10 +157,16 @@ namespace MH
                     ));
         }
         
-        private void PerformedFire(InputAction.CallbackContext obj)
+        private void PerformedAttackWeak(InputAction.CallbackContext obj)
         {
             MessageBroker.GetPublisher<Actor, ActorEvents.RequestAttack>()
-                .Publish(this.actor, ActorEvents.RequestAttack.Get());
+                .Publish(this.actor, ActorEvents.RequestAttack.Get(Define.RequestAttackType.Weak));
+        }
+        
+        private void PerformedAttackStrong(InputAction.CallbackContext obj)
+        {
+            MessageBroker.GetPublisher<Actor, ActorEvents.RequestAttack>()
+                .Publish(this.actor, ActorEvents.RequestAttack.Get(Define.RequestAttackType.Strong));
         }
     }
 }

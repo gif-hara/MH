@@ -48,9 +48,18 @@ namespace MH
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Fire"",
+                    ""name"": ""AttackWeak"",
                     ""type"": ""Button"",
                     ""id"": ""d0c51266-2040-48d5-a750-67f7b8e64e71"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AttackStrong"",
+                    ""type"": ""Button"",
+                    ""id"": ""57bae609-f958-4a13-b2a8-5534d3beab66"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -239,7 +248,7 @@ namespace MH
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Fire"",
+                    ""action"": ""AttackWeak"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -250,7 +259,7 @@ namespace MH
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Fire"",
+                    ""action"": ""AttackWeak"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -261,7 +270,7 @@ namespace MH
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Touch"",
-                    ""action"": ""Fire"",
+                    ""action"": ""AttackWeak"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -272,7 +281,7 @@ namespace MH
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Joystick"",
-                    ""action"": ""Fire"",
+                    ""action"": ""AttackWeak"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -283,7 +292,7 @@ namespace MH
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""XR"",
-                    ""action"": ""Fire"",
+                    ""action"": ""AttackWeak"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -306,6 +315,28 @@ namespace MH
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Dodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""14be90e1-1eae-497b-aa31-7b0b9165e798"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""AttackStrong"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0eb76f4c-ecb9-463c-b4dd-4ff926f20323"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""AttackStrong"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -895,7 +926,8 @@ namespace MH
             m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
             m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
             m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
-            m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
+            m_Player_AttackWeak = m_Player.FindAction("AttackWeak", throwIfNotFound: true);
+            m_Player_AttackStrong = m_Player.FindAction("AttackStrong", throwIfNotFound: true);
             m_Player_Dodge = m_Player.FindAction("Dodge", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
@@ -970,7 +1002,8 @@ namespace MH
         private IPlayerActions m_PlayerActionsCallbackInterface;
         private readonly InputAction m_Player_Move;
         private readonly InputAction m_Player_Look;
-        private readonly InputAction m_Player_Fire;
+        private readonly InputAction m_Player_AttackWeak;
+        private readonly InputAction m_Player_AttackStrong;
         private readonly InputAction m_Player_Dodge;
         public struct PlayerActions
         {
@@ -978,7 +1011,8 @@ namespace MH
             public PlayerActions(@MHInputActions wrapper) { m_Wrapper = wrapper; }
             public InputAction @Move => m_Wrapper.m_Player_Move;
             public InputAction @Look => m_Wrapper.m_Player_Look;
-            public InputAction @Fire => m_Wrapper.m_Player_Fire;
+            public InputAction @AttackWeak => m_Wrapper.m_Player_AttackWeak;
+            public InputAction @AttackStrong => m_Wrapper.m_Player_AttackStrong;
             public InputAction @Dodge => m_Wrapper.m_Player_Dodge;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
@@ -995,9 +1029,12 @@ namespace MH
                     @Look.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
                     @Look.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
                     @Look.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
-                    @Fire.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
-                    @Fire.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
-                    @Fire.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
+                    @AttackWeak.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttackWeak;
+                    @AttackWeak.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttackWeak;
+                    @AttackWeak.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttackWeak;
+                    @AttackStrong.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttackStrong;
+                    @AttackStrong.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttackStrong;
+                    @AttackStrong.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttackStrong;
                     @Dodge.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDodge;
                     @Dodge.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDodge;
                     @Dodge.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDodge;
@@ -1011,9 +1048,12 @@ namespace MH
                     @Look.started += instance.OnLook;
                     @Look.performed += instance.OnLook;
                     @Look.canceled += instance.OnLook;
-                    @Fire.started += instance.OnFire;
-                    @Fire.performed += instance.OnFire;
-                    @Fire.canceled += instance.OnFire;
+                    @AttackWeak.started += instance.OnAttackWeak;
+                    @AttackWeak.performed += instance.OnAttackWeak;
+                    @AttackWeak.canceled += instance.OnAttackWeak;
+                    @AttackStrong.started += instance.OnAttackStrong;
+                    @AttackStrong.performed += instance.OnAttackStrong;
+                    @AttackStrong.canceled += instance.OnAttackStrong;
                     @Dodge.started += instance.OnDodge;
                     @Dodge.performed += instance.OnDodge;
                     @Dodge.canceled += instance.OnDodge;
@@ -1175,7 +1215,8 @@ namespace MH
         {
             void OnMove(InputAction.CallbackContext context);
             void OnLook(InputAction.CallbackContext context);
-            void OnFire(InputAction.CallbackContext context);
+            void OnAttackWeak(InputAction.CallbackContext context);
+            void OnAttackStrong(InputAction.CallbackContext context);
             void OnDodge(InputAction.CallbackContext context);
         }
         public interface IUIActions

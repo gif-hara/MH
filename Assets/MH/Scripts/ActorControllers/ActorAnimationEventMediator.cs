@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Object = System.Object;
 
 namespace MH
 {
@@ -78,6 +79,14 @@ namespace MH
         {
             MessageBroker.GetPublisher<Actor, ActorEvents.InvalidationAttackCollider>()
                 .Publish(this.actor, ActorEvents.InvalidationAttackCollider.Get(colliderName));
+        }
+
+        public void RequestSetForce(UnityEngine.Object obj)
+        {
+            var scriptableVector3 = (ScriptableVector3)obj;
+            Assert.IsNotNull(scriptableVector3);
+            MessageBroker.GetPublisher<Actor, ActorEvents.RequestSetForce>()
+                .Publish(this.actor, ActorEvents.RequestSetForce.Get(scriptableVector3.vector3));
         }
     }
 }

@@ -101,8 +101,12 @@ namespace MH
         /// <summary>
         /// 攻撃のリクエストを行うメッセージ
         /// </summary>
-        public sealed class RequestAttack : Message<RequestAttack>
+        public sealed class RequestAttack : Message<RequestAttack, Define.RequestAttackType>
         {
+            /// <summary>
+            /// リクエストタイプ
+            /// </summary>
+            public Define.RequestAttackType AttackType => this.Param1;
         }
 
         /// <summary>
@@ -164,6 +168,17 @@ namespace MH
         }
 
         /// <summary>
+        /// 衝撃値の設定をリクエストするメッセージ
+        /// </summary>
+        public sealed class RequestSetForce : Message<RequestSetForce, Vector3>
+        {
+            /// <summary>
+            /// 衝撃値
+            /// </summary>
+            public Vector3 Force => this.Param1;
+        }
+
+        /// <summary>
         /// イベントの登録を行う
         /// </summary>
         public static void RegisterEvents(BuiltinContainerBuilder builder)
@@ -183,6 +198,7 @@ namespace MH
             builder.AddMessageBroker<Actor, ValidationAttackCollider>();
             builder.AddMessageBroker<Actor, InvalidationAttackCollider>();
             builder.AddMessageBroker<HitAttack>();
+            builder.AddMessageBroker<Actor, RequestSetForce>();
         }
     }
 }

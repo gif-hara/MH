@@ -1,5 +1,8 @@
+using System;
+using Cysharp.Threading.Tasks;
 using StandardAssets.Characters.Physics;
 using UnityEngine;
+using MessagePipe;
 
 namespace MH
 {
@@ -22,6 +25,16 @@ namespace MH
         private Vector3 currentMoveVector;
         
         private bool isMoving = true;
+
+        private void Start()
+        {
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestSetForce>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.SetForce(x.Force);
+                })
+                .AddTo(this.GetCancellationTokenOnDestroy());
+        }
 
         private void LateUpdate()
         {
@@ -46,7 +59,7 @@ namespace MH
             
             this.currentGravity += this.gravity * this.actor.TimeController.Time.deltaTime;
 
-            var totalVector = this.currentMoveVector + this.currentGravity;
+            var totalVector = this.currentMoveVector + (this.currentGravity * this.actor.TimeController.Time.deltaTime);
 
             this.openCharacterController.Move(totalVector);
             this.currentMoveVector = Vector3.zero;
@@ -62,6 +75,16 @@ namespace MH
             this.currentMoveVector += moveVector;
         }
 
+        public void AddForce(Vector3 force)
+        {
+            this.currentGravity += force;
+        }
+
+        public void SetForce(Vector3 force)
+        {
+            this.currentGravity = force;
+        }
+        
         public void Rotate(Quaternion rotation)
         {
             this.actor.transform.localRotation = rotation;

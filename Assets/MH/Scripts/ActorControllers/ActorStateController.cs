@@ -3,6 +3,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace MH
 {
@@ -28,6 +29,11 @@ namespace MH
         /// 攻撃時の回転処理を行えるか
         /// </summary>
         private bool onAttackCanRotate = false;
+
+        /// <summary>
+        /// 次の攻撃のリクエストタイプ
+        /// </summary>
+        private Define.RequestAttackType nextAttackType;
         
         public ActorStateController(Actor actor)
         {
@@ -82,6 +88,7 @@ namespace MH
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
                 .Subscribe(this.actor, x =>
                 {
+                    this.nextAttackType = x.AttackType;
                     this.stateController.ChangeRequest(State.Attack);
                 })
                 .AddTo(scope);
@@ -128,6 +135,7 @@ namespace MH
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
                 .Subscribe(this.actor, x =>
                 {
+                    this.nextAttackType = x.AttackType;
                     this.stateController.ChangeRequest(State.Attack);
                 })
                 .AddTo(scope);
@@ -139,8 +147,9 @@ namespace MH
                 .Subscribe(this.actor, _ =>
                 {
                     MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
-                        .Subscribe(this.actor, _ =>
+                        .Subscribe(this.actor, x =>
                         {
+                            this.nextAttackType = x.AttackType;
                             this.stateController.ChangeRequest(State.Attack);
                         })
                         .AddTo(scope);
@@ -203,8 +212,9 @@ namespace MH
                 .Subscribe(this.actor, _ =>
                 {
                     MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
-                        .Subscribe(this.actor, _ =>
+                        .Subscribe(this.actor, x =>
                         {
+                            this.nextAttackType = x.AttackType;
                             this.stateController.ChangeRequest(State.Attack);
                         })
                         .AddTo(scope);
@@ -230,9 +240,27 @@ namespace MH
                 })
                 .AddTo(scope);
 
-            var attackType = previousState == State.Dodge
-                ? ActorAttackController.AttackType.DodgeAttack
-                : ActorAttackController.AttackType.WeakAttack;
+            ActorAttackController.AttackType attackType = ActorAttackController.AttackType.WeakAttack;
+            if (this.nextAttackType == Define.RequestAttackType.Weak)
+            {
+                if (previousState == State.Dodge)
+                {
+                    attackType = ActorAttackController.AttackType.DodgeAttack;
+                }
+                else
+                {
+                    attackType = ActorAttackController.AttackType.WeakAttack;
+                }
+            }
+            else if (this.nextAttackType == Define.RequestAttackType.Strong)
+            {
+                attackType = ActorAttackController.AttackType.StrongAttack;
+            }
+            else
+            {
+                Assert.IsTrue(false, this.nextAttackType.ToString());
+            }
+            
             this.actor.AttackController.Invoke(attackType);
         }
         

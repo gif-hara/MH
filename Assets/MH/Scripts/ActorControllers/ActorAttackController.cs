@@ -20,6 +20,7 @@ namespace MH
             None,
             WeakAttack,
             DodgeAttack,
+            StrongAttack,
         }
         private Actor actor;
 
@@ -55,7 +56,7 @@ namespace MH
             string motionName;
             
             // 攻撃していなかった場合はタイプから初回の攻撃を算出する
-            if (this.currentAttackType == AttackType.None)
+            if (this.currentAttackType == AttackType.None || this.currentAttackType != attackType)
             {
                 this.currentAttackType = attackType;
                 motionName = this.GetFirstMotionName(this.currentAttackType);
@@ -117,6 +118,8 @@ namespace MH
                     return "WeakAttack.0";
                 case AttackType.DodgeAttack:
                     return "DodgeAttack";
+                case AttackType.StrongAttack:
+                    return "StrongAttack.0";
                 case AttackType.None:
                 default:
                     Assert.IsTrue(false, $"{attackType} is not supported.");
