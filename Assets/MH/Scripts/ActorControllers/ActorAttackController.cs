@@ -116,7 +116,7 @@ namespace MH
                 case AttackType.WeakAttack:
                     return "WeakAttack.0";
                 case AttackType.DodgeAttack:
-                    return "DodgeAttack.0";
+                    return "DodgeAttack";
                 case AttackType.None:
                 default:
                     Assert.IsTrue(false, $"{attackType} is not supported.");

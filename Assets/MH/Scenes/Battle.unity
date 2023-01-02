@@ -1048,6 +1048,11 @@ MonoBehaviour:
           animationClip: {fileID: 7400000, guid: 21cf87df0bf7f844fa897953d084176d, type: 2}
           blendSeconds: 0.1
         nextMotionName: WeakAttack.0
+      - motionName: DodgeAttack
+        animationBlendData:
+          animationClip: {fileID: 7400000, guid: 7d8ec17e9f150584b9546a02ae167aa4, type: 2}
+          blendSeconds: 0.1
+        nextMotionName: WeakAttack.0
     extensionPrefabs:
     - {fileID: 5450664224324214380, guid: a4249328f81d12b44ab72ea7e1fb3b98, type: 3}
   enemySpawnData:

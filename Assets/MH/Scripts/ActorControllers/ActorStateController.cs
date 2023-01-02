@@ -17,7 +17,7 @@ namespace MH
             Idle,
             Run,
             Dodge,
-            WeakAttack,
+            Attack,
         }
 
         private readonly Actor actor;
@@ -36,7 +36,7 @@ namespace MH
             this.stateController.Set(State.Idle, OnEnterIdle, null);
             this.stateController.Set(State.Run, OnEnterRun, null);
             this.stateController.Set(State.Dodge, OnEnterDodge, null);
-            this.stateController.Set(State.WeakAttack, OnEnterWeakAttack, null);
+            this.stateController.Set(State.Attack, OnEnterWeakAttack, null);
             
             this.stateController.ChangeRequest(State.Idle);
         }
@@ -82,7 +82,7 @@ namespace MH
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
                 .Subscribe(this.actor, x =>
                 {
-                    this.stateController.ChangeRequest(State.WeakAttack);
+                    this.stateController.ChangeRequest(State.Attack);
                 })
                 .AddTo(scope);
         }
@@ -128,7 +128,7 @@ namespace MH
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
                 .Subscribe(this.actor, x =>
                 {
-                    this.stateController.ChangeRequest(State.WeakAttack);
+                    this.stateController.ChangeRequest(State.Attack);
                 })
                 .AddTo(scope);
         }
@@ -141,7 +141,7 @@ namespace MH
                     MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
                         .Subscribe(this.actor, _ =>
                         {
-                            this.stateController.ChangeRequest(State.WeakAttack);
+                            this.stateController.ChangeRequest(State.Attack);
                         })
                         .AddTo(scope);
                     MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
@@ -170,7 +170,7 @@ namespace MH
             this.actor.DodgeController.Invoke();
         }
         
-        private async void OnEnterWeakAttack(State previousState, DisposableBagBuilder scope)
+        private void OnEnterWeakAttack(State previousState, DisposableBagBuilder scope)
         {
             this.onAttackCanRotate = false;
             
@@ -206,7 +206,7 @@ namespace MH
                     MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
                         .Subscribe(this.actor, _ =>
                         {
-                            this.stateController.ChangeRequest(State.WeakAttack);
+                            this.stateController.ChangeRequest(State.Attack);
                         })
                         .AddTo(scope);
                     MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
@@ -232,7 +232,10 @@ namespace MH
                 })
                 .AddTo(scope);
 
-            this.actor.AttackController.Invoke(ActorAttackController.AttackType.WeakAttack);
+            var attackType = previousState == State.Dodge
+                ? ActorAttackController.AttackType.DodgeAttack
+                : ActorAttackController.AttackType.WeakAttack;
+            this.actor.AttackController.Invoke(attackType);
         }
     }
 }
