@@ -9,4 +9,5 @@ EditorBuildSettings:
     path: Assets/MH/Scenes/Battle.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: aca724572688f184eb1be7373fd5abc8, type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: 7f1be149a2533f246b296b7cff419baf, type: 2}

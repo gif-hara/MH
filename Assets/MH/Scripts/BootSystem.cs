@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
+using MH.UISystems;
 using Unity.Services.Core;
 using UnityEngine;
 
@@ -25,7 +26,8 @@ namespace MH
         {
             await UniTask.WhenAll(
                 SetupMessageBroker(),
-                SetupUnityService()
+                SetupUnityService(),
+                UIManager.SetupAsync()
                 );
             
             IsReady = UniTask.CompletedTask;
