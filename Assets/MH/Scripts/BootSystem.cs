@@ -1,5 +1,7 @@
+using System;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
+using Unity.Services.Core;
 using UnityEngine;
 
 namespace MH
@@ -22,7 +24,8 @@ namespace MH
         private static async UniTask SetupInternal()
         {
             await UniTask.WhenAll(
-                SetupMessageBroker()
+                SetupMessageBroker(),
+                SetupUnityService()
                 );
             
             IsReady = UniTask.CompletedTask;
@@ -36,6 +39,19 @@ namespace MH
                 TimeEvents.RegisterEvents(builder);
             });
             return UniTask.CompletedTask;
+        }
+
+        private static async UniTask SetupUnityService()
+        {
+            try
+            {
+                await UnityServices.InitializeAsync();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+                throw;
+            }
         }
     }
 }

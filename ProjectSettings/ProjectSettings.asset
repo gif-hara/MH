@@ -719,11 +719,11 @@ PlayerSettings:
     m_VersionName: 
   apiCompatibilityLevel: 6
   activeInputHandler: 1
-  cloudProjectId: 
+  cloudProjectId: 10c8f600-4908-4c50-a348-8e0dc728b253
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: MH
+  organizationId: kitahara-hiroki
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 
