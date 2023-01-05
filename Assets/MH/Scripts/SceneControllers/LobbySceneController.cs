@@ -1,5 +1,6 @@
 using System;
 using MessagePipe;
+using MH.NetworkSystems;
 using MH.UISystems;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -27,11 +28,12 @@ namespace MH
             uiView.SelectMode.OnClickCreateLobby
                 .Subscribe(async _ =>
                 {
-                    await LobbyManager.CreateLobbyAsync();
-                    
-                    Debug.Log("Create Lobby");
+                    var lobby = await LobbyManager.CreateLobbyAsync();
+                    uiView.SetActiveArea(uiView.Lobby);
                 })
                 .AddTo(bag);
+            
+            uiView.SetActiveArea(uiView.SelectMode);
         }
     }
 }
