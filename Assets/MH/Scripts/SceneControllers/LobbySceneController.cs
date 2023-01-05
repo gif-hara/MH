@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using MessagePipe;
 using MH.NetworkSystems;
 using MH.UISystems;
@@ -13,27 +14,57 @@ namespace MH
     /// </summary>
     public sealed class LobbySceneController : MonoBehaviour
     {
+        public enum State
+        {
+            Invalid,
+            SelectMode,
+            LobbyHost,
+        }
+        
         [SerializeField]
         private LobbyUIView lobbyUIViewPrefab;
 
-        private IDisposable scope;
-        
+        private LobbyUIView lobbyUIView;
+
+        private StateController<State> stateController;
+
         private async void Start()
         {
             await BootSystem.IsReady;
 
-            var bag = DisposableBag.CreateBuilder();
-            var uiView = UIManager.Open(this.lobbyUIViewPrefab);
-            
-            uiView.SelectMode.OnClickCreateLobby
+            this.lobbyUIView = UIManager.Open(this.lobbyUIViewPrefab);
+
+            this.stateController = new StateController<State>(State.Invalid);
+            this.stateController.Set(State.SelectMode, OnEnterSelectMode, null);
+            this.stateController.Set(State.LobbyHost, OnEnterLobbyHost, null);
+            this.stateController.ChangeRequest(State.SelectMode);
+        }
+        
+        private void OnEnterSelectMode(State previousState, DisposableBagBuilder scope)
+        {
+            this.lobbyUIView.SelectMode.OnClickCreateLobby
                 .Subscribe(async _ =>
                 {
-                    var lobby = await LobbyManager.CreateLobbyAsync();
-                    uiView.SetActiveArea(uiView.Lobby);
+                    await LobbyManager.CreateLobbyAsync();
+                    this.stateController.ChangeRequest(State.LobbyHost);
                 })
-                .AddTo(bag);
+                .AddTo(scope);
             
-            uiView.SetActiveArea(uiView.SelectMode);
+            this.lobbyUIView.SetActiveArea(this.lobbyUIView.SelectMode);
+        }
+
+        private void OnEnterLobbyHost(State previousState, DisposableBagBuilder scope)
+        {
+            this.lobbyUIView.Lobby.OnClickDeleteLobbyAsObservable()
+                .Subscribe(async _ =>
+                {
+                    await LobbyManager.DeleteLobbyAsync();
+                    this.stateController.ChangeRequest(State.SelectMode);
+                })
+                .AddTo(scope);
+            
+            this.lobbyUIView.SetActiveArea(this.lobbyUIView.Lobby);
+            this.lobbyUIView.Lobby.SetActiveHostArea();
         }
     }
 }

@@ -58,6 +58,9 @@ namespace MH.UISystems
 
             [SerializeField]
             private Button startGameButton;
+
+            [SerializeField]
+            private Button deleteLobbyButton;
             
             [SerializeField]
             private Button gotoReadyButton;
@@ -126,11 +129,13 @@ namespace MH.UISystems
                 set => this.startGameButton.interactable = value;
             }
 
-            public IObservable<Unit> OnClickStartGame() => this.startGameButton.OnClickAsObservable();
+            public IObservable<Unit> OnClickStartGameAsObservable() => this.startGameButton.OnClickAsObservable();
 
-            public IObservable<Unit> OnClickGotoInPreparation() => this.gotoInPreparationButton.OnClickAsObservable();
+            public IObservable<Unit> OnClickDeleteLobbyAsObservable() => this.deleteLobbyButton.OnClickAsObservable();
 
-            public IObservable<Unit> OnClickGotoReady() => this.gotoReadyButton.OnClickAsObservable();
+            public IObservable<Unit> OnClickGotoInPreparationAsObservable() => this.gotoInPreparationButton.OnClickAsObservable();
+
+            public IObservable<Unit> OnClickGotoReadyAsObservable() => this.gotoReadyButton.OnClickAsObservable();
         }
 
 
