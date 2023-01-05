@@ -1,11 +1,7 @@
-using System;
-using System.Net;
 using Cysharp.Threading.Tasks;
-using MessagePipe;
 using MH.UISystems;
-using Unity.Services.Authentication;
-using Unity.Services.Core;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace MH
 {
@@ -15,8 +11,6 @@ namespace MH
     public static class BootSystem
     {
         public static UniTask IsReady { get; private set; }
-
-        private static readonly DisposableBagBuilder bag = DisposableBag.CreateBuilder();
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
         private static void InitializeOnBeforeSplashScreen()
@@ -28,7 +22,8 @@ namespace MH
         {
             await UniTask.WhenAll(
                 SetupMessageBroker(),
-                UIManager.SetupAsync()
+                UIManager.SetupAsync(),
+                SetupNetworkSystemAsync()
                 );
             
             IsReady = UniTask.CompletedTask;
@@ -42,6 +37,12 @@ namespace MH
                 TimeEvents.RegisterEvents(builder);
             });
             return UniTask.CompletedTask;
+        }
+
+        private static async UniTask SetupNetworkSystemAsync()
+        {
+            var prefab = await AssetLoader.LoadAsync<GameObject>("Assets/MH/Prefabs/NetworkSystems/NetworkManager.prefab");
+            Object.Instantiate(prefab);
         }
     }
 }
