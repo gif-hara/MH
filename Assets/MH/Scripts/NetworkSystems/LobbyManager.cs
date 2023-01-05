@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Unity.Services.Authentication;
@@ -19,18 +20,18 @@ namespace MH.NetworkSystems
 
         private static Lobby currentLobby;
 
-        private static CancellationTokenSource heartbeatScope;
-        
-        public static async UniTask<Lobby> CreateLobbyAsync()
+        private static CancellationTokenSource lobbyScope;
+
+        public static Lobby Lobby => currentLobby;
+
+        public static async UniTask CreateLobbyAsync()
         {
             try
             {
                 await InitializeIfNeed();
                 currentLobby = await Lobbies.Instance.CreateLobbyAsync(Guid.NewGuid().ToString(), 4);
-                heartbeatScope = new CancellationTokenSource();
-                StartHeartbeat(heartbeatScope.Token);
-
-                return currentLobby;
+                lobbyScope = new CancellationTokenSource();
+                BeginHeartbeatAsync(lobbyScope.Token);
             }
             catch (Exception e)
             {
@@ -46,9 +47,10 @@ namespace MH.NetworkSystems
                 await InitializeIfNeed();
                 Assert.IsNotNull(currentLobby);
                 await Lobbies.Instance.DeleteLobbyAsync(currentLobby.Id);
-                Assert.IsNotNull(heartbeatScope);
-                heartbeatScope.Cancel();
-                heartbeatScope.Dispose();
+                currentLobby = null;
+                Assert.IsNotNull(lobbyScope);
+                lobbyScope.Cancel();
+                lobbyScope.Dispose();
             }
             catch (Exception e)
             {
@@ -57,7 +59,7 @@ namespace MH.NetworkSystems
             }
         }
 
-        public static async void StartHeartbeat(CancellationToken token)
+        public static async void BeginHeartbeatAsync(CancellationToken token)
         {
             try
             {
@@ -70,6 +72,33 @@ namespace MH.NetworkSystems
             }
             catch (OperationCanceledException)
             {
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                throw;
+            }
+        }
+
+        public static async void BeginGetLobbyAsync(CancellationToken token)
+        {
+            try
+            {
+                var updateLobby = await Lobbies.Instance.GetLobbyAsync(currentLobby.Id);
+                
+                // 新規で追加されたプレイヤーを通知する
+                foreach (var currentLobbyPlayer in currentLobby.Players)
+                {
+                    
+                }
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                throw;
             }
         }
 
