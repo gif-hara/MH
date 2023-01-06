@@ -84,12 +84,46 @@ namespace MH.NetworkSystems
         {
             try
             {
-                var updateLobby = await Lobbies.Instance.GetLobbyAsync(currentLobby.Id);
+                var newLobby = await Lobbies.Instance.GetLobbyAsync(currentLobby.Id);
                 
                 // 新規で追加されたプレイヤーを通知する
+                foreach (var newLobbyPlayer in newLobby.Players)
+                {
+                    var isNewPlayer = true;
+                    foreach (var currentLobbyPlayer in currentLobby.Players)
+                    {
+                        if (newLobbyPlayer.Id == currentLobbyPlayer.Id)
+                        {
+                            isNewPlayer = false;
+                            break;
+                        }
+                    }
+
+                    if (isNewPlayer)
+                    {
+                        MessageBroker.GetPublisher<LobbyEvents.AddedPlayer>()
+                            .Publish(LobbyEvents.AddedPlayer.Get(newLobbyPlayer));
+                    }
+                }
+                
+                // ロビーから削除されたプレイヤーを通知する
                 foreach (var currentLobbyPlayer in currentLobby.Players)
                 {
-                    
+                    var isRemovePlayer = true;
+                    foreach (var newLobbyPlayer in newLobby.Players)
+                    {
+                        if (currentLobbyPlayer.Id == newLobbyPlayer.Id)
+                        {
+                            isRemovePlayer = false;
+                            break;
+                        }
+                    }
+
+                    if (isRemovePlayer)
+                    {
+                        MessageBroker.GetPublisher<LobbyEvents.RemovedPlayer>()
+                            .Publish(LobbyEvents.RemovedPlayer.Get(currentLobbyPlayer));
+                    }
                 }
             }
             catch (OperationCanceledException)
