@@ -54,7 +54,7 @@ namespace MH
             this.lobbyUIView.SelectMode.OnClickCreateLobby
                 .Subscribe(async _ =>
                 {
-                    await LobbyManager.CreateLobbyAsync();
+                    await MultiPlayManager.BeginAsHost(4);
                     this.stateController.ChangeRequest(State.LobbyHost);
                 })
                 .AddTo(scope);

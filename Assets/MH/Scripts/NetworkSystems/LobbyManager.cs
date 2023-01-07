@@ -65,7 +65,6 @@ namespace MH.NetworkSystems
             {
                 while (!token.IsCancellationRequested)
                 {
-                    Debug.Log($"Heart Beat {currentLobby.Id}");
                     await Lobbies.Instance.SendHeartbeatPingAsync(currentLobby.Id);
                     await UniTask.Delay(TimeSpan.FromSeconds(6.0f), cancellationToken: token);
                 }
