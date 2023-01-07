@@ -6,6 +6,7 @@ using MH.UISystems;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UniRx;
+using Unity.Netcode;
 using UnityEngine.SceneManagement;
 
 namespace MH
@@ -64,7 +65,7 @@ namespace MH
 
         private void OnEnterLobbyHost(State previousState, DisposableBagBuilder scope)
         {
-            SceneManager.LoadScene("Battle");
+            NetworkManager.Singleton.SceneManager.LoadScene("Battle", LoadSceneMode.Single);
             // this.lobbyUIView.Lobby.OnClickDeleteLobbyAsObservable()
             //     .Subscribe(async _ =>
             //     {
