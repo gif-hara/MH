@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using Unity.Services.Relay;
@@ -15,13 +18,22 @@ namespace MH.NetworkSystems
     /// </summary>
     public static class MultiPlayManager
     {
-        public static async UniTask BeginAsHost(int maxConnections)
+        /// <summary>
+        /// 初期化済みであるか
+        /// </summary>
+        private static bool isInitialized = false;
+
+        public static async UniTask BeginAsHostAsync(int maxConnections, CreateLobbyOptions options = null)
         {
             try
             {
-                await LobbyManager.CreateLobbyAsync();
+                await InitializeIfNeed();
                 var allocation = await RelayService.Instance.CreateAllocationAsync(maxConnections);
                 var joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+                options ??= new CreateLobbyOptions();
+                options.Data ??= new Dictionary<string, DataObject>();
+                options.Data.Add("joinCode", new DataObject(DataObject.VisibilityOptions.Public, joinCode));
+                await LobbyManager.CreateLobbyAsync(Guid.NewGuid().ToString(), 4, options);
                 NetworkManager.Singleton.GetComponent<UnityTransport>()
                     .SetRelayServerData(
                         allocation.RelayServer.IpV4,
@@ -30,10 +42,37 @@ namespace MH.NetworkSystems
                         allocation.Key,
                         allocation.ConnectionData
                         );
-                var isSuccess = NetworkManager.Singleton.StartHost();
-                if (!isSuccess)
+                if (!NetworkManager.Singleton.StartHost())
                 {
                     Debug.LogError("Failed Host.");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                throw;
+            }
+        }
+
+        public static async UniTask BeginAsClientAsync(string lobbyId, string joinCode, JoinLobbyByIdOptions options = null)
+        {
+            try
+            {
+                await InitializeIfNeed();
+                await LobbyManager.JoinLobbyAsync(lobbyId, options);
+                var joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
+                NetworkManager.Singleton.GetComponent<UnityTransport>()
+                    .SetRelayServerData(
+                        joinAllocation.RelayServer.IpV4,
+                        (ushort)joinAllocation.RelayServer.Port,
+                        joinAllocation.AllocationIdBytes,
+                        joinAllocation.Key,
+                        joinAllocation.ConnectionData,
+                        joinAllocation.HostConnectionData
+                        );
+                if (!NetworkManager.Singleton.StartClient())
+                {
+                    Debug.LogError("Failed Client.");
                 }
             }
             catch (Exception e)
@@ -47,6 +86,7 @@ namespace MH.NetworkSystems
         {
             try
             {
+                await InitializeIfNeed();
                 return await LobbyManager.QueryLobbiesAsync(options);
             }
             catch (Exception e)
@@ -54,6 +94,21 @@ namespace MH.NetworkSystems
                 Debug.LogException(e);
                 throw;
             }
+        }
+        
+        /// <summary>
+        /// 必要であれば初期化を行う
+        /// </summary>
+        private static async UniTask InitializeIfNeed()
+        {
+            if (isInitialized)
+            {
+                return;
+            }
+
+            isInitialized = true;
+            await UnityServices.InitializeAsync();
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
         }
     }
 }

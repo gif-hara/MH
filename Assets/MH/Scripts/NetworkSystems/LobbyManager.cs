@@ -17,11 +17,6 @@ namespace MH.NetworkSystems
     public static class LobbyManager
     {
         /// <summary>
-        /// 初期化済みであるか
-        /// </summary>
-        private static bool isInitialized = false;
-
-        /// <summary>
         /// 現在参加しているロビー
         /// </summary>
         private static Lobby currentLobby;
@@ -39,14 +34,33 @@ namespace MH.NetworkSystems
         /// <summary>
         /// ロビーを作成する
         /// </summary>
-        public static async UniTask CreateLobbyAsync()
+        public static async UniTask CreateLobbyAsync(string lobbyName, int maxConnections, CreateLobbyOptions options = null)
         {
             try
             {
-                await InitializeIfNeed();
-                currentLobby = await Lobbies.Instance.CreateLobbyAsync(Guid.NewGuid().ToString(), 4);
+                currentLobby = await Lobbies.Instance.CreateLobbyAsync(lobbyName, maxConnections, options);
+                lobbyScope?.Cancel();
+                lobbyScope?.Dispose();
                 lobbyScope = new CancellationTokenSource();
                 BeginHeartbeatAsync(lobbyScope.Token);
+                BeginGetLobbyAsync(lobbyScope.Token);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                throw;
+            }
+        }
+
+        public static async UniTask JoinLobbyAsync(string lobbyId, JoinLobbyByIdOptions options = null)
+        {
+            try
+            {
+                currentLobby = await Lobbies.Instance.JoinLobbyByIdAsync(lobbyId, options);
+                lobbyScope?.Cancel();
+                lobbyScope?.Dispose();
+                lobbyScope = new CancellationTokenSource();
+                BeginGetLobbyAsync(lobbyScope.Token);
             }
             catch (Exception e)
             {
@@ -62,7 +76,6 @@ namespace MH.NetworkSystems
         {
             try
             {
-                await InitializeIfNeed();
                 Assert.IsNotNull(currentLobby);
                 await Lobbies.Instance.DeleteLobbyAsync(currentLobby.Id);
                 currentLobby = null;
@@ -166,7 +179,6 @@ namespace MH.NetworkSystems
         {
             try
             {
-                await InitializeIfNeed();
                 return await Lobbies.Instance.QueryLobbiesAsync(options);
             }
             catch (Exception e)
@@ -174,21 +186,6 @@ namespace MH.NetworkSystems
                 Debug.LogException(e);
                 throw;
             }
-        }
-
-        /// <summary>
-        /// 必要であれば初期化を行う
-        /// </summary>
-        private static async UniTask InitializeIfNeed()
-        {
-            if (isInitialized)
-            {
-                return;
-            }
-
-            isInitialized = true;
-            await UnityServices.InitializeAsync();
-            await AuthenticationService.Instance.SignInAnonymouslyAsync();
         }
     }
 }

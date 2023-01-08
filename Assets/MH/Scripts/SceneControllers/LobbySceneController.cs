@@ -23,6 +23,7 @@ namespace MH
             Invalid,
             SelectMode,
             LobbyHost,
+            LobbyClient,
             SearchLobby,
         }
         
@@ -44,6 +45,7 @@ namespace MH
             this.stateController = new StateController<State>(State.Invalid);
             this.stateController.Set(State.SelectMode, OnEnterSelectMode, null);
             this.stateController.Set(State.LobbyHost, OnEnterLobbyHost, null);
+            this.stateController.Set(State.LobbyClient, OnEnterLobbyClient, null);
             this.stateController.Set(State.SearchLobby, OnEnterSearchLobby, null);
             this.stateController.ChangeRequest(State.SelectMode);
         }
@@ -61,7 +63,7 @@ namespace MH
             this.lobbyUIView.SelectMode.OnClickCreateLobby
                 .Subscribe(async _ =>
                 {
-                    await MultiPlayManager.BeginAsHost(4);
+                    await MultiPlayManager.BeginAsHostAsync(4);
                     this.stateController.ChangeRequest(State.LobbyHost);
                 })
                 .AddTo(scope);
@@ -99,6 +101,10 @@ namespace MH
             // this.lobbyUIView.SetActiveArea(this.lobbyUIView.Lobby);
             // this.lobbyUIView.Lobby.SetActiveHostArea();
         }
+        
+        private void OnEnterLobbyClient(State previousState, DisposableBagBuilder scope)
+        {
+        }
 
         private void OnEnterSearchLobby(State previousState, DisposableBagBuilder scope)
         {
@@ -108,9 +114,10 @@ namespace MH
                 var element = this.lobbyUIView.SearchLobby.CreateLobbyElement();
                 element.LobbyName = lobby.Name;
                 element.OnClickButtonAsObservable()
-                    .Subscribe(_ =>
+                    .Subscribe(async _ =>
                     {
-                        Debug.Log("TODO");
+                        await MultiPlayManager.BeginAsClientAsync(lobby.Id, lobby.Data["joinCode"].Value);
+                        this.stateController.ChangeRequest(State.LobbyClient);
                     })
                     .AddTo(scope);
             }
