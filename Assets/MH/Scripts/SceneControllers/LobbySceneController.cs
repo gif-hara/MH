@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 using MH.NetworkSystems;
@@ -7,6 +8,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UniRx;
 using Unity.Netcode;
+using Unity.Services.Lobbies.Models;
 using UnityEngine.SceneManagement;
 
 namespace MH
@@ -21,6 +23,7 @@ namespace MH
             Invalid,
             SelectMode,
             LobbyHost,
+            SearchLobby,
         }
         
         [SerializeField]
@@ -29,6 +32,8 @@ namespace MH
         private LobbyUIView lobbyUIView;
 
         private StateController<State> stateController;
+
+        private readonly List<Lobby> queryLobbies = new ();
 
         private async void Start()
         {
@@ -39,6 +44,7 @@ namespace MH
             this.stateController = new StateController<State>(State.Invalid);
             this.stateController.Set(State.SelectMode, OnEnterSelectMode, null);
             this.stateController.Set(State.LobbyHost, OnEnterLobbyHost, null);
+            this.stateController.Set(State.SearchLobby, OnEnterSearchLobby, null);
             this.stateController.ChangeRequest(State.SelectMode);
         }
 
@@ -57,6 +63,16 @@ namespace MH
                 {
                     await MultiPlayManager.BeginAsHost(4);
                     this.stateController.ChangeRequest(State.LobbyHost);
+                })
+                .AddTo(scope);
+
+            this.lobbyUIView.SelectMode.OnClickSearchLobby
+                .Subscribe(async _ =>
+                {
+                    var query = await MultiPlayManager.QueryLobbies();
+                    this.queryLobbies.Clear();
+                    this.queryLobbies.AddRange(query.Results);
+                    this.stateController.ChangeRequest(State.SearchLobby);
                 })
                 .AddTo(scope);
             
@@ -82,6 +98,24 @@ namespace MH
             // }
             // this.lobbyUIView.SetActiveArea(this.lobbyUIView.Lobby);
             // this.lobbyUIView.Lobby.SetActiveHostArea();
+        }
+
+        private void OnEnterSearchLobby(State previousState, DisposableBagBuilder scope)
+        {
+            this.lobbyUIView.SearchLobby.RemoveAllLobbyElement();
+            foreach (var lobby in this.queryLobbies)
+            {
+                var element = this.lobbyUIView.SearchLobby.CreateLobbyElement();
+                element.LobbyName = lobby.Name;
+                element.OnClickButtonAsObservable()
+                    .Subscribe(_ =>
+                    {
+                        Debug.Log("TODO");
+                    })
+                    .AddTo(scope);
+            }
+            
+            this.lobbyUIView.SetActiveArea(this.lobbyUIView.SearchLobby);
         }
     }
 }

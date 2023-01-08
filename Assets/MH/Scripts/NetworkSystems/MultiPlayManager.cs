@@ -2,6 +2,8 @@ using System;
 using Cysharp.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using Unity.Services.Lobbies;
+using Unity.Services.Lobbies.Models;
 using Unity.Services.Relay;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -33,6 +35,19 @@ namespace MH.NetworkSystems
                 {
                     Debug.LogError("Failed Host.");
                 }
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                throw;
+            }
+        }
+
+        public static async UniTask<QueryResponse> QueryLobbies(QueryLobbiesOptions options = null)
+        {
+            try
+            {
+                return await LobbyManager.QueryLobbiesAsync(options);
             }
             catch (Exception e)
             {

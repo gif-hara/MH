@@ -12,18 +12,33 @@ using UnityEngine.Assertions;
 namespace MH.NetworkSystems
 {
     /// <summary>
-    /// 
+    /// ロビーを管理するクラス
     /// </summary>
     public static class LobbyManager
     {
+        /// <summary>
+        /// 初期化済みであるか
+        /// </summary>
         private static bool isInitialized = false;
 
+        /// <summary>
+        /// 現在参加しているロビー
+        /// </summary>
         private static Lobby currentLobby;
 
+        /// <summary>
+        /// ロビー参加中のスコープ
+        /// </summary>
         private static CancellationTokenSource lobbyScope;
 
+        /// <summary>
+        /// 現在参加しているロビー
+        /// </summary>
         public static Lobby Lobby => currentLobby;
 
+        /// <summary>
+        /// ロビーを作成する
+        /// </summary>
         public static async UniTask CreateLobbyAsync()
         {
             try
@@ -40,6 +55,9 @@ namespace MH.NetworkSystems
             }
         }
 
+        /// <summary>
+        /// ロビーを削除する
+        /// </summary>
         public static async UniTask DeleteLobbyAsync()
         {
             try
@@ -59,6 +77,9 @@ namespace MH.NetworkSystems
             }
         }
 
+        /// <summary>
+        /// ハートビートを開始する
+        /// </summary>
         public static async void BeginHeartbeatAsync(CancellationToken token)
         {
             try
@@ -79,6 +100,9 @@ namespace MH.NetworkSystems
             }
         }
 
+        /// <summary>
+        /// ロビーの状態を取得する
+        /// </summary>
         public static async void BeginGetLobbyAsync(CancellationToken token)
         {
             try
@@ -135,6 +159,26 @@ namespace MH.NetworkSystems
             }
         }
 
+        /// <summary>
+        /// ロビーの検索を行う
+        /// </summary>
+        public static async UniTask<QueryResponse> QueryLobbiesAsync(QueryLobbiesOptions options = null)
+        {
+            try
+            {
+                await InitializeIfNeed();
+                return await Lobbies.Instance.QueryLobbiesAsync(options);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 必要であれば初期化を行う
+        /// </summary>
         private static async UniTask InitializeIfNeed()
         {
             if (isInitialized)

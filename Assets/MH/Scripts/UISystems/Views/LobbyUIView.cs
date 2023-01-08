@@ -138,6 +138,36 @@ namespace MH.UISystems
             public IObservable<Unit> OnClickGotoReadyAsObservable() => this.gotoReadyButton.OnClickAsObservable();
         }
 
+        [Serializable]
+        public class SearchLobbyArea : Area
+        {
+            [SerializeField]
+            private Transform lobbyListParent;
+
+            [SerializeField]
+            private LobbyUIViewLobbyElement lobbyElementPrefab;
+
+            private readonly List<LobbyUIViewLobbyElement> lobbyElements = new();
+            
+            public LobbyUIViewLobbyElement CreateLobbyElement()
+            {
+                var result = Instantiate(this.lobbyElementPrefab, this.lobbyListParent);
+                this.lobbyElements.Add(result);
+
+                return result;
+            }
+
+            public void RemoveAllLobbyElement()
+            {
+                foreach (var lobbyElement in this.lobbyElements)
+                {
+                    Destroy(lobbyElement.gameObject);
+                }
+                
+                this.lobbyElements.Clear();
+            }
+        }
+
 
         [SerializeField]
         private SelectModeArea selectMode;
@@ -145,14 +175,20 @@ namespace MH.UISystems
         [SerializeField]
         private LobbyArea lobby;
 
+        [SerializeField]
+        private SearchLobbyArea searchLobby;
+
         public SelectModeArea SelectMode => this.selectMode;
 
         public LobbyArea Lobby => this.lobby;
+
+        public SearchLobbyArea SearchLobby => this.searchLobby;
 
         public void SetActiveArea(Area area)
         {
             this.selectMode.SetActiveArea(area);
             this.lobby.SetActiveArea(area);
+            this.searchLobby.SetActiveArea(area);
         }
     }
 }
