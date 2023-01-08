@@ -12,7 +12,7 @@ namespace MH
     {
         public static UniTask IsReady { get; private set; }
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void InitializeOnBeforeSplashScreen()
         {
             IsReady = SetupInternal();
