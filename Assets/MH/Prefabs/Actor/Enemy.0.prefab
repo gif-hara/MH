@@ -347,6 +347,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy.0
       objectReference: {fileID: 0}
+    - target: {fileID: 1689262406764164044, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
+      propertyPath: idle.animationClip
+      value: 
+      objectReference: {fileID: 7400000, guid: ec32a4841c4beea4680bf398cf67ea2d, type: 2}
     - target: {fileID: 1689262406764164046, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
       propertyPath: m_RootOrder
       value: 2

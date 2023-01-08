@@ -17,17 +17,14 @@ namespace MH
         private AnimationController animationController;
 
         [SerializeField]
-        private AnimationClip idleClip;
+        private AnimationBlendData idle;
 
         [SerializeField]
-        private AnimationClip runClip;
+        private AnimationBlendData run;
 
         [SerializeField]
-        private AnimationClip dodgeClip;
-
-        [SerializeField]
-        private float blendSeconds;
-
+        private AnimationBlendData dodge;
+        
         private void Start()
         {
             this.animationController.Time = this.actor.TimeController.Time;
@@ -41,12 +38,12 @@ namespace MH
 
         public void PlayIdle()
         {
-            this.animationController.Play(this.idleClip, this.blendSeconds);
+            this.animationController.Play(this.idle);
         }
 
         public void PlayRun()
         {
-            this.animationController.Play(this.runClip, this.blendSeconds);
+            this.animationController.Play(this.run);
         }
 
         public void Play(AnimationBlendData data)
@@ -61,7 +58,7 @@ namespace MH
 
         public UniTask<AnimationController.CompleteType> PlayDodgeAsync()
         {
-            return this.animationController.PlayAsync(this.dodgeClip, this.blendSeconds);
+            return this.animationController.PlayAsync(this.dodge);
         }
     }
 }
