@@ -6,7 +6,7 @@ using UnityEngine.Assertions;
 namespace MH
 {
     /// <summary>
-    /// 
+    /// <see cref="Actor"/>の攻撃を制御するクラス
     /// </summary>
     public sealed class ActorAttackController
     {
@@ -15,22 +15,16 @@ namespace MH
             None,
             WeakAttack,
             DodgeAttack,
-            StrongAttack,
+            StrongAttack
         }
-        private Actor actor;
 
-        private ActorAttackData data;
+        private readonly Actor actor;
 
-        private Dictionary<string, ActorAttackData.MotionData> motionData;
+        private readonly ActorAttackData data;
+
+        private readonly Dictionary<string, ActorAttackData.MotionData> motionData;
 
         private int currentAttackIndex;
-
-        private bool canRotate;
-
-        /// <summary>
-        /// 攻撃中であるか
-        /// </summary>
-        private bool isAttacking = false;
 
         private AttackType currentAttackType;
 
@@ -40,7 +34,7 @@ namespace MH
         {
             this.actor = actor;
             this.data = data;
-            this.motionData = this.data.motionDataList.ToDictionary(x => x.motionName);
+            motionData = this.data.motionDataList.ToDictionary(x => x.motionName);
         }
 
         /// <summary>
@@ -49,42 +43,41 @@ namespace MH
         public async void Invoke(AttackType attackType)
         {
             string motionName;
-            
+
             // 攻撃していなかった場合はタイプから初回の攻撃を算出する
-            if (this.currentAttackType == AttackType.None || this.currentAttackType != attackType)
+            if (currentAttackType == AttackType.None || currentAttackType != attackType)
             {
-                this.currentAttackType = attackType;
-                motionName = this.GetFirstMotionName(this.currentAttackType);
-                this.currentMotionData = this.motionData[motionName];
+                currentAttackType = attackType;
+                motionName = GetFirstMotionName(currentAttackType);
+                currentMotionData = motionData[motionName];
             }
             else
             {
-                if (this.currentMotionData.nextMotionName == "")
+                if (currentMotionData.nextMotionName == "")
                 {
                     motionName = "";
                 }
                 else
                 {
-                    this.currentMotionData = this.motionData[this.currentMotionData.nextMotionName];
-                    motionName = this.currentMotionData.motionName;
+                    currentMotionData = motionData[currentMotionData.nextMotionName];
+                    motionName = currentMotionData.motionName;
                 }
             }
-            
+
             if (motionName == "")
             {
                 return;
             }
 
-            this.canRotate = false;
-            var animationBlendData = this.currentMotionData.animationBlendData;
+            var animationBlendData = currentMotionData.animationBlendData;
 
             try
             {
-                await this.actor.AnimationController.PlayAsync(animationBlendData);
-            
-                this.Reset();
+                await actor.AnimationController.PlayAsync(animationBlendData);
+
+                Reset();
                 MessageBroker.GetPublisher<Actor, ActorEvents.EndAttack>()
-                    .Publish(this.actor, ActorEvents.EndAttack.Get());
+                    .Publish(actor, ActorEvents.EndAttack.Get());
             }
             catch (OperationCanceledException)
             {
@@ -93,14 +86,9 @@ namespace MH
 
         public void Reset()
         {
-            this.currentAttackType = AttackType.None;
-            this.currentMotionData = null;
+            currentAttackType = AttackType.None;
+            currentMotionData = null;
         }
-
-        /// <summary>
-        /// 攻撃中であるか返す
-        /// </summary>
-        private bool IsAttacking => this.currentAttackType != AttackType.None;
 
         /// <summary>
         /// 最初の攻撃のモーション名を返す
@@ -117,7 +105,10 @@ namespace MH
                     return "StrongAttack.0";
                 case AttackType.None:
                 default:
-                    Assert.IsTrue(false, $"{attackType} is not supported.");
+                    Assert.IsTrue(
+                        false,
+                        $"{attackType} is not supported."
+                        );
                     return "";
             }
         }
