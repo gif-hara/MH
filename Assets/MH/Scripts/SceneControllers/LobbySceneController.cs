@@ -55,7 +55,7 @@ namespace MH
             }
         }
 
-        private async void OnEnterSelectMode(State previousState, DisposableBagBuilder scope)
+        private void OnEnterSelectMode(State previousState, DisposableBagBuilder scope)
         {
             this.lobbyUIView.SetActiveArea(this.lobbyUIView.SelectMode);
 
@@ -81,22 +81,6 @@ namespace MH
         private void OnEnterLobbyHost(State previousState, DisposableBagBuilder scope)
         {
             NetworkManager.Singleton.SceneManager.LoadScene("Battle", LoadSceneMode.Single);
-            // this.lobbyUIView.Lobby.OnClickDeleteLobbyAsObservable()
-            //     .Subscribe(async _ =>
-            //     {
-            //         await LobbyManager.DeleteLobbyAsync();
-            //         this.stateController.ChangeRequest(State.SelectMode);
-            //     })
-            //     .AddTo(scope);
-            //
-            // foreach (var player in LobbyManager.Lobby.Players)
-            // {
-            //     var playerElement = this.lobbyUIView.Lobby.CreatePlayerElement(player.Id);
-            //     playerElement.PlayerName = player.Id;
-            //     playerElement.SetActiveIsReady(false);
-            // }
-            // this.lobbyUIView.SetActiveArea(this.lobbyUIView.Lobby);
-            // this.lobbyUIView.Lobby.SetActiveHostArea();
         }
         
         private void OnEnterLobbyClient(State previousState, DisposableBagBuilder scope)
