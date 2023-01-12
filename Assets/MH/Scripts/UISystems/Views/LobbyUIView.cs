@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using UniRx;
+using Cysharp.Threading.Tasks.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,10 +32,12 @@ namespace MH.UISystems
 
             [SerializeField]
             private Button searchLobbyButton;
+            
+            public IUniTaskAsyncEnumerable<AsyncUnit> OnClickCreateLobbyAsyncEnumerable() =>
+                this.createLobbyButton.OnClickAsAsyncEnumerable();
 
-            public IObservable<Unit> OnClickCreateLobby => this.createLobbyButton.OnClickAsObservable();
-
-            public IObservable<Unit> OnClickSearchLobby => this.searchLobbyButton.OnClickAsObservable();
+            public IUniTaskAsyncEnumerable<AsyncUnit> OnClickSearchLobbyAsyncEnumerable() =>
+                this.searchLobbyButton.OnClickAsAsyncEnumerable();
         }
 
         [Serializable]
@@ -128,14 +130,6 @@ namespace MH.UISystems
             {
                 set => this.startGameButton.interactable = value;
             }
-
-            public IObservable<Unit> OnClickStartGameAsObservable() => this.startGameButton.OnClickAsObservable();
-
-            public IObservable<Unit> OnClickDeleteLobbyAsObservable() => this.deleteLobbyButton.OnClickAsObservable();
-
-            public IObservable<Unit> OnClickGotoInPreparationAsObservable() => this.gotoInPreparationButton.OnClickAsObservable();
-
-            public IObservable<Unit> OnClickGotoReadyAsObservable() => this.gotoReadyButton.OnClickAsObservable();
         }
 
         [Serializable]

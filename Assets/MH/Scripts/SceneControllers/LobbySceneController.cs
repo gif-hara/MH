@@ -1,12 +1,9 @@
-using System;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using MessagePipe;
 using MH.NetworkSystems;
 using MH.UISystems;
 using UnityEngine;
-using UnityEngine.Assertions;
-using UniRx;
 using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
 using UnityEngine.SceneManagement;
@@ -58,9 +55,11 @@ namespace MH
             }
         }
 
-        private void OnEnterSelectMode(State previousState, DisposableBagBuilder scope)
+        private async void OnEnterSelectMode(State previousState, DisposableBagBuilder scope)
         {
-            this.lobbyUIView.SelectMode.OnClickCreateLobby
+            this.lobbyUIView.SetActiveArea(this.lobbyUIView.SelectMode);
+
+            this.lobbyUIView.SelectMode.OnClickCreateLobbyAsyncEnumerable()
                 .Subscribe(async _ =>
                 {
                     await MultiPlayManager.BeginAsHostAsync(4);
@@ -68,7 +67,7 @@ namespace MH
                 })
                 .AddTo(scope);
 
-            this.lobbyUIView.SelectMode.OnClickSearchLobby
+            this.lobbyUIView.SelectMode.OnClickSearchLobbyAsyncEnumerable()
                 .Subscribe(async _ =>
                 {
                     var query = await MultiPlayManager.QueryLobbies();
@@ -77,8 +76,6 @@ namespace MH
                     this.stateController.ChangeRequest(State.SearchLobby);
                 })
                 .AddTo(scope);
-            
-            this.lobbyUIView.SetActiveArea(this.lobbyUIView.SelectMode);
         }
 
         private void OnEnterLobbyHost(State previousState, DisposableBagBuilder scope)
@@ -113,7 +110,7 @@ namespace MH
             {
                 var element = this.lobbyUIView.SearchLobby.CreateLobbyElement();
                 element.LobbyName = lobby.Name;
-                element.OnClickButtonAsObservable()
+                element.OnClickAsyncEnumerable()
                     .Subscribe(async _ =>
                     {
                         await MultiPlayManager.BeginAsClientAsync(lobby.Id, lobby.Data["joinCode"].Value);

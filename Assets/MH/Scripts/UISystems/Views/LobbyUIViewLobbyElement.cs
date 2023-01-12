@@ -1,6 +1,5 @@
-using System;
+using Cysharp.Threading.Tasks;
 using TMPro;
-using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,8 +16,9 @@ namespace MH.UISystems
         [SerializeField]
         private TextMeshProUGUI lobbyName;
 
-        public IObservable<Unit> OnClickButtonAsObservable() => this.button.OnClickAsObservable();
-        
+        public IUniTaskAsyncEnumerable<AsyncUnit> OnClickAsyncEnumerable() =>
+            this.button.OnClickAsAsyncEnumerable();
+
         public string LobbyName
         {
             set => this.lobbyName.text = value;
