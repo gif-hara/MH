@@ -8,24 +8,23 @@ namespace MH
     /// </summary>
     public sealed class ActorTimeController
     {
-        public Time Time { get; }
-
         public ActorTimeController()
         {
-            this.Time = new Time(TimeManager.Game);
+            Time = new Time(TimeManager.Game);
         }
+        public Time Time { get; }
 
         /// <summary>
         /// ヒットストップを開始する
         /// </summary>
         public async void BeginHitStop(float timeScale, float hitStopSeconds)
         {
-            var tempTimeScale = this.Time.timeScale;
-            this.Time.timeScale = timeScale;
+            var tempTimeScale = Time.timeScale;
+            Time.timeScale = timeScale;
 
             await UniTask.Delay(TimeSpan.FromSeconds(hitStopSeconds));
 
-            this.Time.timeScale = tempTimeScale;
+            Time.timeScale = tempTimeScale;
         }
     }
 }

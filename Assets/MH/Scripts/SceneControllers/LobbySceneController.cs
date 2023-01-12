@@ -3,15 +3,15 @@ using Cysharp.Threading.Tasks.Linq;
 using MessagePipe;
 using MH.NetworkSystems;
 using MH.UISystems;
-using UnityEngine;
 using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace MH
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed class LobbySceneController : MonoBehaviour
     {
@@ -21,59 +21,57 @@ namespace MH
             SelectMode,
             LobbyHost,
             LobbyClient,
-            SearchLobby,
+            SearchLobby
         }
-        
+
         [SerializeField]
         private LobbyUIView lobbyUIViewPrefab;
+
+        private readonly List<Lobby> queryLobbies = new();
 
         private LobbyUIView lobbyUIView;
 
         private StateController<State> stateController;
 
-        private readonly List<Lobby> queryLobbies = new ();
-
         private async void Start()
         {
             await BootSystem.IsReady;
 
-            this.lobbyUIView = UIManager.Open(this.lobbyUIViewPrefab);
+            lobbyUIView = UIManager.Open(lobbyUIViewPrefab);
 
-            this.stateController = new StateController<State>(State.Invalid);
-            this.stateController.Set(State.SelectMode, OnEnterSelectMode, null);
-            this.stateController.Set(State.LobbyHost, OnEnterLobbyHost, null);
-            this.stateController.Set(State.LobbyClient, OnEnterLobbyClient, null);
-            this.stateController.Set(State.SearchLobby, OnEnterSearchLobby, null);
-            this.stateController.ChangeRequest(State.SelectMode);
+            stateController = new StateController<State>(State.Invalid);
+            stateController.Set(State.SelectMode, OnEnterSelectMode, null);
+            stateController.Set(State.LobbyHost, OnEnterLobbyHost, null);
+            stateController.Set(State.LobbyClient, OnEnterLobbyClient, null);
+            stateController.Set(State.SearchLobby, OnEnterSearchLobby, null);
+            stateController.ChangeRequest(State.SelectMode);
         }
 
         private void OnDestroy()
         {
-            if (this.lobbyUIView != null)
-            {
-                UIManager.Close(this.lobbyUIView);
-            }
+            if (lobbyUIView != null)
+                UIManager.Close(lobbyUIView);
         }
 
         private void OnEnterSelectMode(State previousState, DisposableBagBuilder scope)
         {
-            this.lobbyUIView.SetActiveArea(this.lobbyUIView.SelectMode);
+            lobbyUIView.SetActiveArea(lobbyUIView.SelectMode);
 
-            this.lobbyUIView.SelectMode.OnClickCreateLobbyAsyncEnumerable()
+            lobbyUIView.SelectMode.OnClickCreateLobbyAsyncEnumerable()
                 .Subscribe(async _ =>
                 {
                     await MultiPlayManager.BeginAsHostAsync(4);
-                    this.stateController.ChangeRequest(State.LobbyHost);
+                    stateController.ChangeRequest(State.LobbyHost);
                 })
                 .AddTo(scope);
 
-            this.lobbyUIView.SelectMode.OnClickSearchLobbyAsyncEnumerable()
+            lobbyUIView.SelectMode.OnClickSearchLobbyAsyncEnumerable()
                 .Subscribe(async _ =>
                 {
                     var query = await MultiPlayManager.QueryLobbies();
-                    this.queryLobbies.Clear();
-                    this.queryLobbies.AddRange(query.Results);
-                    this.stateController.ChangeRequest(State.SearchLobby);
+                    queryLobbies.Clear();
+                    queryLobbies.AddRange(query.Results);
+                    stateController.ChangeRequest(State.SearchLobby);
                 })
                 .AddTo(scope);
         }
@@ -82,28 +80,28 @@ namespace MH
         {
             NetworkManager.Singleton.SceneManager.LoadScene("Battle", LoadSceneMode.Single);
         }
-        
+
         private void OnEnterLobbyClient(State previousState, DisposableBagBuilder scope)
         {
         }
 
         private void OnEnterSearchLobby(State previousState, DisposableBagBuilder scope)
         {
-            this.lobbyUIView.SearchLobby.RemoveAllLobbyElement();
-            foreach (var lobby in this.queryLobbies)
+            lobbyUIView.SearchLobby.RemoveAllLobbyElement();
+            foreach (var lobby in queryLobbies)
             {
-                var element = this.lobbyUIView.SearchLobby.CreateLobbyElement();
+                var element = lobbyUIView.SearchLobby.CreateLobbyElement();
                 element.LobbyName = lobby.Name;
                 element.OnClickAsyncEnumerable()
                     .Subscribe(async _ =>
                     {
                         await MultiPlayManager.BeginAsClientAsync(lobby.Id, lobby.Data["joinCode"].Value);
-                        this.stateController.ChangeRequest(State.LobbyClient);
+                        stateController.ChangeRequest(State.LobbyClient);
                     })
                     .AddTo(scope);
             }
-            
-            this.lobbyUIView.SetActiveArea(this.lobbyUIView.SearchLobby);
+
+            lobbyUIView.SetActiveArea(lobbyUIView.SearchLobby);
         }
     }
 }
