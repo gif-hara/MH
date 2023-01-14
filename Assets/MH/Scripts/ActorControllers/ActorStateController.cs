@@ -1,16 +1,12 @@
-using System;
-using System.Threading;
-using Cysharp.Threading.Tasks;
 using MessagePipe;
-using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace MH
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    public sealed class ActorStateController
+    public sealed class ActorStateController : IActorController
     {
         public enum State
         {
@@ -21,21 +17,21 @@ namespace MH
             Attack,
         }
 
-        private readonly Actor actor;
-
-        private readonly StateController<State> stateController;
-
-        /// <summary>
-        /// 攻撃時の回転処理を行えるか
-        /// </summary>
-        private bool onAttackCanRotate = false;
+        private Actor actor;
 
         /// <summary>
         /// 次の攻撃のリクエストタイプ
         /// </summary>
         private Define.RequestAttackType nextAttackType;
-        
-        public ActorStateController(Actor actor)
+
+        /// <summary>
+        /// 攻撃時の回転処理を行えるか
+        /// </summary>
+        private bool onAttackCanRotate;
+
+        private StateController<State> stateController;
+
+        void IActorController.Setup(Actor actor, ActorSpawnData spawnData)
         {
             this.actor = actor;
             this.stateController = new StateController<State>(State.Invalid);
@@ -43,14 +39,14 @@ namespace MH
             this.stateController.Set(State.Run, OnEnterRun, null);
             this.stateController.Set(State.Dodge, OnEnterDodge, null);
             this.stateController.Set(State.Attack, OnEnterAttack, OnExitAttack);
-            
+
             this.stateController.ChangeRequest(State.Idle);
         }
 
         private void OnEnterIdle(State previousState, DisposableBagBuilder scope)
         {
             this.actor.AnimationController.PlayIdle();
-            
+
             MessageBroker.GetSubscriber<Actor, ActorEvents.BeginMove>()
                 .Subscribe(this.actor, _ =>
                 {
@@ -97,21 +93,21 @@ namespace MH
         private void OnEnterRun(State previousState, DisposableBagBuilder scope)
         {
             this.actor.AnimationController.PlayRun();
-            
+
             MessageBroker.GetSubscriber<Actor, ActorEvents.EndMove>()
                 .Subscribe(this.actor, _ =>
                 {
                     this.stateController.ChangeRequest(State.Idle);
                 })
                 .AddTo(scope);
-            
+
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestMove>()
                 .Subscribe(this.actor, x =>
                 {
                     this.actor.PostureController.Move(x.Velocity);
                 })
                 .AddTo(scope);
-            
+
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestRotation>()
                 .Subscribe(this.actor, x =>
                 {
@@ -131,7 +127,7 @@ namespace MH
                     this.stateController.ChangeRequest(State.Dodge);
                 })
                 .AddTo(scope);
-            
+
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
                 .Subscribe(this.actor, x =>
                 {
@@ -174,14 +170,14 @@ namespace MH
                     this.stateController.ChangeRequest(State.Idle);
                 })
                 .AddTo(scope);
-            
+
             this.actor.DodgeController.Invoke();
         }
-        
+
         private void OnEnterAttack(State previousState, DisposableBagBuilder scope)
         {
             this.onAttackCanRotate = false;
-            
+
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestRotation>()
                 .Subscribe(this.actor, x =>
                 {
@@ -189,11 +185,11 @@ namespace MH
                     {
                         return;
                     }
-                    
+
                     this.actor.PostureController.Rotate(x.Rotation);
                 })
                 .AddTo(scope);
-            
+
             MessageBroker.GetSubscriber<Actor, ActorEvents.AcceptRequestRotation>()
                 .Subscribe(this.actor, _ =>
                 {
@@ -260,17 +256,17 @@ namespace MH
             {
                 Assert.IsTrue(false, this.nextAttackType.ToString());
             }
-            
+
             this.actor.AttackController.Invoke(attackType);
         }
-        
+
         private void OnExitAttack(State nextState)
         {
             if (nextState == State.Attack)
             {
                 return;
             }
-            
+
             this.actor.AttackController.Reset();
         }
     }

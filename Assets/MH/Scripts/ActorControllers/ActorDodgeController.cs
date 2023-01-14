@@ -1,26 +1,25 @@
 using System;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace MH
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    public sealed class ActorDodgeController
+    public sealed class ActorDodgeController : IActorController
     {
-        private readonly Actor actor;
+        private Actor actor;
 
         private Vector3 direction;
-
-        private float speed;
 
         private float duration;
 
         private Ease ease;
-        
-        public ActorDodgeController(Actor actor)
+
+        private float speed;
+
+        void IActorController.Setup(Actor actor, ActorSpawnData spawnData)
         {
             this.actor = actor;
         }

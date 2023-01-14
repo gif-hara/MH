@@ -9,7 +9,7 @@ namespace MH
     /// <summary>
     /// <see cref="ActorEvents"/>をフックしてトレイルの再生フラグを設定するクラス
     /// </summary>
-    public abstract class SetTrailEmittingFromActorEvent<TValue> : MonoBehaviour, IActorAttachable
+    public abstract class SetTrailEmittingFromActorEvent<TValue> : MonoBehaviour, IActorController
     {
         [SerializeField]
         private Actor actor;
@@ -17,14 +17,6 @@ namespace MH
         [SerializeField]
         private List<TargetData> targetDataList;
 
-        [Serializable]
-        public class TargetData
-        {
-            public TrailRenderer target;
-
-            public bool emitting;
-        }
-        
         private void Start()
         {
             MessageBroker.GetSubscriber<Actor, TValue>()
@@ -37,10 +29,18 @@ namespace MH
                 })
                 .AddTo(this.GetCancellationTokenOnDestroy());
         }
-        
-        public void Attach(Actor actor)
+
+        public void Setup(Actor actor, ActorSpawnData spawnData)
         {
             this.actor = actor;
+        }
+
+        [Serializable]
+        public class TargetData
+        {
+            public TrailRenderer target;
+
+            public bool emitting;
         }
     }
 }

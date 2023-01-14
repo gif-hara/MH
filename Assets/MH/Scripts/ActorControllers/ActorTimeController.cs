@@ -6,25 +6,26 @@ namespace MH
     /// <summary>
     /// <see cref="Actor"/>の時間を制御するクラス
     /// </summary>
-    public sealed class ActorTimeController
+    public sealed class ActorTimeController : IActorController
     {
-        public ActorTimeController()
+        public Time Time { get; private set; }
+
+        void IActorController.Setup(Actor actor, ActorSpawnData spawnData)
         {
-            Time = new Time(TimeManager.Game);
+            this.Time = new Time(TimeManager.Game);
         }
-        public Time Time { get; }
 
         /// <summary>
         /// ヒットストップを開始する
         /// </summary>
         public async void BeginHitStop(float timeScale, float hitStopSeconds)
         {
-            var tempTimeScale = Time.timeScale;
-            Time.timeScale = timeScale;
+            var tempTimeScale = this.Time.timeScale;
+            this.Time.timeScale = timeScale;
 
             await UniTask.Delay(TimeSpan.FromSeconds(hitStopSeconds));
 
-            Time.timeScale = tempTimeScale;
+            this.Time.timeScale = tempTimeScale;
         }
     }
 }

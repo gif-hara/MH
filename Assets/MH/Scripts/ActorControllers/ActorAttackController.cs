@@ -8,7 +8,7 @@ namespace MH
     /// <summary>
     /// <see cref="Actor"/>の攻撃を制御するクラス
     /// </summary>
-    public sealed class ActorAttackController
+    public sealed class ActorAttackController : IActorController
     {
         public enum AttackType
         {
@@ -18,11 +18,7 @@ namespace MH
             StrongAttack
         }
 
-        private readonly Actor actor;
-
-        private readonly ActorAttackData data;
-
-        private readonly Dictionary<string, ActorAttackData.MotionData> motionData;
+        private Actor actor;
 
         private int currentAttackIndex;
 
@@ -30,11 +26,15 @@ namespace MH
 
         private ActorAttackData.MotionData currentMotionData;
 
-        public ActorAttackController(Actor actor, ActorAttackData data)
+        private ActorAttackData data;
+
+        private Dictionary<string, ActorAttackData.MotionData> motionData;
+
+        void IActorController.Setup(Actor actor, ActorSpawnData spawnData)
         {
             this.actor = actor;
-            this.data = data;
-            motionData = this.data.motionDataList.ToDictionary(x => x.motionName);
+            this.data = spawnData.attackData;
+            this.motionData = this.data.motionDataList.ToDictionary(x => x.motionName);
         }
 
         /// <summary>

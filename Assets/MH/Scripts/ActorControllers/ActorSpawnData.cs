@@ -18,7 +18,7 @@ namespace MH
         /// <see cref="Actor"/>にアタッチするプレハブリスト
         /// </summary>
         /// <remarks>
-        /// <see cref="IActorAttachable"/>がアタッチされているプレハブを想定しています
+        /// <see cref="IActorController"/>がアタッチされているプレハブを想定しています
         /// </remarks>
         public List<GameObject> extensionPrefabs;
     }

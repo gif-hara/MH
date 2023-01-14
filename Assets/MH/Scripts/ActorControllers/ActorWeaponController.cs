@@ -9,7 +9,7 @@ namespace MH
     /// <summary>
     /// <see cref="Actor"/>の武器を制御するクラス
     /// </summary>
-    public sealed class ActorWeaponController : MonoBehaviour, IActorAttachable
+    public sealed class ActorWeaponController : MonoBehaviour, IActorController
     {
         [SerializeField]
         private float hitStopTimeScale;
@@ -61,7 +61,7 @@ namespace MH
             actor.TimeController.BeginHitStop(hitStopTimeScale, hitStopSeconds);
         }
 
-        public void Attach(Actor actor)
+        public void Setup(Actor actor, ActorSpawnData spawnData)
         {
             this.actor = actor;
             var t = transform;
