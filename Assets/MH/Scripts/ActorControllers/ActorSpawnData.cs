@@ -12,6 +12,8 @@ namespace MH
     {
         public ActorAttackData attackData;
 
+        public ActorAnimationData animationData;
+
         /// <summary>
         /// <see cref="Actor"/>にアタッチするプレハブリスト
         /// </summary>
