@@ -17,13 +17,13 @@ namespace MH
 
         public ActorAnimationController AnimationController => this.animationController;
 
+        public ActorModelController ModelController => this.modelController;
+
         public ActorStateController StateController { private set; get; }
 
         public ActorDodgeController DodgeController { private set; get; }
 
         public ActorAttackController AttackController { private set; get; }
-
-        public ActorModelController ModelController => this.modelController;
 
         public ActorTimeController TimeController { private set; get; }
 

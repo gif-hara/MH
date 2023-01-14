@@ -8,10 +8,10 @@ using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace MH
+namespace MH.SceneControllers
 {
     /// <summary>
-    ///
+    /// ロビーシーンを制御するクラス
     /// </summary>
     public sealed class LobbySceneController : MonoBehaviour
     {

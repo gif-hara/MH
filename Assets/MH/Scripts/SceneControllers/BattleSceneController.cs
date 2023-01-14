@@ -1,11 +1,9 @@
-using System;
 using UnityEngine;
-using UnityEngine.Assertions;
 
-namespace MH
+namespace MH.SceneControllers
 {
     /// <summary>
-    /// 
+    /// バトルシーンを制御するクラス
     /// </summary>
     public sealed class BattleSceneController : MonoBehaviour
     {
@@ -16,10 +14,7 @@ namespace MH
         private Actor enemyPrefab;
 
         [SerializeField]
-        private ActorSpawnData playerSpawnData;
-
-        [SerializeField]
-        private ActorSpawnData enemySpawnData;
+        private BattleSceneDebugData debugData;
 
         [SerializeField]
         private PlayerInputController playerInputControllerPrefab;
@@ -36,11 +31,11 @@ namespace MH
 
             Instantiate(this.playerInputControllerPrefab, this.transform);
 
-            var player = this.playerPrefab.Spawn(this.playerSpawnData, this.playerSpawnPoint);
+            var player = this.playerPrefab.Spawn(this.debugData.playerSpawnData.data, this.playerSpawnPoint);
             MessageBroker.GetPublisher<ActorEvents.SpawnedPlayer>()
                 .Publish(ActorEvents.SpawnedPlayer.Get(player));
 
-            this.enemyPrefab.Spawn(this.enemySpawnData, this.enemySpawnPoint);
+            this.enemyPrefab.Spawn(this.debugData.enemySpawnData.data, this.enemySpawnPoint);
         }
     }
 }

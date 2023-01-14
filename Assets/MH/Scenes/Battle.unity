@@ -1068,13 +1068,18 @@ MonoBehaviour:
           animationClip: {fileID: 7400000, guid: d1634fb508b311b4e97d1f627670eda6, type: 2}
           blendSeconds: 0.1
         nextMotionName: 
+    animationData:
+      dataList: []
     extensionPrefabs:
     - {fileID: 5450664224324214380, guid: a4249328f81d12b44ab72ea7e1fb3b98, type: 3}
   enemySpawnData:
     attackData:
       baseStrength: 0
       motionDataList: []
+    animationData:
+      dataList: []
     extensionPrefabs: []
+  debugData: {fileID: 11400000, guid: d9d5568935b530943a57c8f923d781bb, type: 2}
   playerInputControllerPrefab: {fileID: 5100394250428141442, guid: 6d1edebb2d4fef34bb8650676303d165, type: 3}
   playerSpawnPoint: {fileID: 915631917}
   enemySpawnPoint: {fileID: 952618026}
