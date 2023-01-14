@@ -1,3 +1,7 @@
+using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
+using MH.NetworkSystems;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace MH.SceneControllers
@@ -29,7 +33,28 @@ namespace MH.SceneControllers
         {
             await BootSystem.IsReady;
 
+            if (!MultiPlayManager.IsConnecting)
+            {
+                NetworkManager.Singleton.StartHost();
+            }
+
             Instantiate(this.playerInputControllerPrefab, this.transform);
+
+            var ct = this.GetCancellationTokenOnDestroy();
+
+            MultiPlayManager.OnClientConnectedAsyncEnumerable(ct)
+                .Subscribe(x =>
+                {
+                    Debug.Log($"OnClientConnected {x}");
+                })
+                .AddTo(ct);
+
+            MultiPlayManager.OnClientDisconnectAsyncEnumerable(ct)
+                .Subscribe(x =>
+                {
+                    Debug.Log($"OnClientDisconnect {x}");
+                })
+                .AddTo(ct);
 
             var player = this.playerPrefab.Spawn(this.debugData.playerSpawnData.data, this.playerSpawnPoint);
             MessageBroker.GetPublisher<ActorEvents.SpawnedPlayer>()

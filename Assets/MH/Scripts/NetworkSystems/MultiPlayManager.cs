@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
@@ -9,19 +10,23 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using Unity.Services.Relay;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace MH.NetworkSystems
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public static class MultiPlayManager
     {
         /// <summary>
         /// 初期化済みであるか
         /// </summary>
-        private static bool isInitialized = false;
+        private static bool isInitialized;
+
+        /// <summary>
+        /// 通信中か返す
+        /// </summary>
+        public static bool IsConnecting => NetworkManager.Singleton.IsListening;
 
         public static async UniTask BeginAsHostAsync(int maxConnections, CreateLobbyOptions options = null)
         {
@@ -95,7 +100,39 @@ namespace MH.NetworkSystems
                 throw;
             }
         }
-        
+
+        public static IUniTaskAsyncEnumerable<ulong> OnClientConnectedAsyncEnumerable(CancellationToken ct)
+        {
+            return new ActionHandlerAsyncEnumerable<ulong>(
+                x => NetworkManager.Singleton.OnClientConnectedCallback += x,
+                x =>
+                {
+                    var networkManager = NetworkManager.Singleton;
+                    if (networkManager != null)
+                    {
+                        networkManager.OnClientConnectedCallback -= x;
+                    }
+                },
+                ct
+                );
+        }
+
+        public static IUniTaskAsyncEnumerable<ulong> OnClientDisconnectAsyncEnumerable(CancellationToken ct)
+        {
+            return new ActionHandlerAsyncEnumerable<ulong>(
+                x => NetworkManager.Singleton.OnClientDisconnectCallback += x,
+                x =>
+                {
+                    var networkManager = NetworkManager.Singleton;
+                    if (networkManager != null)
+                    {
+                        networkManager.OnClientDisconnectCallback -= x;
+                    }
+                },
+                ct
+                );
+        }
+
         /// <summary>
         /// 必要であれば初期化を行う
         /// </summary>
