@@ -220,7 +220,7 @@ namespace MH
                 })
                 .AddTo(scope);
 
-            ActorAttackController.AttackType attackType = ActorAttackController.AttackType.WeakAttack;
+            var attackType = ActorAttackController.AttackType.WeakAttack;
             if (this.nextAttackType == Define.RequestAttackType.Weak)
             {
                 if (previousState == State.Dodge)
