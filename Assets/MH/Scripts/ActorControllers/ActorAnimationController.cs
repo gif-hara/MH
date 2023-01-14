@@ -1,32 +1,26 @@
 using Cysharp.Threading.Tasks;
 using MessagePipe;
-using UnityEngine;
 
 namespace MH
 {
     /// <summary>
     /// </summary>
-    public sealed class ActorAnimationController : MonoBehaviour
+    public sealed class ActorAnimationController : IActorController
     {
-        [SerializeField]
-        private Actor actor;
-
-        [SerializeField]
         private AnimationController animationController;
 
-        [SerializeField]
-        private AnimationBlendData idle;
+        private ActorAnimationData data;
 
-        [SerializeField]
-        private AnimationBlendData run;
-
-        [SerializeField]
-        private AnimationBlendData dodge;
-
-        private void Start()
+        void IActorController.Setup(
+            Actor actor,
+            IActorDependencyInjector actorDependencyInjector,
+            ActorSpawnData spawnData
+        )
         {
-            animationController.Time = actor.TimeController.Time;
-            animationController.SetSpeed(actor.TimeController.Time.totalTimeScale);
+            this.animationController = actorDependencyInjector.AnimationController;
+            this.data = spawnData.animationData;
+            this.animationController.Time = actor.TimeController.Time;
+            this.animationController.SetSpeed(actor.TimeController.Time.totalTimeScale);
             MessageBroker.GetSubscriber<Time, TimeEvents.UpdatedTimeScale>()
                 .Subscribe(actor.TimeController.Time, x =>
                 {
@@ -36,12 +30,12 @@ namespace MH
 
         public void PlayIdle()
         {
-            animationController.Play(idle);
+            animationController.Play(this.data.GetAnimationBlendData("Idle"));
         }
 
         public void PlayRun()
         {
-            animationController.Play(run);
+            animationController.Play(this.data.GetAnimationBlendData("Run"));
         }
 
         public void Play(AnimationBlendData data)
@@ -56,7 +50,7 @@ namespace MH
 
         public UniTask<AnimationController.CompleteType> PlayDodgeAsync()
         {
-            return animationController.PlayAsync(dodge);
+            return animationController.PlayAsync(this.data.GetAnimationBlendData("Dodge"));
         }
     }
 }

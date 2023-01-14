@@ -1,73 +1,81 @@
-using System;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
+using Cysharp.Threading.Tasks.Triggers;
+using MessagePipe;
 using StandardAssets.Characters.Physics;
 using UnityEngine;
-using MessagePipe;
 
 namespace MH
 {
     /// <summary>
     /// <see cref="Actor"/>の姿勢を制御するクラス
     /// </summary>
-    public sealed class ActorPostureController : MonoBehaviour
+    public sealed class ActorPostureController : IActorController
     {
-        [SerializeField]
-        private Actor actor;
-        
-        [SerializeField]
-        private OpenCharacterController openCharacterController;
+        private readonly Vector3 gravity = new(0.0f, -60.0f, 0.0f);
 
-        [SerializeField]
-        private Vector3 gravity;
+        private Actor actor;
 
         private Vector3 currentGravity;
 
         private Vector3 currentMoveVector;
-        
+
         private bool isMoving = true;
 
-        private void Start()
+        private OpenCharacterController openCharacterController;
+
+        void IActorController.Setup(
+            Actor actor,
+            IActorDependencyInjector actorDependencyInjector,
+            ActorSpawnData spawnData
+            )
         {
+            this.actor = actor;
+            this.openCharacterController = actorDependencyInjector.OpenCharacterController;
+
+            var ct = this.actor.GetCancellationTokenOnDestroy();
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestSetForce>()
                 .Subscribe(this.actor, x =>
                 {
                     this.SetForce(x.Force);
                 })
-                .AddTo(this.GetCancellationTokenOnDestroy());
-        }
+                .AddTo(ct);
 
-        private void LateUpdate()
-        {
-            if (this.currentMoveVector.sqrMagnitude > 0.0f)
-            {
-                if (!this.isMoving)
+            this.actor.GetAsyncLateUpdateTrigger()
+                .Subscribe(_ =>
                 {
-                    this.isMoving = true;
-                    MessageBroker.GetPublisher<Actor, ActorEvents.BeginMove>()
-                        .Publish(this.actor, ActorEvents.BeginMove.Get());
-                }
-            }
-            else
-            {
-                if (this.isMoving)
-                {
-                    this.isMoving = false;
-                    MessageBroker.GetPublisher<Actor, ActorEvents.EndMove>()
-                        .Publish(this.actor, ActorEvents.EndMove.Get());
-                }
-            }
-            
-            this.currentGravity += this.gravity * this.actor.TimeController.Time.deltaTime;
+                    if (this.currentMoveVector.sqrMagnitude > 0.0f)
+                    {
+                        if (!this.isMoving)
+                        {
+                            this.isMoving = true;
+                            MessageBroker.GetPublisher<Actor, ActorEvents.BeginMove>()
+                                .Publish(this.actor, ActorEvents.BeginMove.Get());
+                        }
+                    }
+                    else
+                    {
+                        if (this.isMoving)
+                        {
+                            this.isMoving = false;
+                            MessageBroker.GetPublisher<Actor, ActorEvents.EndMove>()
+                                .Publish(this.actor, ActorEvents.EndMove.Get());
+                        }
+                    }
 
-            var totalVector = this.currentMoveVector + (this.currentGravity * this.actor.TimeController.Time.deltaTime);
+                    this.currentGravity += this.gravity * this.actor.TimeController.Time.deltaTime;
 
-            this.openCharacterController.Move(totalVector);
-            this.currentMoveVector = Vector3.zero;
+                    var totalVector = this.currentMoveVector + (this.currentGravity * this.actor.TimeController.Time.deltaTime);
 
-            if (this.openCharacterController.isGrounded)
-            {
-                this.currentGravity = Vector3.zero;
-            }
+                    this.openCharacterController.Move(totalVector);
+                    this.currentMoveVector = Vector3.zero;
+
+                    if (this.openCharacterController.isGrounded)
+                    {
+                        this.currentGravity = Vector3.zero;
+                    }
+                })
+                .AddTo(ct);
         }
 
         public void Move(Vector3 moveVector)
@@ -84,7 +92,7 @@ namespace MH
         {
             this.currentGravity = force;
         }
-        
+
         public void Rotate(Quaternion rotation)
         {
             this.actor.transform.localRotation = rotation;

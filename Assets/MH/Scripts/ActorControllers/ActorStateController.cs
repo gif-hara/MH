@@ -31,7 +31,11 @@ namespace MH
 
         private StateController<State> stateController;
 
-        void IActorController.Setup(Actor actor, ActorSpawnData spawnData)
+        void IActorController.Setup(
+            Actor actor,
+            IActorDependencyInjector actorDependencyInjector,
+            ActorSpawnData spawnData
+        )
         {
             this.actor = actor;
             this.stateController = new StateController<State>(State.Invalid);

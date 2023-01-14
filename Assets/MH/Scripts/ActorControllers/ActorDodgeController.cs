@@ -19,7 +19,11 @@ namespace MH
 
         private float speed;
 
-        void IActorController.Setup(Actor actor, ActorSpawnData spawnData)
+        void IActorController.Setup(
+            Actor actor,
+            IActorDependencyInjector actorDependencyInjector,
+            ActorSpawnData spawnData
+        )
         {
             this.actor = actor;
         }

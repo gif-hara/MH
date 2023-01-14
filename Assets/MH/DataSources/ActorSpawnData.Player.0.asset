@@ -47,6 +47,18 @@ MonoBehaviour:
           blendSeconds: 0.1
         nextMotionName: 
     animationData:
-      dataList: []
+      dataList:
+      - name: Idle
+        blendData:
+          animationClip: {fileID: 7400000, guid: ec32a4841c4beea4680bf398cf67ea2d, type: 2}
+          blendSeconds: 0.1
+      - name: Run
+        blendData:
+          animationClip: {fileID: 7400000, guid: 7a7cd163c014c084e811fe6dd9409011, type: 2}
+          blendSeconds: 0.1
+      - name: Dodge
+        blendData:
+          animationClip: {fileID: 7400000, guid: bfb3dc0778d06534d9f67ed90d08e637, type: 2}
+          blendSeconds: 0.1
     extensionPrefabs:
     - {fileID: 5450664224324214380, guid: a4249328f81d12b44ab72ea7e1fb3b98, type: 3}

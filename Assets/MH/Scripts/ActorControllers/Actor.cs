@@ -1,23 +1,25 @@
+using StandardAssets.Characters.Physics;
 using UnityEngine;
 
 namespace MH
 {
-    public class Actor : MonoBehaviour
+    public class Actor : MonoBehaviour, IActorDependencyInjector
     {
-        [SerializeField]
-        private ActorPostureController postureController;
 
         [SerializeField]
-        private ActorAnimationController animationController;
+        private AnimationController animationController;
 
         [SerializeField]
-        private ActorModelController modelController;
+        private BoneHolder boneHolder;
 
-        public ActorPostureController PostureController => this.postureController;
+        [SerializeField]
+        private OpenCharacterController openCharacterController;
 
-        public ActorAnimationController AnimationController => this.animationController;
+        public ActorPostureController PostureController { private set; get; }
 
-        public ActorModelController ModelController => this.modelController;
+        public ActorAnimationController AnimationController { private set; get; }
+
+        public ActorModelController ModelController { private set; get; }
 
         public ActorStateController StateController { private set; get; }
 
@@ -26,6 +28,12 @@ namespace MH
         public ActorAttackController AttackController { private set; get; }
 
         public ActorTimeController TimeController { private set; get; }
+
+        AnimationController IActorDependencyInjector.AnimationController => this.animationController;
+
+        BoneHolder IActorDependencyInjector.BoneHolder => this.boneHolder;
+
+        OpenCharacterController IActorDependencyInjector.OpenCharacterController => this.openCharacterController;
 
         public Actor Spawn(ActorSpawnData data, Vector3 position, Quaternion rotation)
         {
@@ -41,17 +49,20 @@ namespace MH
 
         private void Initialize(ActorSpawnData spawnData)
         {
+            this.PostureController = this.CreateActorController<ActorPostureController>(spawnData);
+            this.TimeController = this.CreateActorController<ActorTimeController>(spawnData);
+            this.ModelController = this.CreateActorController<ActorModelController>(spawnData);
+            this.AnimationController = this.CreateActorController<ActorAnimationController>(spawnData);
             this.StateController = this.CreateActorController<ActorStateController>(spawnData);
             this.DodgeController = this.CreateActorController<ActorDodgeController>(spawnData);
             this.AttackController = this.CreateActorController<ActorAttackController>(spawnData);
-            this.TimeController = this.CreateActorController<ActorTimeController>(spawnData);
 
             foreach (var prefab in spawnData.extensionPrefabs)
             {
                 var extensionObject = Instantiate(prefab, this.transform);
                 foreach (var i in extensionObject.GetComponentsInChildren<IActorController>())
                 {
-                    i.Setup(this, spawnData);
+                    i.Setup(this, this, spawnData);
                 }
             }
         }
@@ -59,7 +70,7 @@ namespace MH
         private T CreateActorController<T>(ActorSpawnData spawnData) where T : IActorController, new()
         {
             var instance = new T();
-            instance.Setup(this, spawnData);
+            instance.Setup(this, this, spawnData);
 
             return instance;
         }

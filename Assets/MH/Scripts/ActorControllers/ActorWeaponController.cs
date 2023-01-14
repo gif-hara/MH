@@ -61,7 +61,11 @@ namespace MH
             actor.TimeController.BeginHitStop(hitStopTimeScale, hitStopSeconds);
         }
 
-        public void Setup(Actor actor, ActorSpawnData spawnData)
+        void IActorController.Setup(
+            Actor actor,
+            IActorDependencyInjector actorDependencyInjector,
+            ActorSpawnData spawnData
+        )
         {
             this.actor = actor;
             var t = transform;

@@ -1,16 +1,19 @@
-using UnityEngine;
-using UnityEngine.Assertions;
-
 namespace MH
 {
     /// <summary>
     /// <see cref="Actor"/>のモデルを制御するクラス
     /// </summary>
-    public sealed class ActorModelController : MonoBehaviour
+    public sealed class ActorModelController : IActorController
     {
-        [SerializeField]
-        private BoneHolder boneHolder;
+        public BoneHolder BoneHolder { private set; get; }
 
-        public BoneHolder BoneHolder => this.boneHolder;
+        void IActorController.Setup(
+            Actor actor,
+            IActorDependencyInjector actorDependencyInjector,
+            ActorSpawnData spawnData
+            )
+        {
+            this.BoneHolder = actorDependencyInjector.BoneHolder;
+        }
     }
 }

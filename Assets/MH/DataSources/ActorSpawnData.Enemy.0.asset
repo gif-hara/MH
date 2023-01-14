@@ -17,5 +17,9 @@ MonoBehaviour:
       baseStrength: 0
       motionDataList: []
     animationData:
-      dataList: []
+      dataList:
+      - name: Idle
+        blendData:
+          animationClip: {fileID: 7400000, guid: ec32a4841c4beea4680bf398cf67ea2d, type: 2}
+          blendSeconds: 0.1
     extensionPrefabs: []

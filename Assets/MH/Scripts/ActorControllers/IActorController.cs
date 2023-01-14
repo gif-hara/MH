@@ -6,8 +6,8 @@ namespace MH
     public interface IActorController
     {
         /// <summary>
-        /// アタッチする
+        /// セットアップする
         /// </summary>
-        void Setup(Actor actor, ActorSpawnData spawnData);
+        void Setup(Actor actor, IActorDependencyInjector actorDependencyInjector, ActorSpawnData spawnData);
     }
 }

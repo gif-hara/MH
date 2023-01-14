@@ -44,10 +44,7 @@ GameObject:
   - component: {fileID: 1689262406764164040}
   - component: {fileID: 1689262406764164041}
   - component: {fileID: 1689262406764164045}
-  - component: {fileID: 1689262406764164044}
   - component: {fileID: 1689262406764164035}
-  - component: {fileID: 1689262406764164034}
-  - component: {fileID: 8571845875620172789}
   m_Layer: 6
   m_Name: Actor
   m_TagString: Untagged
@@ -146,27 +143,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67c315d4cab395a4c82c9f6c88d84a2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  postureController: {fileID: 1689262406764164034}
-  animationController: {fileID: 1689262406764164044}
-  modelController: {fileID: 8571845875620172789}
---- !u!114 &1689262406764164044
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1689262406764164042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fa41aea3120ca84c85ccdc165a4f84c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  actor: {fileID: 1689262406764164045}
   animationController: {fileID: 1689262406764164035}
-  idleClip: {fileID: 7400000, guid: ec32a4841c4beea4680bf398cf67ea2d, type: 2}
-  runClip: {fileID: 7400000, guid: 7a7cd163c014c084e811fe6dd9409011, type: 2}
-  dodgeClip: {fileID: 7400000, guid: bfb3dc0778d06534d9f67ed90d08e637, type: 2}
-  blendSeconds: 0.1
+  boneHolder: {fileID: 0}
+  openCharacterController: {fileID: 1689262406764164041}
 --- !u!114 &1689262406764164035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,31 +159,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
---- !u!114 &1689262406764164034
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1689262406764164042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae2184882dba93d42be3b136250da4a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  actor: {fileID: 1689262406764164045}
-  openCharacterController: {fileID: 1689262406764164041}
-  gravity: {x: 0, y: -60, z: 0}
---- !u!114 &8571845875620172789
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1689262406764164042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fe98213473dc49479b76b7366544fe1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boneHolder: {fileID: 0}

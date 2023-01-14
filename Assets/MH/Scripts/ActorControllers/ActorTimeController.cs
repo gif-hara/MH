@@ -10,7 +10,11 @@ namespace MH
     {
         public Time Time { get; private set; }
 
-        void IActorController.Setup(Actor actor, ActorSpawnData spawnData)
+        void IActorController.Setup(
+            Actor actor,
+            IActorDependencyInjector actorDependencyInjector,
+            ActorSpawnData spawnData
+        )
         {
             this.Time = new Time(TimeManager.Game);
         }
