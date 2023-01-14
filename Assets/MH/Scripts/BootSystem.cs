@@ -24,6 +24,8 @@ namespace MH
                 UIManager.SetupAsync(),
                 SetupNetworkSystemAsync()
                 );
+
+            IsReady = UniTask.CompletedTask;
         }
 
         private static UniTask SetupMessageBroker()
