@@ -75,12 +75,7 @@ namespace MH
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
                 .Subscribe(this.actor, x =>
                 {
-                    this.actor.DodgeController.Ready(
-                        x.Direction,
-                        x.Speed,
-                        x.Duration,
-                        x.Ease
-                        );
+                    this.actor.DodgeController.Ready(x.Data);
                     this.stateController.ChangeRequest(State.Dodge);
                 })
                 .AddTo(scope);
@@ -122,12 +117,7 @@ namespace MH
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
                 .Subscribe(this.actor, x =>
                 {
-                    this.actor.DodgeController.Ready(
-                        x.Direction,
-                        x.Speed,
-                        x.Duration,
-                        x.Ease
-                        );
+                    this.actor.DodgeController.Ready(x.Data);
                     this.stateController.ChangeRequest(State.Dodge);
                 })
                 .AddTo(scope);
@@ -156,12 +146,7 @@ namespace MH
                     MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
                         .Subscribe(this.actor, x =>
                         {
-                            this.actor.DodgeController.Ready(
-                                x.Direction,
-                                x.Speed,
-                                x.Duration,
-                                x.Ease
-                                );
+                            this.actor.DodgeController.Ready(x.Data);
                             this.stateController.ChangeRequest(State.Dodge);
                         })
                         .AddTo(scope);
@@ -221,12 +206,7 @@ namespace MH
                     MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
                         .Subscribe(this.actor, x =>
                         {
-                            this.actor.DodgeController.Ready(
-                                x.Direction,
-                                x.Speed,
-                                x.Duration,
-                                x.Ease
-                                );
+                            this.actor.DodgeController.Ready(x.Data);
                             this.stateController.ChangeRequest(State.Dodge);
                         })
                         .AddTo(scope);

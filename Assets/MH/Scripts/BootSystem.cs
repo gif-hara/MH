@@ -1,7 +1,6 @@
 using Cysharp.Threading.Tasks;
 using MH.UISystems;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace MH
 {
@@ -25,10 +24,8 @@ namespace MH
                 UIManager.SetupAsync(),
                 SetupNetworkSystemAsync()
                 );
-            
-            IsReady = UniTask.CompletedTask;
         }
-        
+
         private static UniTask SetupMessageBroker()
         {
             MessageBroker.Setup(builder =>

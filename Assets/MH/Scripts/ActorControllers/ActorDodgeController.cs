@@ -11,13 +11,7 @@ namespace MH
     {
         private Actor actor;
 
-        private Vector3 direction;
-
-        private float duration;
-
-        private Ease ease;
-
-        private float speed;
+        private InvokeData invokeData;
 
         void IActorController.Setup(
             Actor actor,
@@ -28,32 +22,24 @@ namespace MH
             this.actor = actor;
         }
 
-        public void Ready(
-            Vector3 direction,
-            float speed,
-            float duration,
-            Ease ease
-            )
+        public void Ready(InvokeData invokeData)
         {
-            this.direction = direction;
-            this.speed = speed;
-            this.duration = duration;
-            this.ease = ease;
+            this.invokeData = invokeData;
         }
 
         public async void Invoke()
         {
-            this.actor.PostureController.Rotate(Quaternion.LookRotation(this.direction));
+            this.actor.PostureController.Rotate(Quaternion.LookRotation(this.invokeData.direction));
             var tween = DOTween.To(
-                    () => this.speed,
+                    () => this.invokeData.speed,
                     x =>
                     {
-                        this.actor.PostureController.Move(this.direction * x * this.actor.TimeController.Time.deltaTime);
+                        this.actor.PostureController.Move(this.invokeData.direction * x * this.actor.TimeController.Time.deltaTime);
                     },
                     0.0f,
-                    this.duration
+                    this.invokeData.duration
                     )
-                .SetEase(this.ease);
+                .SetEase(this.invokeData.ease);
 
             try
             {
@@ -69,6 +55,17 @@ namespace MH
             {
                 tween.Kill();
             }
+        }
+
+        public struct InvokeData
+        {
+            public Vector3 direction;
+
+            public float duration;
+
+            public Ease ease;
+
+            public float speed;
         }
     }
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -10,7 +8,7 @@ using UnityEngine.InputSystem;
 public class MessagePipeTest : MonoBehaviour
 {
     private CancellationTokenSource cancellationTokenSource;
-    
+
     async void Start()
     {
         var builder = new BuiltinContainerBuilder();
@@ -30,7 +28,7 @@ public class MessagePipeTest : MonoBehaviour
             .Subscribe(async (myEvent, cancelToken) =>
             {
                 await UniTask.Delay(3000, cancellationToken: cancelToken);
-                
+
                 if (cancelToken.IsCancellationRequested)
                 {
                     Debug.Log("Cancelされた");
@@ -44,7 +42,7 @@ public class MessagePipeTest : MonoBehaviour
             .Subscribe(async (myEvent, cancelToken) =>
             {
                 await UniTask.Delay(1000, cancellationToken: cancelToken);
-                
+
                 if (cancelToken.IsCancellationRequested)
                 {
                     Debug.Log("Cancelされた");
@@ -54,7 +52,7 @@ public class MessagePipeTest : MonoBehaviour
                     Debug.Log(myEvent.message);
                 }
             });
-        
+
         publisher.Publish(new MyEvent{message = "Test"});
         publisher.Publish(new MyEvent{message = "Hoge"});
         publisher.Publish(new MyEvent{message = "Fuga"});
@@ -65,12 +63,12 @@ public class MessagePipeTest : MonoBehaviour
         {
             await asyncPublisher.PublishAsync(new MyEvent {message = "Async"}, this.cancellationTokenSource.Token);
         }
-        catch (OperationCanceledException exception)
+        catch (OperationCanceledException)
         {
         }
-        
+
         Debug.Log("Complete!");
-        
+
         d.Dispose();
         e.Dispose();
         f.Dispose();

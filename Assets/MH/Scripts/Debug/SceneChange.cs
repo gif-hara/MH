@@ -1,6 +1,4 @@
-using System;
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 
 namespace MH.DebugSystems
@@ -12,8 +10,8 @@ namespace MH.DebugSystems
     {
         [SerializeField]
         private string sceneName;
-        
-        private async void Start()
+
+        private void Start()
         {
             SceneManager.LoadScene(this.sceneName);
         }

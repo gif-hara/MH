@@ -1,27 +1,48 @@
-using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
 
 namespace MH
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed class ActorEvents
     {
+
+        /// <summary>
+        /// イベントの登録を行う
+        /// </summary>
+        public static void RegisterEvents(BuiltinContainerBuilder builder)
+        {
+            builder.AddMessageBroker<Actor, BeginMove>();
+            builder.AddMessageBroker<Actor, EndMove>();
+            builder.AddMessageBroker<Actor, RequestMove>();
+            builder.AddMessageBroker<Actor, RequestRotation>();
+            builder.AddMessageBroker<Actor, AcceptRequestRotation>();
+            builder.AddMessageBroker<Actor, CloseRequestRotation>();
+            builder.AddMessageBroker<Actor, RequestDodge>();
+            builder.AddMessageBroker<Actor, EndDodge>();
+            builder.AddMessageBroker<Actor, RequestAttack>();
+            builder.AddMessageBroker<Actor, EndAttack>();
+            builder.AddMessageBroker<Actor, AcceptNextState>();
+            builder.AddMessageBroker<SpawnedPlayer>();
+            builder.AddMessageBroker<Actor, ValidationAttackCollider>();
+            builder.AddMessageBroker<Actor, InvalidationAttackCollider>();
+            builder.AddMessageBroker<HitAttack>();
+            builder.AddMessageBroker<Actor, RequestSetForce>();
+        }
+
         /// <summary>
         /// 移動を開始した際のメッセージ
         /// </summary>
         public sealed class BeginMove : Message<BeginMove>
-        {
-        }
-        
+        {}
+
         /// <summary>
         /// 移動を終了した際のメッセージ
         /// </summary>
         public sealed class EndMove : Message<EndMove>
-        {
-        }
+        {}
 
         /// <summary>
         /// 移動のリクエストを行うメッセージ
@@ -52,8 +73,7 @@ namespace MH
         /// 攻撃アニメーションのとあるタイミングで回転入力を受け付ける時に利用しています
         /// </remarks>
         public sealed class AcceptRequestRotation : Message<AcceptRequestRotation>
-        {
-        }
+        {}
 
         /// <summary>
         /// 回転のリクエストの受付を終了するメッセージ
@@ -62,41 +82,21 @@ namespace MH
         /// 攻撃アニメーションのとあるタイミングで回転入力を受け付ける時に利用しています
         /// </remarks>
         public sealed class CloseRequestRotation : Message<CloseRequestRotation>
-        {
-        }
+        {}
 
         /// <summary>
         /// 回避のリクエストを行うメッセージ
         /// </summary>
-        public sealed class RequestDodge : Message<RequestDodge, Vector3, float, float, Ease>
+        public sealed class RequestDodge : Message<RequestDodge, ActorDodgeController.InvokeData>
         {
-            /// <summary>
-            /// 回避の目標値
-            /// </summary>
-            public Vector3 Direction => this.Param1;
-
-            /// <summary>
-            /// 移動速度
-            /// </summary>
-            public float Speed => this.Param2;
-
-            /// <summary>
-            /// 回避する時間（秒）
-            /// </summary>
-            public float Duration => this.Param3;
-
-            /// <summary>
-            /// イージングタイプ
-            /// </summary>
-            public Ease Ease => this.Param4;
+            public ActorDodgeController.InvokeData Data => this.Param1;
         }
 
         /// <summary>
         /// 回避が終了した際のメッセージ
         /// </summary>
         public sealed class EndDodge : Message<EndDodge>
-        {
-        }
+        {}
 
         /// <summary>
         /// 攻撃のリクエストを行うメッセージ
@@ -113,15 +113,13 @@ namespace MH
         /// 攻撃が終了した際のメッセージ
         /// </summary>
         public sealed class EndAttack : Message<EndAttack>
-        {
-        }
-        
+        {}
+
         /// <summary>
         /// 次の行動を選択可能な状態にするメッセージ
         /// </summary>
         public sealed class AcceptNextState : Message<AcceptNextState>
-        {
-        }
+        {}
 
         /// <summary>
         /// プレイヤーが生成された際のメッセージ
@@ -176,29 +174,6 @@ namespace MH
             /// 衝撃値
             /// </summary>
             public Vector3 Force => this.Param1;
-        }
-
-        /// <summary>
-        /// イベントの登録を行う
-        /// </summary>
-        public static void RegisterEvents(BuiltinContainerBuilder builder)
-        {
-            builder.AddMessageBroker<Actor, BeginMove>();
-            builder.AddMessageBroker<Actor, EndMove>();
-            builder.AddMessageBroker<Actor, RequestMove>();
-            builder.AddMessageBroker<Actor, RequestRotation>();
-            builder.AddMessageBroker<Actor, AcceptRequestRotation>();
-            builder.AddMessageBroker<Actor, CloseRequestRotation>();
-            builder.AddMessageBroker<Actor, RequestDodge>();
-            builder.AddMessageBroker<Actor, EndDodge>();
-            builder.AddMessageBroker<Actor, RequestAttack>();
-            builder.AddMessageBroker<Actor, EndAttack>();
-            builder.AddMessageBroker<Actor, AcceptNextState>();
-            builder.AddMessageBroker<SpawnedPlayer>();
-            builder.AddMessageBroker<Actor, ValidationAttackCollider>();
-            builder.AddMessageBroker<Actor, InvalidationAttackCollider>();
-            builder.AddMessageBroker<HitAttack>();
-            builder.AddMessageBroker<Actor, RequestSetForce>();
         }
     }
 }

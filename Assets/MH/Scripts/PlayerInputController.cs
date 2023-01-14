@@ -144,14 +144,18 @@ namespace MH
             var forwardVelocity = input.y * cameraForward;
             var direction = (rightVelocity + forwardVelocity).normalized;
             if (direction.sqrMagnitude <= 0.0f)
+            {
                 direction = Vector3.Scale(actor.transform.forward, new Vector3(1, 0, 1));
+            }
+            var invokeData = new ActorDodgeController.InvokeData
+            {
+                direction = direction,
+                speed = dodgeSpeed,
+                duration = dodgeDuration,
+                ease = dodgeEase
+            };
             MessageBroker.GetPublisher<Actor, ActorEvents.RequestDodge>()
-                .Publish(actor, ActorEvents.RequestDodge.Get(
-                    direction,
-                    dodgeSpeed,
-                    dodgeDuration,
-                    dodgeEase
-                    ));
+                .Publish(actor, ActorEvents.RequestDodge.Get(invokeData));
         }
 
         private void PerformedAttackWeak(InputAction.CallbackContext obj)
