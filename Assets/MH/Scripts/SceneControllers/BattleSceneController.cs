@@ -32,10 +32,6 @@ namespace MH.SceneControllers
         {
             await BootSystem.IsReady;
 
-            if (!MultiPlayManager.IsConnecting)
-            {
-                MultiPlayManager.StartAsSinglePlay();
-            }
 
             Instantiate(this.playerInputControllerPrefab, this.transform);
 
@@ -54,6 +50,11 @@ namespace MH.SceneControllers
                     Debug.Log($"OnClientDisconnect {x}");
                 })
                 .AddTo(ct);
+
+            if (!MultiPlayManager.IsConnecting)
+            {
+                MultiPlayManager.StartAsSinglePlay();
+            }
 
             var player = this.playerPrefab.Spawn(this.debugData.playerSpawnData.data, this.playerSpawnPoint);
             MessageBroker.GetPublisher<ActorEvents.SpawnedPlayer>()
