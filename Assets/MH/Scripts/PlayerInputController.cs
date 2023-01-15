@@ -65,8 +65,9 @@ namespace MH
                 .Subscribe(x =>
                 {
                     actor = x.Player;
-                    cinemachineVirtualCamera.Follow = actor.transform;
-                    cinemachineVirtualCamera.LookAt = actor.transform;
+                    var t = actor.transform;
+                    cinemachineVirtualCamera.Follow = t;
+                    cinemachineVirtualCamera.LookAt = t;
                     enabled = true;
                 })
                 .AddTo(bag);
