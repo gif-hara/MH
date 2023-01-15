@@ -10,6 +10,7 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using Unity.Services.Relay;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace MH.NetworkSystems
 {
@@ -131,6 +132,15 @@ namespace MH.NetworkSystems
                 },
                 ct
                 );
+        }
+
+        /// <summary>
+        /// シングルプレイとして開始する
+        /// </summary>
+        public static void StartAsSinglePlay()
+        {
+            Assert.IsFalse(IsConnecting);
+            NetworkManager.Singleton.StartHost();
         }
 
         /// <summary>

@@ -1,7 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 using MH.NetworkSystems;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace MH.SceneControllers
@@ -35,7 +34,7 @@ namespace MH.SceneControllers
 
             if (!MultiPlayManager.IsConnecting)
             {
-                NetworkManager.Singleton.StartHost();
+                MultiPlayManager.StartAsSinglePlay();
             }
 
             Instantiate(this.playerInputControllerPrefab, this.transform);
