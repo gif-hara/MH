@@ -9,14 +9,23 @@ namespace MH.NetworkSystems
     public sealed class PlayerNetworkBehaviour : NetworkBehaviour
     {
         [SerializeField]
-        private ActorSpawnData actorSpawnData;
+        private ActorSpawnDataScriptableObject actorSpawnData;
 
         [SerializeField]
         private Actor actorPrefab;
 
+        [SerializeField]
+        private PlayerInputController playerInputControllerPrefab;
+
         public override void OnNetworkSpawn()
         {
-            Debug.Log("OnNetworkSpawn");
+            var player = this.actorPrefab.Spawn(this.actorSpawnData.data, Vector3.zero, Quaternion.identity);
+            player.transform.SetParent(this.transform);
+            if (this.IsOwner)
+            {
+                var inputController = Instantiate(this.playerInputControllerPrefab, this.transform);
+                inputController.Attach(player);
+            }
         }
     }
 }

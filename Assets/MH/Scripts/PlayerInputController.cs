@@ -1,7 +1,5 @@
-using System;
 using Cinemachine;
 using DG.Tweening;
-using MessagePipe;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -50,8 +48,6 @@ namespace MH
 
         private CinemachineComposer cinemachineComposer;
 
-        private IDisposable disposable;
-
         private MHInputActions inputActions;
 
         private Vector3 lastRotation;
@@ -60,31 +56,7 @@ namespace MH
 
         private void Awake()
         {
-            var bag = DisposableBag.CreateBuilder();
-            MessageBroker.GetSubscriber<ActorEvents.SpawnedPlayer>()
-                .Subscribe(x =>
-                {
-                    actor = x.Player;
-                    var t = actor.transform;
-                    cinemachineVirtualCamera.Follow = t;
-                    cinemachineVirtualCamera.LookAt = t;
-                    enabled = true;
-                })
-                .AddTo(bag);
-
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            orbitalTransposer = cinemachineVirtualCamera.GetComponentInChildren<CinemachineOrbitalTransposer>();
-            cinemachineComposer = cinemachineVirtualCamera.GetComponentInChildren<CinemachineComposer>();
-
-            inputActions = new MHInputActions();
-            inputActions.Player.Dodge.performed += PerformedDodge;
-            inputActions.Player.AttackWeak.performed += PerformedAttackWeak;
-            inputActions.Player.AttackStrong.performed += PerformedAttackStrong;
-            inputActions.Enable();
             enabled = false;
-
-            disposable = bag.Build();
         }
 
         private void Update()
@@ -130,9 +102,24 @@ namespace MH
             orbitalTransposer.m_FollowOffset.y = offsetY;
         }
 
-        private void OnDestroy()
+        public void Attach(Actor actor)
         {
-            disposable.Dispose();
+            this.actor = actor;
+            var t = actor.transform;
+            cinemachineVirtualCamera.Follow = t;
+            cinemachineVirtualCamera.LookAt = t;
+            enabled = true;
+
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            orbitalTransposer = cinemachineVirtualCamera.GetComponentInChildren<CinemachineOrbitalTransposer>();
+            cinemachineComposer = cinemachineVirtualCamera.GetComponentInChildren<CinemachineComposer>();
+
+            inputActions = new MHInputActions();
+            inputActions.Player.Dodge.performed += PerformedDodge;
+            inputActions.Player.AttackWeak.performed += PerformedAttackWeak;
+            inputActions.Player.AttackStrong.performed += PerformedAttackStrong;
+            inputActions.Enable();
         }
 
         private void PerformedDodge(InputAction.CallbackContext context)
