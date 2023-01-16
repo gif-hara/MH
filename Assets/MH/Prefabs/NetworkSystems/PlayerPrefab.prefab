@@ -61,6 +61,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93ea090e290a18d40a98e96b84a5387e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerActorCommonData: {fileID: 11400000, guid: b6764a9cefa650a45adef6b1c736b6e1, type: 2}
   actorSpawnData: {fileID: 11400000, guid: e2d02c814af5bae4db0177e9b315e626, type: 2}
   actorPrefab: {fileID: 6321397659681280986, guid: b75c59ac30827e149842ceba11d840f0, type: 3}
   playerInputControllerPrefab: {fileID: 5100394250428141442, guid: 6d1edebb2d4fef34bb8650676303d165, type: 3}
+  sendPositionThreshold: 0.1
+  sendRotationYThreshold: 1
+  warpPositionThreshold: 5

@@ -262,14 +262,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actor: {fileID: 0}
   cinemachineVirtualCamera: {fileID: 464068319}
-  moveSpeed: 10
-  rotationSpeed: 10
   cameraSpeed: {x: 12, y: -20}
   followYMax: 10
   followYMin: 0.1
   screenXMin: 0.4
   screenXMax: 0.6
   screenMoveSpeed: -0.2
-  dodgeSpeed: 50
-  dodgeDuration: 0.5
-  dodgeEase: 6

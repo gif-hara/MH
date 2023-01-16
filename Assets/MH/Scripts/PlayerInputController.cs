@@ -1,5 +1,4 @@
 using Cinemachine;
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,12 +11,6 @@ namespace MH
 
         [SerializeField]
         private CinemachineVirtualCamera cinemachineVirtualCamera;
-
-        [SerializeField]
-        private float moveSpeed;
-
-        [SerializeField]
-        private float rotationSpeed;
 
         [SerializeField]
         private Vector2 cameraSpeed;
@@ -37,15 +30,6 @@ namespace MH
         [SerializeField]
         private float screenMoveSpeed;
 
-        [SerializeField]
-        private float dodgeSpeed;
-
-        [SerializeField]
-        private float dodgeDuration;
-
-        [SerializeField]
-        private Ease dodgeEase;
-
         private CinemachineComposer cinemachineComposer;
 
         private MHInputActions inputActions;
@@ -53,6 +37,8 @@ namespace MH
         private Vector3 lastRotation;
 
         private CinemachineOrbitalTransposer orbitalTransposer;
+
+        private PlayerActorCommonData playerActorCommonData;
 
         private void Awake()
         {
@@ -73,7 +59,7 @@ namespace MH
             if (velocity.sqrMagnitude >= 0.01f)
             {
                 MessageBroker.GetPublisher<Actor, ActorEvents.RequestMove>()
-                    .Publish(actor, ActorEvents.RequestMove.Get(velocity * moveSpeed * deltaTime));
+                    .Publish(actor, ActorEvents.RequestMove.Get(velocity * this.playerActorCommonData.MoveSpeed * deltaTime));
                 lastRotation = velocity;
             }
             if (lastRotation.sqrMagnitude >= 0.01f)
@@ -81,7 +67,7 @@ namespace MH
                 var rotation = Quaternion.Lerp(
                     actor.transform.localRotation,
                     Quaternion.LookRotation(lastRotation),
-                    rotationSpeed * deltaTime
+                    this.playerActorCommonData.RotationSpeed * deltaTime
                     );
                 MessageBroker.GetPublisher<Actor, ActorEvents.RequestRotation>()
                     .Publish(actor, ActorEvents.RequestRotation.Get(rotation));
@@ -102,9 +88,10 @@ namespace MH
             orbitalTransposer.m_FollowOffset.y = offsetY;
         }
 
-        public void Attach(Actor actor)
+        public void Attach(Actor actor, PlayerActorCommonData playerActorCommonData)
         {
             this.actor = actor;
+            this.playerActorCommonData = playerActorCommonData;
             var t = actor.transform;
             cinemachineVirtualCamera.Follow = t;
             cinemachineVirtualCamera.LookAt = t;
@@ -138,9 +125,9 @@ namespace MH
             var invokeData = new ActorDodgeController.InvokeData
             {
                 direction = direction,
-                speed = dodgeSpeed,
-                duration = dodgeDuration,
-                ease = dodgeEase
+                speed = this.playerActorCommonData.DodgeSpeed,
+                duration = this.playerActorCommonData.DodgeDuration,
+                ease = this.playerActorCommonData.DodgeEase
             };
             MessageBroker.GetPublisher<Actor, ActorEvents.RequestDodge>()
                 .Publish(actor, ActorEvents.RequestDodge.Get(invokeData));

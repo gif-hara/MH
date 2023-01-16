@@ -93,6 +93,11 @@ namespace MH
             this.currentGravity = force;
         }
 
+        public void Warp(Vector3 position)
+        {
+            this.openCharacterController.SetPosition(position, true);
+        }
+
         public void Rotate(Quaternion rotation)
         {
             this.actor.transform.localRotation = rotation;
