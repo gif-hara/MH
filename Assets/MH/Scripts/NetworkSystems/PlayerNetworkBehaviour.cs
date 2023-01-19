@@ -2,6 +2,8 @@ using System;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 using Cysharp.Threading.Tasks.Triggers;
+using MessagePipe;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -53,6 +55,13 @@ namespace MH.NetworkSystems
                     {
                         this.TrySubmitPosition();
                         this.TrySubmitRotationY();
+                    })
+                    .AddTo(ct);
+
+                MessageBroker.GetSubscriber<Actor, ActorEvents.BeginAttack>()
+                    .Subscribe(this.player, x =>
+                    {
+                        this.SubmitAttackMotionNameServerRpc( new FixedString32Bytes(x.MotionName));
                     })
                     .AddTo(ct);
             }
@@ -129,6 +138,19 @@ namespace MH.NetworkSystems
         private void SubmitRotationYServerRpc(float newRotationY, ServerRpcParams rpcParams = default)
         {
             this.networkRotationY.Value = newRotationY;
+        }
+
+        [ServerRpc]
+        private void SubmitAttackMotionNameServerRpc(FixedString32Bytes motionName, ServerRpcParams rpcParams = default)
+        {
+            this.SubmitAttackMotionNameClientRpc(motionName);
+        }
+
+        [ClientRpc]
+        private void SubmitAttackMotionNameClientRpc(FixedString32Bytes motionName, ClientRpcParams rpcParams = default)
+        {
+            MessageBroker.GetPublisher<Actor, ActorEvents.RequestAttackNetwork>()
+                .Publish(this.player, ActorEvents.RequestAttackNetwork.Get(motionName.Value));
         }
     }
 }

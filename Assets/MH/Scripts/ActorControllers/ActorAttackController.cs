@@ -44,27 +44,24 @@ namespace MH
         /// <summary>
         /// 攻撃を実行する
         /// </summary>
-        public async void Invoke(AttackType attackType)
+        public void Invoke(AttackType attackType)
         {
             string motionName;
 
-            // 攻撃していなかった場合はタイプから初回の攻撃を算出する
-            if (currentAttackType == AttackType.None || currentAttackType != attackType)
+            if (this.currentAttackType == AttackType.None || this.currentAttackType != attackType)
             {
-                currentAttackType = attackType;
-                motionName = GetFirstMotionName(currentAttackType);
-                currentMotionData = motionData[motionName];
+                this.currentAttackType = attackType;
+                motionName = GetFirstMotionName(this.currentAttackType);
             }
             else
             {
-                if (currentMotionData.nextMotionName == "")
+                if (this.currentMotionData.nextMotionName == "")
                 {
                     motionName = "";
                 }
                 else
                 {
-                    currentMotionData = motionData[currentMotionData.nextMotionName];
-                    motionName = currentMotionData.motionName;
+                    motionName = this.motionData[this.currentMotionData.nextMotionName].motionName;
                 }
             }
 
@@ -73,10 +70,23 @@ namespace MH
                 return;
             }
 
-            var animationBlendData = currentMotionData.animationBlendData;
+            Invoke(motionName);
+        }
+
+        /// <summary>
+        /// 攻撃を実行する
+        /// </summary>
+        public async void Invoke(string motionName)
+        {
+            Assert.AreNotEqual(motionName, "");
+            this.currentMotionData = this.motionData[motionName];
+            var animationBlendData = this.currentMotionData.animationBlendData;
 
             try
             {
+                MessageBroker.GetPublisher<Actor, ActorEvents.BeginAttack>()
+                    .Publish(actor, ActorEvents.BeginAttack.Get(motionName));
+
                 await actor.AnimationController.PlayAsync(animationBlendData);
 
                 Reset();

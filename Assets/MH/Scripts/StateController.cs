@@ -11,33 +11,32 @@ namespace MH
     /// </summary>
     public sealed class StateController<T> : IDisposable where T : Enum
     {
-        private class StateInfo
-        {
-            public Action<T, DisposableBagBuilder> onEnter;
 
-            public Action<T> onExit;
-        }
+        private readonly DisposableBagBuilder scope = DisposableBag.CreateBuilder();
 
-        private Dictionary<Enum, StateInfo> states = new();
-
-        public T CurrentState { get; private set; }
-
-        private T nextState;
-
-        private T invalidState;
+        private readonly T invalidState;
 
         /// <summary>
         /// ステート切り替え中であるか
         /// </summary>
         private bool isChanging;
 
-        private readonly DisposableBagBuilder scope = DisposableBag.CreateBuilder();
-        
+        private T nextState;
+
+        private readonly Dictionary<Enum, StateInfo> states = new();
+
         public StateController(T invalidState)
         {
             this.invalidState = invalidState;
             this.CurrentState = invalidState;
             this.nextState = invalidState;
+        }
+
+        public T CurrentState { get; private set; }
+
+        public void Dispose()
+        {
+            this.scope.Clear();
         }
 
         public void Set(T value, Action<T, DisposableBagBuilder> onEnter, Action<T> onExit)
@@ -84,9 +83,11 @@ namespace MH
             }
         }
 
-        public void Dispose()
+        private class StateInfo
         {
-            this.scope.Clear();
+            public Action<T, DisposableBagBuilder> onEnter;
+
+            public Action<T> onExit;
         }
     }
 }

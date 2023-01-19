@@ -23,6 +23,8 @@ namespace MH
             builder.AddMessageBroker<Actor, RequestDodge>();
             builder.AddMessageBroker<Actor, EndDodge>();
             builder.AddMessageBroker<Actor, RequestAttack>();
+            builder.AddMessageBroker<Actor, RequestAttackNetwork>();
+            builder.AddMessageBroker<Actor, BeginAttack>();
             builder.AddMessageBroker<Actor, EndAttack>();
             builder.AddMessageBroker<Actor, AcceptNextState>();
             builder.AddMessageBroker<SpawnedPlayer>();
@@ -107,6 +109,28 @@ namespace MH
             /// リクエストタイプ
             /// </summary>
             public Define.RequestAttackType AttackType => this.Param1;
+        }
+
+        /// <summary>
+        /// ネットワーク上で攻撃のリクエストを行うメッセージ
+        /// </summary>
+        public sealed class RequestAttackNetwork : Message<RequestAttackNetwork, string>
+        {
+            /// <summary>
+            /// モーションの名前
+            /// </summary>
+            public string MotionName => this.Param1;
+        }
+
+        /// <summary>
+        /// 攻撃が開始した際のメッセージ
+        /// </summary>
+        public sealed class BeginAttack : Message<BeginAttack, string>
+        {
+            /// <summary>
+            /// モーションの名前
+            /// </summary>
+            public string MotionName => this.Param1;
         }
 
         /// <summary>

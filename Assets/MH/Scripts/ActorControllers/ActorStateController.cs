@@ -15,9 +15,16 @@ namespace MH
             Run,
             Dodge,
             Attack,
+
+            AttackNetwork,
         }
 
         private Actor actor;
+
+        /// <summary>
+        /// ネットワーク上で受け取った攻撃のモーション名
+        /// </summary>
+        private string networkAttackMotionName;
 
         /// <summary>
         /// 次の攻撃のリクエストタイプ
@@ -39,10 +46,11 @@ namespace MH
         {
             this.actor = actor;
             this.stateController = new StateController<State>(State.Invalid);
-            this.stateController.Set(State.Idle, OnEnterIdle, null);
-            this.stateController.Set(State.Run, OnEnterRun, null);
-            this.stateController.Set(State.Dodge, OnEnterDodge, null);
-            this.stateController.Set(State.Attack, OnEnterAttack, OnExitAttack);
+            this.stateController.Set(State.Idle, this.OnEnterIdle, null);
+            this.stateController.Set(State.Run, this.OnEnterRun, null);
+            this.stateController.Set(State.Dodge, this.OnEnterDodge, null);
+            this.stateController.Set(State.Attack, this.OnEnterAttack, this.OnExitAttack);
+            this.stateController.Set(State.AttackNetwork, this.OnEnterAttackNetwork, null);
 
             this.stateController.ChangeRequest(State.Idle);
         }
@@ -87,6 +95,14 @@ namespace MH
                     this.stateController.ChangeRequest(State.Attack);
                 })
                 .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttackNetwork>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.networkAttackMotionName = x.MotionName;
+                    this.stateController.ChangeRequest(State.AttackNetwork);
+                })
+                .AddTo(scope);
         }
 
         private void OnEnterRun(State previousState, DisposableBagBuilder scope)
@@ -129,6 +145,14 @@ namespace MH
                     this.stateController.ChangeRequest(State.Attack);
                 })
                 .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttackNetwork>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.networkAttackMotionName = x.MotionName;
+                    this.stateController.ChangeRequest(State.AttackNetwork);
+                })
+                .AddTo(scope);
         }
 
         private void OnEnterDodge(State previousState, DisposableBagBuilder scope)
@@ -157,6 +181,14 @@ namespace MH
                 .Subscribe(this.actor, _ =>
                 {
                     this.stateController.ChangeRequest(State.Idle);
+                })
+                .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttackNetwork>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.networkAttackMotionName = x.MotionName;
+                    this.stateController.ChangeRequest(State.AttackNetwork);
                 })
                 .AddTo(scope);
 
@@ -252,6 +284,54 @@ namespace MH
             }
 
             this.actor.AttackController.Reset();
+        }
+
+        private void OnEnterAttackNetwork(State prevState, DisposableBagBuilder scope)
+        {
+            this.onAttackCanRotate = false;
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestRotation>()
+                .Subscribe(this.actor, x =>
+                {
+                    if (!this.onAttackCanRotate)
+                    {
+                        return;
+                    }
+
+                    this.actor.PostureController.Rotate(x.Rotation);
+                })
+                .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.AcceptRequestRotation>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.onAttackCanRotate = true;
+                })
+                .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.CloseRequestRotation>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.onAttackCanRotate = false;
+                })
+                .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.EndAttack>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.stateController.ChangeRequest(State.Idle);
+                })
+                .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttackNetwork>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.networkAttackMotionName = x.MotionName;
+                    this.stateController.ChangeRequest(State.AttackNetwork);
+                })
+                .AddTo(scope);
+
+            this.actor.AttackController.Invoke(this.networkAttackMotionName);
         }
     }
 }
