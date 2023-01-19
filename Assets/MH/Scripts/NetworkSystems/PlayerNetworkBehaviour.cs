@@ -39,17 +39,17 @@ namespace MH.NetworkSystems
 
         private readonly NetworkVariable<float> networkRotationY = new();
 
-        private Actor player;
+        private Actor actor;
 
         public override void OnNetworkSpawn()
         {
             var ct = this.GetCancellationTokenOnDestroy();
-            this.player = this.actorPrefab.Spawn(this.actorSpawnData.data, Vector3.zero, Quaternion.identity);
-            this.player.transform.SetParent(this.transform);
+            this.actor = this.actorPrefab.Spawn(this.actorSpawnData.data, Vector3.zero, Quaternion.identity);
+            this.actor.transform.SetParent(this.transform);
             if (this.IsOwner)
             {
                 var inputController = Instantiate(this.playerInputControllerPrefab, this.transform);
-                inputController.Attach(this.player, this.playerActorCommonData);
+                inputController.Attach(this.actor, this.playerActorCommonData);
                 UniTaskAsyncEnumerable.Interval(TimeSpan.FromSeconds(0.1f))
                     .Subscribe(_ =>
                     {
@@ -59,7 +59,7 @@ namespace MH.NetworkSystems
                     .AddTo(ct);
 
                 MessageBroker.GetSubscriber<Actor, ActorEvents.BeginAttack>()
-                    .Subscribe(this.player, x =>
+                    .Subscribe(this.actor, x =>
                     {
                         this.SubmitAttackMotionNameServerRpc( new FixedString32Bytes(x.MotionName));
                     })
@@ -72,10 +72,10 @@ namespace MH.NetworkSystems
                     {
                         // 座標の更新
                         {
-                            var difference = this.networkPosition.Value - this.player.transform.localPosition;
+                            var difference = this.networkPosition.Value - this.actor.transform.localPosition;
                             if (difference.sqrMagnitude > this.warpPositionThreshold * this.warpPositionThreshold)
                             {
-                                this.player.PostureController.Warp(this.networkPosition.Value);
+                                this.actor.PostureController.Warp(this.networkPosition.Value);
                             }
                             else
                             {
@@ -85,24 +85,24 @@ namespace MH.NetworkSystems
                                 {
                                     var direction = difference.normalized;
                                     MessageBroker.GetPublisher<Actor, ActorEvents.RequestMove>()
-                                        .Publish(this.player, ActorEvents.RequestMove.Get(direction * this.playerActorCommonData.MoveSpeed * this.player.TimeController.Time.deltaTime));
+                                        .Publish(this.actor, ActorEvents.RequestMove.Get(direction * this.playerActorCommonData.MoveSpeed * this.actor.TimeController.Time.deltaTime));
                                 }
                                 else if (sqrMagnitude < threshold && sqrMagnitude > 0.01f)
                                 {
                                     MessageBroker.GetPublisher<Actor, ActorEvents.RequestMove>()
-                                        .Publish(this.player, ActorEvents.RequestMove.Get(difference * this.playerActorCommonData.MoveSpeed * this.player.TimeController.Time.deltaTime));
+                                        .Publish(this.actor, ActorEvents.RequestMove.Get(difference * this.playerActorCommonData.MoveSpeed * this.actor.TimeController.Time.deltaTime));
                                 }
                             }
                         }
                         // 回転の更新
                         {
                             var rotation = Quaternion.Lerp(
-                                this.player.transform.localRotation,
+                                this.actor.transform.localRotation,
                                 Quaternion.Euler(0.0f, this.networkRotationY.Value, 0.0f),
-                                this.playerActorCommonData.RotationSpeed * this.player.TimeController.Time.deltaTime
+                                this.playerActorCommonData.RotationSpeed * this.actor.TimeController.Time.deltaTime
                                 );
                             MessageBroker.GetPublisher<Actor, ActorEvents.RequestRotation>()
-                                .Publish(this.player, ActorEvents.RequestRotation.Get(rotation));
+                                .Publish(this.actor, ActorEvents.RequestRotation.Get(rotation));
                         }
                     })
                     .AddTo(ct);
@@ -111,20 +111,20 @@ namespace MH.NetworkSystems
 
         private void TrySubmitPosition()
         {
-            var distance = (this.player.transform.localPosition - this.networkPosition.Value).sqrMagnitude;
+            var distance = (this.actor.transform.localPosition - this.networkPosition.Value).sqrMagnitude;
             if (distance > this.sendPositionThreshold * this.sendPositionThreshold)
             {
-                this.SubmitPositionServerRpc(this.player.transform.localPosition);
+                this.SubmitPositionServerRpc(this.actor.transform.localPosition);
             }
         }
 
         private void TrySubmitRotationY()
         {
-            var difference = this.networkRotationY.Value - this.player.transform.localRotation.eulerAngles.y;
+            var difference = this.networkRotationY.Value - this.actor.transform.localRotation.eulerAngles.y;
             difference = difference < 0 ? -difference : difference;
             if (difference > this.sendRotationYThreshold)
             {
-                this.SubmitRotationYServerRpc(this.player.transform.localRotation.eulerAngles.y);
+                this.SubmitRotationYServerRpc(this.actor.transform.localRotation.eulerAngles.y);
             }
         }
 
@@ -150,7 +150,7 @@ namespace MH.NetworkSystems
         private void SubmitAttackMotionNameClientRpc(FixedString32Bytes motionName, ClientRpcParams rpcParams = default)
         {
             MessageBroker.GetPublisher<Actor, ActorEvents.RequestAttackNetwork>()
-                .Publish(this.player, ActorEvents.RequestAttackNetwork.Get(motionName.Value));
+                .Publish(this.actor, ActorEvents.RequestAttackNetwork.Get(motionName.Value));
         }
     }
 }
