@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Height: 2.6
   m_CollisionLayerMask:
     serializedVersion: 2
-    m_Bits: 321
+    m_Bits: 320
   m_IsLocalHuman: 1
   m_SlideAlongCeiling: 1
   m_SlowAgainstWalls: 1
