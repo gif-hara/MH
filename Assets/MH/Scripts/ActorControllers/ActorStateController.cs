@@ -103,6 +103,14 @@ namespace MH
                     this.stateController.ChangeRequest(State.AttackNetwork);
                 })
                 .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodgeNetwork>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.actor.DodgeController.Ready(x.Data);
+                    this.stateController.ChangeRequest(State.Dodge);
+                })
+                .AddTo(scope);
         }
 
         private void OnEnterRun(State previousState, DisposableBagBuilder scope)
@@ -153,6 +161,14 @@ namespace MH
                     this.stateController.ChangeRequest(State.AttackNetwork);
                 })
                 .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodgeNetwork>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.actor.DodgeController.Ready(x.Data);
+                    this.stateController.ChangeRequest(State.Dodge);
+                })
+                .AddTo(scope);
         }
 
         private void OnEnterDodge(State previousState, DisposableBagBuilder scope)
@@ -189,6 +205,14 @@ namespace MH
                 {
                     this.networkAttackMotionName = x.MotionName;
                     this.stateController.ChangeRequest(State.AttackNetwork);
+                })
+                .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodgeNetwork>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.actor.DodgeController.Ready(x.Data);
+                    this.stateController.ChangeRequest(State.Dodge);
                 })
                 .AddTo(scope);
 
@@ -249,6 +273,14 @@ namespace MH
                 .Subscribe(this.actor, _ =>
                 {
                     this.stateController.ChangeRequest(State.Idle);
+                })
+                .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodgeNetwork>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.actor.DodgeController.Ready(x.Data);
+                    this.stateController.ChangeRequest(State.Dodge);
                 })
                 .AddTo(scope);
 
@@ -328,6 +360,14 @@ namespace MH
                 {
                     this.networkAttackMotionName = x.MotionName;
                     this.stateController.ChangeRequest(State.AttackNetwork);
+                })
+                .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodgeNetwork>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.actor.DodgeController.Ready(x.Data);
+                    this.stateController.ChangeRequest(State.Dodge);
                 })
                 .AddTo(scope);
 

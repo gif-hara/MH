@@ -21,6 +21,8 @@ namespace MH
             builder.AddMessageBroker<Actor, AcceptRequestRotation>();
             builder.AddMessageBroker<Actor, CloseRequestRotation>();
             builder.AddMessageBroker<Actor, RequestDodge>();
+            builder.AddMessageBroker<Actor, RequestDodgeNetwork>();
+            builder.AddMessageBroker<Actor, BeginDodge>();
             builder.AddMessageBroker<Actor, EndDodge>();
             builder.AddMessageBroker<Actor, RequestAttack>();
             builder.AddMessageBroker<Actor, RequestAttackNetwork>();
@@ -90,6 +92,22 @@ namespace MH
         /// 回避のリクエストを行うメッセージ
         /// </summary>
         public sealed class RequestDodge : Message<RequestDodge, ActorDodgeController.InvokeData>
+        {
+            public ActorDodgeController.InvokeData Data => this.Param1;
+        }
+
+        /// <summary>
+        /// ネットワーク上で回避のリクエストを行うメッセージ
+        /// </summary>
+        public sealed class RequestDodgeNetwork : Message<RequestDodgeNetwork, ActorDodgeController.InvokeData>
+        {
+            public ActorDodgeController.InvokeData Data => this.Param1;
+        }
+
+        /// <summary>
+        /// 回避を開始した際のメッセージ
+        /// </summary>
+        public sealed class BeginDodge : Message<BeginDodge, ActorDodgeController.InvokeData>
         {
             public ActorDodgeController.InvokeData Data => this.Param1;
         }

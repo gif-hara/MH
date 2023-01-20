@@ -29,7 +29,8 @@ namespace MH
 
         public async void Invoke()
         {
-            this.actor.PostureController.Rotate(Quaternion.LookRotation(this.invokeData.direction));
+            var rotation = Quaternion.LookRotation(this.invokeData.direction);
+            this.actor.PostureController.Rotate(rotation);
             var tween = DOTween.To(
                     () => this.invokeData.speed,
                     x =>
@@ -43,6 +44,9 @@ namespace MH
 
             try
             {
+                MessageBroker.GetPublisher<Actor, ActorEvents.BeginDodge>()
+                    .Publish(this.actor, ActorEvents.BeginDodge.Get(this.invokeData));
+
                 await this.actor.AnimationController.PlayDodgeAsync();
 
                 MessageBroker.GetPublisher<Actor, ActorEvents.EndDodge>()
