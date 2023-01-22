@@ -62,38 +62,31 @@ namespace MH
                         var clone = Instantiate(meshRenderer, t.position, t.rotation);
                         clones.Add(clone.gameObject);
                         clone.sharedMaterial = material;
-                        this.BeginUpdateGhostMaterial(clone);
                     }
-
-                    UniTaskAsyncEnumerable.Timer(TimeSpan.FromSeconds(this.destroyGhostSeconds))
-                        .Subscribe(_ =>
-                        {
-                            foreach (var clone in clones)
-                            {
-                                Destroy(clone);
-                            }
-                        });
+                    this.BeginUpdateGhostMaterial(clones, material);
                 });
         }
 
-        private void BeginUpdateGhostMaterial(Renderer renderer)
+        private void BeginUpdateGhostMaterial(List<GameObject> clones, Material material)
         {
-            var m = renderer.sharedMaterial;
             var tween = DOTween.To(
-                () => m.color.a,
+                () => material.color.a,
                 x =>
                 {
-                    var c = m.color;
+                    var c = material.color;
                     c.a = x;
-                    m.color = c;
+                    material.color = c;
                 },
                 0.0f,
                 this.destroyGhostSeconds
                 );
             tween.OnComplete(() =>
             {
-                Destroy(m);
-                Destroy(renderer.gameObject);
+                Destroy(material);
+                foreach (var clone in clones)
+                {
+                    Destroy(clone);
+                }
             });
         }
     }
