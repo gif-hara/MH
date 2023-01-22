@@ -10,6 +10,8 @@ namespace MH
     [Serializable]
     public sealed class ActorSpawnData
     {
+        public ActorStatus actorStatus;
+
         public ActorAttackData attackData;
 
         public ActorAnimationData animationData;

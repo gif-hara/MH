@@ -29,6 +29,13 @@ namespace MH
 
         public ActorTimeController TimeController { private set; get; }
 
+        public ActorStatusController StatusController { private set; get; }
+
+        private void OnDestroy()
+        {
+            ActorManager.RemoveActor(this);
+        }
+
         AnimationController IActorDependencyInjector.AnimationController => this.animationController;
 
         BoneHolder IActorDependencyInjector.BoneHolder => this.boneHolder;
@@ -56,6 +63,7 @@ namespace MH
             this.StateController = this.CreateActorController<ActorStateController>(spawnData);
             this.DodgeController = this.CreateActorController<ActorDodgeController>(spawnData);
             this.AttackController = this.CreateActorController<ActorAttackController>(spawnData);
+            this.StatusController = this.CreateActorController<ActorStatusController>(spawnData);
 
             foreach (var prefab in spawnData.extensionPrefabs)
             {
@@ -65,6 +73,8 @@ namespace MH
                     i.Setup(this, this, spawnData);
                 }
             }
+
+            ActorManager.AddActor(this);
         }
 
         private T CreateActorController<T>(ActorSpawnData spawnData) where T : IActorController, new()

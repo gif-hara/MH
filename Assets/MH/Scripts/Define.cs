@@ -1,13 +1,21 @@
-using UnityEngine;
-using UnityEngine.Assertions;
-
 namespace MH
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public static class Define
     {
+
+        /// <summary>
+        /// アクタータイプ
+        /// </summary>
+        public enum ActorType
+        {
+            Player,
+
+            Enemy,
+        }
+
         /// <summary>
         /// アタックリクエストタイプ
         /// </summary>
@@ -17,7 +25,7 @@ namespace MH
             /// 弱攻撃
             /// </summary>
             Weak,
-            
+
             /// <summary>
             /// 強攻撃
             /// </summary>

@@ -96,6 +96,7 @@ namespace MH
         public void Warp(Vector3 position)
         {
             this.openCharacterController.SetPosition(position, true);
+            this.currentGravity = Vector3.zero;
         }
 
         public void Rotate(Quaternion rotation)
