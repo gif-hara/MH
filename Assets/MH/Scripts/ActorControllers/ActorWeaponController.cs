@@ -23,6 +23,8 @@ namespace MH
         [SerializeField]
         private GameObject hitEffectPrefab;
 
+        private readonly HashSet<Rigidbody> collidedRigidbodies = new();
+
         private Actor actor;
 
         private Dictionary<string, GameObject> colliderDictionary;
@@ -32,7 +34,9 @@ namespace MH
         private void Awake()
         {
             foreach (var i in colliders)
+            {
                 i.SetActive(false);
+            }
 
             colliderDictionary = colliders.ToDictionary(x => x.name);
         }
@@ -45,7 +49,17 @@ namespace MH
         private void OnTriggerEnter(Collider other)
         {
             if (actor.gameObject == other.gameObject)
+            {
                 return;
+            }
+
+            var targetRigidbody = other.attachedRigidbody;
+            if (this.collidedRigidbodies.Contains(targetRigidbody))
+            {
+                return;
+            }
+
+            this.collidedRigidbodies.Add(targetRigidbody);
 
             var hitData = new HitData
             {
@@ -77,14 +91,15 @@ namespace MH
             MessageBroker.GetSubscriber<Actor, ActorEvents.ValidationAttackCollider>()
                 .Subscribe(this.actor, x =>
                 {
-                    colliderDictionary[x.ColliderName].SetActive(true);
+                    this.collidedRigidbodies.Clear();
+                    this.colliderDictionary[x.ColliderName].SetActive(true);
                 })
                 .AddTo(bag);
 
             MessageBroker.GetSubscriber<Actor, ActorEvents.InvalidationAttackCollider>()
                 .Subscribe(this.actor, x =>
                 {
-                    colliderDictionary[x.ColliderName].SetActive(false);
+                    this.colliderDictionary[x.ColliderName].SetActive(false);
                 })
                 .AddTo(bag);
 
