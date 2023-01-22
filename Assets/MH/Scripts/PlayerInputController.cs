@@ -10,36 +10,16 @@ namespace MH
 {
     public class PlayerInputController : MonoBehaviour
     {
-        [SerializeField]
-        private Actor actor;
-
-        [SerializeField]
-        private CinemachineVirtualCamera cinemachineVirtualCamera;
-
-        [SerializeField]
-        private Vector2 cameraSpeed;
-
-        [SerializeField]
-        private float followYMax;
-
-        [SerializeField]
-        private float followYMin;
-
-        [SerializeField]
-        private float screenXMin;
-
-        [SerializeField]
-        private float screenXMax;
-
-        [SerializeField]
-        private float screenMoveSpeed;
-
         /// <summary>
         /// 先行入力を行っている処理
         /// </summary>
         private readonly DisposableBagBuilder advancedEntryScope = DisposableBag.CreateBuilder();
 
+        private Actor actor;
+
         private CinemachineComposer cinemachineComposer;
+
+        private CinemachineVirtualCamera cinemachineVirtualCamera;
 
         private MHInputActions inputActions;
 
@@ -83,17 +63,21 @@ namespace MH
             }
 
             // カメラのスクリーン値の更新
-            var screenVelocity = input.x * screenMoveSpeed * deltaTime;
+            var screenVelocity = input.x * this.playerActorCommonData.ScreenMoveSpeed * deltaTime;
             var screenX = Mathf.Clamp(
                 cinemachineComposer.m_ScreenX + screenVelocity,
-                screenXMin,
-                screenXMax
+                this.playerActorCommonData.ScreenXMin,
+                this.playerActorCommonData.ScreenXMax
                 );
             cinemachineComposer.m_ScreenX = screenX;
 
             // カメラのY方向の回転処理
             input = inputActions.Player.Look.ReadValue<Vector2>();
-            var offsetY = Mathf.Clamp(orbitalTransposer.m_FollowOffset.y + input.y * cameraSpeed.y * deltaTime, followYMin, followYMax);
+            var offsetY = Mathf.Clamp(
+                orbitalTransposer.m_FollowOffset.y + input.y * this.playerActorCommonData.CameraMoveSpeed.y * deltaTime,
+                this.playerActorCommonData.FollowYMin,
+                this.playerActorCommonData.FollowYMax
+                );
             orbitalTransposer.m_FollowOffset.y = offsetY;
         }
 

@@ -18,3 +18,9 @@ MonoBehaviour:
   dodgeDuration: 0.5
   dodgeEase: 6
   advancedEntrySeconds: 0.25
+  cameraSpeed: {x: 12, y: -20}
+  followYMin: 0.1
+  followYMax: 10
+  screenXMin: 0.4
+  screenXMax: 0.6
+  screenMoveSpeed: -0.2

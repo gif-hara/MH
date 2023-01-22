@@ -44,11 +44,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a18179a47dec594e9fce9fc08281d10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actor: {fileID: 0}
-  cinemachineVirtualCamera: {fileID: 0}
-  cameraSpeed: {x: 12, y: -20}
-  followYMax: 10
-  followYMin: 0.1
-  screenXMin: 0.4
-  screenXMax: 0.6
-  screenMoveSpeed: -0.2

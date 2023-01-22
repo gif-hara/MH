@@ -30,6 +30,42 @@ namespace MH
         [SerializeField]
         private float advancedEntrySeconds;
 
+        /// <summary>
+        /// カメラの移動速度
+        /// </summary>
+        [SerializeField]
+        private Vector2 cameraSpeed;
+
+        /// <summary>
+        /// カメラのフォローYの最小値
+        /// </summary>
+        [SerializeField]
+        private float followYMin;
+
+        /// <summary>
+        /// カメラのフォローYの最大値
+        /// </summary>
+        [SerializeField]
+        private float followYMax;
+
+        /// <summary>
+        /// カメラのスクリーンXの最小値
+        /// </summary>
+        [SerializeField]
+        private float screenXMin;
+
+        /// <summary>
+        /// カメラのスクリーンXの最大値
+        /// </summary>
+        [SerializeField]
+        private float screenXMax;
+
+        /// <summary>
+        /// カメラのスクリーンの移動速度
+        /// </summary>
+        [SerializeField]
+        private float screenMoveSpeed;
+
         public float MoveSpeed => this.moveSpeed;
 
         public float RotationSpeed => this.rotationSpeed;
@@ -41,5 +77,17 @@ namespace MH
         public Ease DodgeEase => this.dodgeEase;
 
         public float AdvancedEntrySeconds => this.advancedEntrySeconds;
+
+        public Vector2 CameraMoveSpeed => this.cameraSpeed;
+
+        public float FollowYMin => this.followYMin;
+
+        public float FollowYMax => this.followYMax;
+
+        public float ScreenXMin => this.screenXMin;
+
+        public float ScreenXMax => this.screenXMax;
+
+        public float ScreenMoveSpeed => this.screenMoveSpeed;
     }
 }
