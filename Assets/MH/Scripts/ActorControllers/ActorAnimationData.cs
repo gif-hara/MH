@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace MH
 {
@@ -19,7 +20,7 @@ namespace MH
         public AnimationBlendData GetAnimationBlendData(string name)
         {
             this.runtimeDataDictionary ??= this.dataList.ToDictionary(x => x.name, x => x.blendData);
-
+            Assert.IsTrue(this.runtimeDataDictionary.ContainsKey(name), $"{name} is not found.");
             return this.runtimeDataDictionary[name];
         }
 
