@@ -17,3 +17,4 @@ MonoBehaviour:
   dodgeSpeed: 50
   dodgeDuration: 0.5
   dodgeEase: 6
+  advancedEntrySeconds: 0.25

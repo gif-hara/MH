@@ -24,6 +24,12 @@ namespace MH
         [SerializeField]
         private Ease dodgeEase;
 
+        /// <summary>
+        /// 先行入力を行う秒数
+        /// </summary>
+        [SerializeField]
+        private float advancedEntrySeconds;
+
         public float MoveSpeed => this.moveSpeed;
 
         public float RotationSpeed => this.rotationSpeed;
@@ -33,5 +39,7 @@ namespace MH
         public float DodgeDuration => this.dodgeDuration;
 
         public Ease DodgeEase => this.dodgeEase;
+
+        public float AdvancedEntrySeconds => this.advancedEntrySeconds;
     }
 }

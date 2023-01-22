@@ -1,4 +1,8 @@
+using System;
 using Cinemachine;
+using Cysharp.Threading.Tasks.Linq;
+using Cysharp.Threading.Tasks.Triggers;
+using MessagePipe;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -29,6 +33,11 @@ namespace MH
 
         [SerializeField]
         private float screenMoveSpeed;
+
+        /// <summary>
+        /// 先行入力を行っている処理
+        /// </summary>
+        private readonly DisposableBagBuilder advancedEntryScope = DisposableBag.CreateBuilder();
 
         private CinemachineComposer cinemachineComposer;
 
@@ -111,38 +120,63 @@ namespace MH
 
         private void PerformedDodge(InputAction.CallbackContext context)
         {
-            var input = inputActions.Player.Move.ReadValue<Vector2>();
-            var cameraTransform = cinemachineVirtualCamera.transform;
-            var cameraRight = Vector3.Scale(cameraTransform.right, new Vector3(1, 0, 1));
-            var cameraForward = Vector3.Scale(cameraTransform.forward, new Vector3(1, 0, 1));
-            var rightVelocity = input.x * cameraRight;
-            var forwardVelocity = input.y * cameraForward;
-            var direction = (rightVelocity + forwardVelocity).normalized;
-            if (direction.sqrMagnitude <= 0.0f)
+            this.RegisterAdvancedEntry(() =>
             {
-                direction = Vector3.Scale(actor.transform.forward, new Vector3(1, 0, 1));
-            }
-            var invokeData = new ActorDodgeController.InvokeData
-            {
-                direction = direction,
-                speed = this.playerActorCommonData.DodgeSpeed,
-                duration = this.playerActorCommonData.DodgeDuration,
-                ease = this.playerActorCommonData.DodgeEase
-            };
-            MessageBroker.GetPublisher<Actor, ActorEvents.RequestDodge>()
-                .Publish(actor, ActorEvents.RequestDodge.Get(invokeData));
+                var input = inputActions.Player.Move.ReadValue<Vector2>();
+                var cameraTransform = cinemachineVirtualCamera.transform;
+                var cameraRight = Vector3.Scale(cameraTransform.right, new Vector3(1, 0, 1));
+                var cameraForward = Vector3.Scale(cameraTransform.forward, new Vector3(1, 0, 1));
+                var rightVelocity = input.x * cameraRight;
+                var forwardVelocity = input.y * cameraForward;
+                var direction = (rightVelocity + forwardVelocity).normalized;
+                if (direction.sqrMagnitude <= 0.0f)
+                {
+                    direction = Vector3.Scale(actor.transform.forward, new Vector3(1, 0, 1));
+                }
+                var invokeData = new ActorDodgeController.InvokeData
+                {
+                    direction = direction,
+                    speed = this.playerActorCommonData.DodgeSpeed,
+                    duration = this.playerActorCommonData.DodgeDuration,
+                    ease = this.playerActorCommonData.DodgeEase
+                };
+                MessageBroker.GetPublisher<Actor, ActorEvents.RequestDodge>()
+                    .Publish(actor, ActorEvents.RequestDodge.Get(invokeData));
+            });
         }
 
         private void PerformedAttackWeak(InputAction.CallbackContext obj)
         {
-            MessageBroker.GetPublisher<Actor, ActorEvents.RequestAttack>()
-                .Publish(actor, ActorEvents.RequestAttack.Get(Define.RequestAttackType.Weak));
+            this.RegisterAdvancedEntry(() =>
+            {
+                MessageBroker.GetPublisher<Actor, ActorEvents.RequestAttack>()
+                    .Publish(actor, ActorEvents.RequestAttack.Get(Define.RequestAttackType.Weak));
+            });
         }
 
         private void PerformedAttackStrong(InputAction.CallbackContext obj)
         {
-            MessageBroker.GetPublisher<Actor, ActorEvents.RequestAttack>()
-                .Publish(actor, ActorEvents.RequestAttack.Get(Define.RequestAttackType.Strong));
+            this.RegisterAdvancedEntry(() =>
+            {
+                MessageBroker.GetPublisher<Actor, ActorEvents.RequestAttack>()
+                    .Publish(actor, ActorEvents.RequestAttack.Get(Define.RequestAttackType.Strong));
+            });
+        }
+
+        private void RegisterAdvancedEntry(Action entryAction)
+        {
+            entryAction();
+
+            this.advancedEntryScope.Clear();
+            this.GetAsyncUpdateTrigger()
+                .Subscribe(_ => entryAction())
+                .AddTo(this.advancedEntryScope);
+            UniTaskAsyncEnumerable.Timer(TimeSpan.FromSeconds(this.playerActorCommonData.AdvancedEntrySeconds))
+                .Subscribe(_ =>
+                {
+                    this.advancedEntryScope.Clear();
+                })
+                .AddTo(this.advancedEntryScope);
         }
     }
 }
