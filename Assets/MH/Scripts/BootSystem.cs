@@ -20,15 +20,16 @@ namespace MH
         private static async UniTask SetupInternal()
         {
             await UniTask.WhenAll(
-                SetupMessageBroker(),
+                SetupMessageBrokerAsync(),
                 UIManager.SetupAsync(),
-                SetupNetworkSystemAsync()
+                SetupNetworkSystemAsync(),
+                SetupInputActionAsync()
                 );
 
             IsReady = UniTask.CompletedTask;
         }
 
-        private static UniTask SetupMessageBroker()
+        private static UniTask SetupMessageBrokerAsync()
         {
             MessageBroker.Setup(builder =>
             {
@@ -42,6 +43,12 @@ namespace MH
         {
             var prefab = await AssetLoader.LoadAsync<GameObject>("Assets/MH/Prefabs/NetworkSystems/NetworkManager.prefab");
             Object.Instantiate(prefab);
+        }
+
+        private static UniTask SetupInputActionAsync()
+        {
+            InputController.Setup();
+            return UniTask.CompletedTask;
         }
     }
 }

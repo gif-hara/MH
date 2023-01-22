@@ -21,8 +21,6 @@ namespace MH
 
         private CinemachineVirtualCamera cinemachineVirtualCamera;
 
-        private MHInputActions inputActions;
-
         private Vector3 lastRotation;
 
         private CinemachineOrbitalTransposer orbitalTransposer;
@@ -38,7 +36,7 @@ namespace MH
         {
             // キャラクターの移動処理
             var deltaTime = actor.TimeController.Time.deltaTime;
-            var input = inputActions.Player.Move.ReadValue<Vector2>();
+            var input = InputController.InputActions.Player.Move.ReadValue<Vector2>();
             var cameraTransform = this.cinemachineVirtualCamera.transform;
             var cameraRight = Vector3.Scale(cameraTransform.right, new Vector3(1, 0, 1));
             var cameraForward = Vector3.Scale(cameraTransform.forward, new Vector3(1, 0, 1));
@@ -72,7 +70,7 @@ namespace MH
             cinemachineComposer.m_ScreenX = screenX;
 
             // カメラのY方向の回転処理
-            input = inputActions.Player.Look.ReadValue<Vector2>();
+            input = InputController.InputActions.Player.Look.ReadValue<Vector2>();
             var offsetY = Mathf.Clamp(
                 orbitalTransposer.m_FollowOffset.y + input.y * this.playerActorCommonData.CameraMoveSpeed.y * deltaTime,
                 this.playerActorCommonData.FollowYMin,
@@ -96,7 +94,7 @@ namespace MH
             orbitalTransposer = this.cinemachineVirtualCamera.GetComponentInChildren<CinemachineOrbitalTransposer>();
             cinemachineComposer = this.cinemachineVirtualCamera.GetComponentInChildren<CinemachineComposer>();
 
-            inputActions = new MHInputActions();
+            var inputActions = InputController.InputActions;
             inputActions.Player.Dodge.performed += PerformedDodge;
             inputActions.Player.AttackWeak.performed += PerformedAttackWeak;
             inputActions.Player.AttackStrong.performed += PerformedAttackStrong;
@@ -107,7 +105,7 @@ namespace MH
         {
             this.RegisterAdvancedEntry(() =>
             {
-                var input = inputActions.Player.Move.ReadValue<Vector2>();
+                var input = InputController.InputActions.Player.Move.ReadValue<Vector2>();
                 var cameraTransform = cinemachineVirtualCamera.transform;
                 var cameraRight = Vector3.Scale(cameraTransform.right, new Vector3(1, 0, 1));
                 var cameraForward = Vector3.Scale(cameraTransform.forward, new Vector3(1, 0, 1));
