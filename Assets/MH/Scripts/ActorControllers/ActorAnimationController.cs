@@ -28,29 +28,24 @@ namespace MH
                 });
         }
 
-        public void PlayIdle()
+        public void Play(string animationName)
         {
-            animationController.Play(this.data.GetAnimationBlendData("Idle"));
-        }
-
-        public void PlayRun()
-        {
-            animationController.Play(this.data.GetAnimationBlendData("Run"));
+            this.animationController.Play(this.data.GetAnimationBlendData(animationName));
         }
 
         public void Play(AnimationBlendData data)
         {
-            animationController.Play(data);
+            this.animationController.Play(data);
+        }
+
+        public UniTask<AnimationController.CompleteType> PlayAsync(string animationName)
+        {
+            return this.animationController.PlayAsync(this.data.GetAnimationBlendData(animationName));
         }
 
         public UniTask<AnimationController.CompleteType> PlayAsync(AnimationBlendData data)
         {
-            return animationController.PlayAsync(data);
-        }
-
-        public UniTask<AnimationController.CompleteType> PlayDodgeAsync()
-        {
-            return animationController.PlayAsync(this.data.GetAnimationBlendData("Dodge"));
+            return this.animationController.PlayAsync(data);
         }
     }
 }

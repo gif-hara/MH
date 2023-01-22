@@ -68,10 +68,11 @@ namespace MH
             foreach (var prefab in spawnData.extensionPrefabs)
             {
                 var extensionObject = Instantiate(prefab, this.transform);
-                foreach (var i in extensionObject.GetComponentsInChildren<IActorController>())
-                {
-                    i.Setup(this, this, spawnData);
-                }
+            }
+
+            foreach (var i in this.GetComponentsInChildren<IActorController>())
+            {
+                i.Setup(this, this, spawnData);
             }
 
             ActorManager.AddActor(this);

@@ -57,7 +57,7 @@ namespace MH
 
         private void OnEnterIdle(State previousState, DisposableBagBuilder scope)
         {
-            this.actor.AnimationController.PlayIdle();
+            this.actor.AnimationController.Play("Idle");
 
             MessageBroker.GetSubscriber<Actor, ActorEvents.BeginMove>()
                 .Subscribe(this.actor, _ =>
@@ -115,7 +115,7 @@ namespace MH
 
         private void OnEnterRun(State previousState, DisposableBagBuilder scope)
         {
-            this.actor.AnimationController.PlayRun();
+            this.actor.AnimationController.Play("Run");
 
             MessageBroker.GetSubscriber<Actor, ActorEvents.EndMove>()
                 .Subscribe(this.actor, _ =>

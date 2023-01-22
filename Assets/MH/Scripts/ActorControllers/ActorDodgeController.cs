@@ -47,7 +47,7 @@ namespace MH
                 MessageBroker.GetPublisher<Actor, ActorEvents.BeginDodge>()
                     .Publish(this.actor, ActorEvents.BeginDodge.Get(this.invokeData));
 
-                await this.actor.AnimationController.PlayDodgeAsync();
+                await this.actor.AnimationController.PlayAsync("Dodge");
 
                 MessageBroker.GetPublisher<Actor, ActorEvents.EndDodge>()
                     .Publish(this.actor, ActorEvents.EndDodge.Get());
