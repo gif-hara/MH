@@ -31,6 +31,8 @@ namespace MH
 
         public ActorStatusController StatusController { private set; get; }
 
+        public ActorAIController AIController { private set; get; }
+
         private void OnDestroy()
         {
             ActorManager.RemoveActor(this);
@@ -64,6 +66,7 @@ namespace MH
             this.DodgeController = this.CreateActorController<ActorDodgeController>(spawnData);
             this.AttackController = this.CreateActorController<ActorAttackController>(spawnData);
             this.StatusController = this.CreateActorController<ActorStatusController>(spawnData);
+            this.AIController = this.CreateActorController<ActorAIController>(spawnData);
 
             foreach (var prefab in spawnData.extensionPrefabs)
             {

@@ -24,9 +24,6 @@ namespace MH.NetworkSystems
         private Actor actorPrefab;
 
         [SerializeField]
-        private PlayerInputController playerInputControllerPrefab;
-
-        [SerializeField]
         private CameraController cameraControllerPrefab;
 
         [SerializeField]
@@ -47,13 +44,13 @@ namespace MH.NetworkSystems
         public override void OnNetworkSpawn()
         {
             var ct = this.GetCancellationTokenOnDestroy();
-            this.actor = this.actorPrefab.Spawn(this.actorSpawnData.data, Vector3.zero, Quaternion.identity);
-            this.actor.transform.SetParent(this.transform);
             if (this.IsOwner)
             {
                 Instantiate(this.cameraControllerPrefab, this.transform);
-                var inputController = Instantiate(this.playerInputControllerPrefab, this.transform);
-                inputController.Attach(this.actor, this.playerActorCommonData);
+                var spawnData = this.actorSpawnData.data;
+                spawnData.actorAI = new ActorAIPlayer(this.playerActorCommonData);
+                this.actor = this.actorPrefab.Spawn(spawnData, Vector3.zero, Quaternion.identity);
+                this.actor.transform.SetParent(this.transform);
                 UniTaskAsyncEnumerable.Interval(TimeSpan.FromSeconds(0.1f))
                     .Subscribe(_ =>
                     {
@@ -84,6 +81,10 @@ namespace MH.NetworkSystems
             }
             else
             {
+                var spawnData = this.actorSpawnData.data;
+                this.actor = this.actorPrefab.Spawn(spawnData, Vector3.zero, Quaternion.identity);
+                this.actor.transform.SetParent(this.transform);
+
                 this.GetAsyncUpdateTrigger()
                     .Subscribe(_ =>
                     {

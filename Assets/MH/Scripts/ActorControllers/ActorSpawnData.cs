@@ -23,5 +23,7 @@ namespace MH
         /// <see cref="IActorController"/>がアタッチされているプレハブを想定しています
         /// </remarks>
         public List<GameObject> extensionPrefabs;
+
+        public IActorAI actorAI;
     }
 }

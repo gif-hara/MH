@@ -1,5 +1,6 @@
 using System;
 using Cinemachine;
+using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 using Cysharp.Threading.Tasks.Triggers;
 using MessagePipe;
@@ -8,12 +9,17 @@ using UnityEngine.InputSystem;
 
 namespace MH
 {
-    public class PlayerInputController : MonoBehaviour
+    /// <summary>
+    ///
+    /// </summary>
+    public sealed class ActorAIPlayer : IActorAI
     {
         /// <summary>
         /// 先行入力を行っている処理
         /// </summary>
         private readonly DisposableBagBuilder advancedEntryScope = DisposableBag.CreateBuilder();
+
+        private readonly PlayerActorCommonData playerActorCommonData;
 
         private Actor actor;
 
@@ -25,80 +31,79 @@ namespace MH
 
         private CinemachineOrbitalTransposer orbitalTransposer;
 
-        private PlayerActorCommonData playerActorCommonData;
-
-        private void Awake()
+        public ActorAIPlayer(PlayerActorCommonData playerActorCommonData)
         {
-            enabled = false;
+            this.playerActorCommonData = playerActorCommonData;
         }
 
-        private void Update()
-        {
-            // キャラクターの移動処理
-            var deltaTime = actor.TimeController.Time.deltaTime;
-            var input = InputController.InputActions.Player.Move.ReadValue<Vector2>();
-            var cameraTransform = this.cinemachineVirtualCamera.transform;
-            var cameraRight = Vector3.Scale(cameraTransform.right, new Vector3(1, 0, 1));
-            var cameraForward = Vector3.Scale(cameraTransform.forward, new Vector3(1, 0, 1));
-            var rightVelocity = input.x * cameraRight;
-            var forwardVelocity = input.y * cameraForward;
-            var velocity = (rightVelocity + forwardVelocity).normalized;
-            if (velocity.sqrMagnitude >= 0.01f)
-            {
-                MessageBroker.GetPublisher<Actor, ActorEvents.RequestMove>()
-                    .Publish(actor, ActorEvents.RequestMove.Get(velocity * this.playerActorCommonData.MoveSpeed * deltaTime));
-                lastRotation = velocity;
-            }
-            if (lastRotation.sqrMagnitude >= 0.01f)
-            {
-                var rotation = Quaternion.Lerp(
-                    actor.transform.localRotation,
-                    Quaternion.LookRotation(lastRotation),
-                    this.playerActorCommonData.RotationSpeed * deltaTime
-                    );
-                MessageBroker.GetPublisher<Actor, ActorEvents.RequestRotation>()
-                    .Publish(actor, ActorEvents.RequestRotation.Get(rotation));
-            }
-
-            // カメラのスクリーン値の更新
-            var screenVelocity = input.x * this.playerActorCommonData.ScreenMoveSpeed * deltaTime;
-            var screenX = Mathf.Clamp(
-                cinemachineComposer.m_ScreenX + screenVelocity,
-                this.playerActorCommonData.ScreenXMin,
-                this.playerActorCommonData.ScreenXMax
-                );
-            cinemachineComposer.m_ScreenX = screenX;
-
-            // カメラのY方向の回転処理
-            input = InputController.InputActions.Player.Look.ReadValue<Vector2>();
-            var offsetY = Mathf.Clamp(
-                orbitalTransposer.m_FollowOffset.y + input.y * this.playerActorCommonData.CameraMoveSpeed.y * deltaTime,
-                this.playerActorCommonData.FollowYMin,
-                this.playerActorCommonData.FollowYMax
-                );
-            orbitalTransposer.m_FollowOffset.y = offsetY;
-        }
-
-        public void Attach(Actor actor, PlayerActorCommonData playerActorCommonData)
+        public void Attach(Actor actor)
         {
             this.actor = actor;
-            this.playerActorCommonData = playerActorCommonData;
-            var t = actor.transform;
             this.cinemachineVirtualCamera = CameraController.Instance.Player;
+            var t = this.actor.transform;
             this.cinemachineVirtualCamera.Follow = t;
             this.cinemachineVirtualCamera.LookAt = t;
-            enabled = true;
+            this.orbitalTransposer = this.cinemachineVirtualCamera.GetComponentInChildren<CinemachineOrbitalTransposer>();
+            this.cinemachineComposer = this.cinemachineVirtualCamera.GetComponentInChildren<CinemachineComposer>();
 
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            orbitalTransposer = this.cinemachineVirtualCamera.GetComponentInChildren<CinemachineOrbitalTransposer>();
-            cinemachineComposer = this.cinemachineVirtualCamera.GetComponentInChildren<CinemachineComposer>();
 
             var inputActions = InputController.InputActions;
             inputActions.Player.Dodge.performed += PerformedDodge;
             inputActions.Player.AttackWeak.performed += PerformedAttackWeak;
             inputActions.Player.AttackStrong.performed += PerformedAttackStrong;
             inputActions.Enable();
+
+            var ct = actor.GetCancellationTokenOnDestroy();
+            actor.GetAsyncUpdateTrigger()
+                .Subscribe(_ =>
+                {
+                    // キャラクターの移動処理
+                    var deltaTime = actor.TimeController.Time.deltaTime;
+                    var input = InputController.InputActions.Player.Move.ReadValue<Vector2>();
+                    var cameraTransform = this.cinemachineVirtualCamera.transform;
+                    var cameraRight = Vector3.Scale(cameraTransform.right, new Vector3(1, 0, 1));
+                    var cameraForward = Vector3.Scale(cameraTransform.forward, new Vector3(1, 0, 1));
+                    var rightVelocity = input.x * cameraRight;
+                    var forwardVelocity = input.y * cameraForward;
+                    var velocity = (rightVelocity + forwardVelocity).normalized;
+                    if (velocity.sqrMagnitude >= 0.01f)
+                    {
+                        MessageBroker.GetPublisher<Actor, ActorEvents.RequestMove>()
+                            .Publish(actor, ActorEvents.RequestMove.Get(velocity * this.playerActorCommonData.MoveSpeed * deltaTime));
+                        lastRotation = velocity;
+                    }
+                    if (lastRotation.sqrMagnitude >= 0.01f)
+                    {
+                        var rotation = Quaternion.Lerp(
+                            actor.transform.localRotation,
+                            Quaternion.LookRotation(lastRotation),
+                            this.playerActorCommonData.RotationSpeed * deltaTime
+                            );
+                        MessageBroker.GetPublisher<Actor, ActorEvents.RequestRotation>()
+                            .Publish(actor, ActorEvents.RequestRotation.Get(rotation));
+                    }
+
+                    // カメラのスクリーン値の更新
+                    var screenVelocity = input.x * this.playerActorCommonData.ScreenMoveSpeed * deltaTime;
+                    var screenX = Mathf.Clamp(
+                        cinemachineComposer.m_ScreenX + screenVelocity,
+                        this.playerActorCommonData.ScreenXMin,
+                        this.playerActorCommonData.ScreenXMax
+                        );
+                    cinemachineComposer.m_ScreenX = screenX;
+
+                    // カメラのY方向の回転処理
+                    input = InputController.InputActions.Player.Look.ReadValue<Vector2>();
+                    var offsetY = Mathf.Clamp(
+                        orbitalTransposer.m_FollowOffset.y + input.y * this.playerActorCommonData.CameraMoveSpeed.y * deltaTime,
+                        this.playerActorCommonData.FollowYMin,
+                        this.playerActorCommonData.FollowYMax
+                        );
+                    orbitalTransposer.m_FollowOffset.y = offsetY;
+                })
+                .AddTo(ct);
         }
 
         private void PerformedDodge(InputAction.CallbackContext context)
@@ -114,7 +119,7 @@ namespace MH
                 var direction = (rightVelocity + forwardVelocity).normalized;
                 if (direction.sqrMagnitude <= 0.0f)
                 {
-                    direction = Vector3.Scale(actor.transform.forward, new Vector3(1, 0, 1));
+                    direction = Vector3.Scale(this.actor.transform.forward, new Vector3(1, 0, 1));
                 }
                 var invokeData = new ActorDodgeController.InvokeData
                 {
@@ -124,7 +129,7 @@ namespace MH
                     ease = this.playerActorCommonData.DodgeEase
                 };
                 MessageBroker.GetPublisher<Actor, ActorEvents.RequestDodge>()
-                    .Publish(actor, ActorEvents.RequestDodge.Get(invokeData));
+                    .Publish(this.actor, ActorEvents.RequestDodge.Get(invokeData));
             });
         }
 
@@ -151,7 +156,7 @@ namespace MH
             entryAction();
 
             this.advancedEntryScope.Clear();
-            this.GetAsyncUpdateTrigger()
+            this.actor.GetAsyncUpdateTrigger()
                 .Subscribe(_ => entryAction())
                 .AddTo(this.advancedEntryScope);
             UniTaskAsyncEnumerable.Timer(TimeSpan.FromSeconds(this.playerActorCommonData.AdvancedEntrySeconds))
