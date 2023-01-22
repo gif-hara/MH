@@ -6,34 +6,10 @@ using UnityEngine;
 namespace MH
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed class AnimationController : MonoBehaviour
     {
-        [SerializeField]
-        private Animator animator;
-        
-        private AnimatorOverrideController overrideController;
-        
-        private int currentLayerIndex = LayerAIndex;
-
-        private CancellationTokenDisposable animationCancelToken;
-
-        private float currentBlendSeconds;
-        
-        private const string OverrideClipAName = "ClipA";
-
-        private const string OverrideClipBName = "ClipB";
-        
-        private static readonly int OverrideStateA = Animator.StringToHash("Override State A");
-
-        private static readonly int OverrideStateB = Animator.StringToHash("Override State B");
-
-        private const int LayerAIndex = 1;
-
-        private const int LayerBIndex = 2;
-
-        public Time Time { set; get; } = TimeManager.Game;
 
         /// <summary>
         /// アニメーション再生完了タイプ
@@ -44,13 +20,38 @@ namespace MH
             /// 最後まで再生した
             /// </summary>
             Success,
-            
+
             /// <summary>
             /// 途中で終了した
             /// </summary>
             Aborted,
         }
-        
+
+        private const string OverrideClipAName = "ClipA";
+
+        private const string OverrideClipBName = "ClipB";
+
+        private const int LayerAIndex = 1;
+
+        private const int LayerBIndex = 2;
+
+        private static readonly int OverrideStateA = Animator.StringToHash("Override State A");
+
+        private static readonly int OverrideStateB = Animator.StringToHash("Override State B");
+
+        [SerializeField]
+        private Animator animator;
+
+        private CancellationTokenDisposable animationCancelToken;
+
+        private float currentBlendSeconds;
+
+        private int currentLayerIndex = LayerAIndex;
+
+        private AnimatorOverrideController overrideController;
+
+        public Time Time { set; get; } = TimeManager.Game;
+
         private void Awake()
         {
             this.overrideController = new AnimatorOverrideController();
@@ -76,7 +77,7 @@ namespace MH
             this.overrideController[this.GetCurrentOverrideClipName()] = clip;
             this.animator.Play(this.GetCurrentOverrideState(), this.currentLayerIndex, 0.0f);
             this.currentBlendSeconds = 0.0f;
-            
+
             // ブレンドしない場合は即座にレイヤーを更新する
             if (blendSeconds <= 0.0f)
             {
@@ -95,7 +96,7 @@ namespace MH
         {
             this.Play(data.animationClip, data.blendSeconds);
         }
-        
+
         public UniTask<CompleteType> PlayAsync(AnimationClip clip, float blendSeconds = 0.0f)
         {
             this.Play(clip, blendSeconds);
@@ -113,27 +114,27 @@ namespace MH
             {
                 return CompleteType.Aborted;
             }
-            
+
             while (this.animator.GetCurrentAnimatorStateInfo(this.currentLayerIndex).normalizedTime < 1.0f)
             {
                 if (token.IsCancellationRequested)
                 {
                     return CompleteType.Aborted;
                 }
-                
+
                 await UniTask.NextFrame(PlayerLoopTiming.Update, token);
             }
 
             return CompleteType.Success;
         }
-        
+
         private async UniTask StartBlendAsync(float blendSeconds, CancellationToken token)
         {
             if (token.IsCancellationRequested)
             {
                 return;
             }
-            
+
             this.currentBlendSeconds += this.Time.deltaTime;
             var rate = this.currentBlendSeconds / blendSeconds;
             while (rate < 1.0f)
@@ -142,13 +143,16 @@ namespace MH
                 {
                     return;
                 }
-                
+
                 this.animator.SetLayerWeight(LayerAIndex, this.currentLayerIndex == LayerAIndex ? rate : 1.0f - rate);
                 this.animator.SetLayerWeight(LayerBIndex, this.currentLayerIndex == LayerBIndex ? rate : 1.0f - rate);
                 await UniTask.NextFrame(PlayerLoopTiming.Update, token);
                 this.currentBlendSeconds += this.Time.deltaTime;
                 rate = this.currentBlendSeconds / blendSeconds;
             }
+
+            this.animator.SetLayerWeight(LayerAIndex, this.currentLayerIndex == LayerAIndex ? 1.0f : 0.0f);
+            this.animator.SetLayerWeight(LayerBIndex, this.currentLayerIndex == LayerBIndex ? 1.0f : 0.0f);
         }
 
         public async UniTask WaitForAnimation()
@@ -163,12 +167,12 @@ namespace MH
         {
             this.animator.speed = speed;
         }
-        
+
         private string GetCurrentOverrideClipName()
         {
             return this.currentLayerIndex == LayerAIndex ? OverrideClipAName : OverrideClipBName;
         }
-        
+
         private int GetCurrentOverrideState()
         {
             return this.currentLayerIndex == LayerAIndex ? OverrideStateA : OverrideStateB;
