@@ -9,7 +9,7 @@ namespace MH
     {
         AnimationController AnimationController { get; }
 
-        BoneHolder BoneHolder { get; }
+        ModelDataHolder ModelDataHolder { get; }
 
         OpenCharacterController OpenCharacterController { get; }
     }

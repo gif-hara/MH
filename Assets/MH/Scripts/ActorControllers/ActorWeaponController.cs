@@ -83,7 +83,7 @@ namespace MH
         {
             this.actor = actor;
             var t = transform;
-            t.SetParent(this.actor.ModelController.BoneHolder.RightHand, false);
+            t.SetParent(this.actor.ModelController.ModelDataHolder.RightHand, false);
             t.localPosition = Vector3.zero;
             t.localRotation = Quaternion.identity;
             var bag = DisposableBag.CreateBuilder();

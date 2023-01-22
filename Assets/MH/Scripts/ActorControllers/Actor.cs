@@ -10,7 +10,7 @@ namespace MH
         private AnimationController animationController;
 
         [SerializeField]
-        private BoneHolder boneHolder;
+        private ModelDataHolder modelDataHolder;
 
         [SerializeField]
         private OpenCharacterController openCharacterController;
@@ -38,7 +38,7 @@ namespace MH
 
         AnimationController IActorDependencyInjector.AnimationController => this.animationController;
 
-        BoneHolder IActorDependencyInjector.BoneHolder => this.boneHolder;
+        ModelDataHolder IActorDependencyInjector.ModelDataHolder => this.modelDataHolder;
 
         OpenCharacterController IActorDependencyInjector.OpenCharacterController => this.openCharacterController;
 

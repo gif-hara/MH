@@ -5,7 +5,7 @@ namespace MH
     /// </summary>
     public sealed class ActorModelController : IActorController
     {
-        public BoneHolder BoneHolder { private set; get; }
+        public ModelDataHolder ModelDataHolder { private set; get; }
 
         void IActorController.Setup(
             Actor actor,
@@ -13,7 +13,7 @@ namespace MH
             ActorSpawnData spawnData
             )
         {
-            this.BoneHolder = actorDependencyInjector.BoneHolder;
+            this.ModelDataHolder = actorDependencyInjector.ModelDataHolder;
         }
     }
 }
