@@ -82,6 +82,7 @@ namespace MH.NetworkSystems
             else
             {
                 var spawnData = this.actorSpawnData.data;
+                spawnData.actorAI = null;
                 this.actor = this.actorPrefab.Spawn(spawnData, Vector3.zero, Quaternion.identity);
                 this.actor.transform.SetParent(this.transform);
 
