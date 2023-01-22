@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Unity.Services.Authentication;
-using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
@@ -121,7 +118,7 @@ namespace MH.NetworkSystems
             try
             {
                 var newLobby = await Lobbies.Instance.GetLobbyAsync(currentLobby.Id);
-                
+
                 // 新規で追加されたプレイヤーを通知する
                 foreach (var newLobbyPlayer in newLobby.Players)
                 {
@@ -141,7 +138,7 @@ namespace MH.NetworkSystems
                             .Publish(LobbyEvents.AddedPlayer.Get(newLobbyPlayer));
                     }
                 }
-                
+
                 // ロビーから削除されたプレイヤーを通知する
                 foreach (var currentLobbyPlayer in currentLobby.Players)
                 {

@@ -59,7 +59,7 @@ namespace MH
             // キャラクターの移動処理
             var deltaTime = actor.TimeController.Time.deltaTime;
             var input = inputActions.Player.Move.ReadValue<Vector2>();
-            var cameraTransform = cinemachineVirtualCamera.transform;
+            var cameraTransform = this.cinemachineVirtualCamera.transform;
             var cameraRight = Vector3.Scale(cameraTransform.right, new Vector3(1, 0, 1));
             var cameraForward = Vector3.Scale(cameraTransform.forward, new Vector3(1, 0, 1));
             var rightVelocity = input.x * cameraRight;
@@ -102,14 +102,15 @@ namespace MH
             this.actor = actor;
             this.playerActorCommonData = playerActorCommonData;
             var t = actor.transform;
-            cinemachineVirtualCamera.Follow = t;
-            cinemachineVirtualCamera.LookAt = t;
+            this.cinemachineVirtualCamera = CameraController.Instance.Player;
+            this.cinemachineVirtualCamera.Follow = t;
+            this.cinemachineVirtualCamera.LookAt = t;
             enabled = true;
 
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            orbitalTransposer = cinemachineVirtualCamera.GetComponentInChildren<CinemachineOrbitalTransposer>();
-            cinemachineComposer = cinemachineVirtualCamera.GetComponentInChildren<CinemachineComposer>();
+            orbitalTransposer = this.cinemachineVirtualCamera.GetComponentInChildren<CinemachineOrbitalTransposer>();
+            cinemachineComposer = this.cinemachineVirtualCamera.GetComponentInChildren<CinemachineComposer>();
 
             inputActions = new MHInputActions();
             inputActions.Player.Dodge.performed += PerformedDodge;

@@ -27,6 +27,9 @@ namespace MH.NetworkSystems
         private PlayerInputController playerInputControllerPrefab;
 
         [SerializeField]
+        private CameraController cameraControllerPrefab;
+
+        [SerializeField]
         private float sendPositionThreshold;
 
         [SerializeField]
@@ -48,6 +51,7 @@ namespace MH.NetworkSystems
             this.actor.transform.SetParent(this.transform);
             if (this.IsOwner)
             {
+                Instantiate(this.cameraControllerPrefab, this.transform);
                 var inputController = Instantiate(this.playerInputControllerPrefab, this.transform);
                 inputController.Attach(this.actor, this.playerActorCommonData);
                 UniTaskAsyncEnumerable.Interval(TimeSpan.FromSeconds(0.1f))
