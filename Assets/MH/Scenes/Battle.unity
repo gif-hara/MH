@@ -1032,55 +1032,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45c2058f0a05bb42863192e99831ab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 6321397659681280986, guid: b75c59ac30827e149842ceba11d840f0, type: 3}
   enemyPrefab: {fileID: 6321397659681280986, guid: 822a6d5e163b2754dad4f40394f5cb29, type: 3}
-  playerSpawnData:
-    attackData:
-      baseStrength: 0
-      motionDataList:
-      - motionName: WeakAttack.0
-        animationBlendData:
-          animationClip: {fileID: 7400000, guid: f3b2dc672b635c94ca44ea5840839b9b, type: 2}
-          blendSeconds: 0.05
-        nextMotionName: WeakAttack.1
-      - motionName: WeakAttack.1
-        animationBlendData:
-          animationClip: {fileID: 7400000, guid: 21cf87df0bf7f844fa897953d084176d, type: 2}
-          blendSeconds: 0.1
-        nextMotionName: WeakAttack.2
-      - motionName: WeakAttack.2
-        animationBlendData:
-          animationClip: {fileID: 7400000, guid: ac13d65b24a4b26439ad3278062a88ed, type: 2}
-          blendSeconds: 0.1
-        nextMotionName: WeakAttack.3
-      - motionName: WeakAttack.3
-        animationBlendData:
-          animationClip: {fileID: 7400000, guid: 51f48ccbbd9b4b94fbe0dc29a04ee6c6, type: 2}
-          blendSeconds: 0.1
-        nextMotionName: WeakAttack.0
-      - motionName: DodgeAttack
-        animationBlendData:
-          animationClip: {fileID: 7400000, guid: 7d8ec17e9f150584b9546a02ae167aa4, type: 2}
-          blendSeconds: 0.1
-        nextMotionName: WeakAttack.0
-      - motionName: StrongAttack.0
-        animationBlendData:
-          animationClip: {fileID: 7400000, guid: d1634fb508b311b4e97d1f627670eda6, type: 2}
-          blendSeconds: 0.1
-        nextMotionName: 
-    animationData:
-      dataList: []
-    extensionPrefabs:
-    - {fileID: 5450664224324214380, guid: a4249328f81d12b44ab72ea7e1fb3b98, type: 3}
-  enemySpawnData:
-    attackData:
-      baseStrength: 0
-      motionDataList: []
-    animationData:
-      dataList: []
-    extensionPrefabs: []
   debugData: {fileID: 11400000, guid: d9d5568935b530943a57c8f923d781bb, type: 2}
-  playerInputControllerPrefab: {fileID: 5100394250428141442, guid: 6d1edebb2d4fef34bb8650676303d165, type: 3}
   playerSpawnPoint: {fileID: 915631917}
   enemySpawnPoint: {fileID: 952618026}
 --- !u!1 &1344185545

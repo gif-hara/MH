@@ -31,6 +31,9 @@ namespace MH
             {
                 enemies.Add(actor);
             }
+
+            MessageBroker.GetPublisher<ActorEvents.AddedActor>()
+                .Publish(ActorEvents.AddedActor.Get(actor));
         }
 
         public static void RemoveActor(Actor actor)
@@ -45,6 +48,9 @@ namespace MH
             {
                 enemies.Remove(actor);
             }
+
+            MessageBroker.GetPublisher<ActorEvents.RemovedActor>()
+                .Publish(ActorEvents.RemovedActor.Get(actor));
         }
     }
 }

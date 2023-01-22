@@ -29,7 +29,8 @@ namespace MH
             builder.AddMessageBroker<Actor, BeginAttack>();
             builder.AddMessageBroker<Actor, EndAttack>();
             builder.AddMessageBroker<Actor, AcceptNextState>();
-            builder.AddMessageBroker<SpawnedPlayer>();
+            builder.AddMessageBroker<AddedActor>();
+            builder.AddMessageBroker<RemovedActor>();
             builder.AddMessageBroker<Actor, ValidationAttackCollider>();
             builder.AddMessageBroker<Actor, InvalidationAttackCollider>();
             builder.AddMessageBroker<HitAttack>();
@@ -164,14 +165,25 @@ namespace MH
         {}
 
         /// <summary>
-        /// プレイヤーが生成された際のメッセージ
+        /// <see cref="Actor"/>が追加された際のメッセージ
         /// </summary>
-        public sealed class SpawnedPlayer : Message<SpawnedPlayer, Actor>
+        public sealed class AddedActor : Message<AddedActor, Actor>
         {
             /// <summary>
-            /// 生成されたプレイヤー
+            /// 追加された<see cref="Actor"/>
             /// </summary>
-            public Actor Player => this.Param1;
+            public Actor Actor => this.Param1;
+        }
+
+        /// <summary>
+        /// <see cref="Actor"/>が削除された際のメッセージ
+        /// </summary>
+        public sealed class RemovedActor : Message<RemovedActor, Actor>
+        {
+            /// <summary>
+            /// 削除された<see cref="Actor"/>
+            /// </summary>
+            public Actor Actor => this.Param1;
         }
 
         /// <summary>

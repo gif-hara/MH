@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using MessagePipe;
 using MH.NetworkSystems;
 using UnityEngine;
 
@@ -23,6 +25,23 @@ namespace MH.SceneControllers
         private async void Start()
         {
             await BootSystem.IsReady;
+
+            var ct = this.GetCancellationTokenOnDestroy();
+
+            MessageBroker.GetSubscriber<ActorEvents.AddedActor>()
+                .Subscribe(x =>
+                {
+                    if (x.Actor.StatusController.BaseStatus.actorType == Define.ActorType.Player)
+                    {
+                        x.Actor.PostureController.Warp(this.playerSpawnPoint.position);
+                    }
+                })
+                .AddTo(ct);
+
+            foreach (var player in ActorManager.Players)
+            {
+                player.PostureController.Warp(this.playerSpawnPoint.position);
+            }
 
             if (!MultiPlayManager.IsConnecting)
             {
