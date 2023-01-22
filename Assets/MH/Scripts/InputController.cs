@@ -3,7 +3,7 @@ namespace MH
     /// <summary>
     ///
     /// </summary>
-    public sealed class InputController
+    public static class InputController
     {
         public static MHInputActions InputActions { private set; get; }
 
