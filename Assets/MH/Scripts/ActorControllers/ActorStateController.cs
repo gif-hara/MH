@@ -1,7 +1,7 @@
 using MessagePipe;
 using UnityEngine.Assertions;
 
-namespace MH
+namespace MH.ActorControllers
 {
     /// <summary>
     ///

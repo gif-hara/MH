@@ -1,6 +1,6 @@
 using StandardAssets.Characters.Physics;
 
-namespace MH
+namespace MH.ActorControllers
 {
     /// <summary>
     /// <see cref="Actor"/>の依存性を注入するインターフェイス

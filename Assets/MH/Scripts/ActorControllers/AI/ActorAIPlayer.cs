@@ -7,7 +7,7 @@ using MessagePipe;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace MH
+namespace MH.ActorControllers
 {
     /// <summary>
     ///

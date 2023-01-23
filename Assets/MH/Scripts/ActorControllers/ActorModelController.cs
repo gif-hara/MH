@@ -1,4 +1,4 @@
-namespace MH
+namespace MH.ActorControllers
 {
     /// <summary>
     /// <see cref="Actor"/>のモデルを制御するクラス

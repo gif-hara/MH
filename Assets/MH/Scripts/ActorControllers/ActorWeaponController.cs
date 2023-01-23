@@ -4,7 +4,7 @@ using System.Linq;
 using MessagePipe;
 using UnityEngine;
 
-namespace MH
+namespace MH.ActorControllers
 {
     /// <summary>
     /// <see cref="Actor"/>の武器を制御するクラス

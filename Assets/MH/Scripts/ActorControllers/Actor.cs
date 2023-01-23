@@ -1,7 +1,7 @@
 using StandardAssets.Characters.Physics;
 using UnityEngine;
 
-namespace MH
+namespace MH.ActorControllers
 {
     public class Actor : MonoBehaviour, IActorDependencyInjector
     {

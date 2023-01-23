@@ -2,7 +2,7 @@ using System;
 using DG.Tweening;
 using UnityEngine;
 
-namespace MH
+namespace MH.ActorControllers
 {
     /// <summary>
     ///

@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 
-namespace MH
+namespace MH.ActorControllers
 {
     /// <summary>
     /// </summary>

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
+using MH.ActorControllers;
 using UnityEngine;
 
 namespace MH
@@ -17,14 +18,6 @@ namespace MH
         [SerializeField]
         private List<TargetData> targetDataList;
 
-        [Serializable]
-        public class TargetData
-        {
-            public ParticleSystem target;
-
-            public bool isPlay;
-        }
-        
         private void Start()
         {
             MessageBroker.GetSubscriber<Actor, TValue>()
@@ -43,6 +36,14 @@ namespace MH
                     }
                 })
                 .AddTo(this.GetCancellationTokenOnDestroy());
+        }
+
+        [Serializable]
+        public class TargetData
+        {
+            public ParticleSystem target;
+
+            public bool isPlay;
         }
     }
 }

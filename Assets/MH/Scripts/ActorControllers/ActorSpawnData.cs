@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MH
+namespace MH.ActorControllers
 {
     /// <summary>
     /// <see cref="Actor"/>を生成するために必要なデータ

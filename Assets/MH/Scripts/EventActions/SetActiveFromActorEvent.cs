@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
+using MH.ActorControllers;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace MH
 {
@@ -18,14 +18,6 @@ namespace MH
         [SerializeField]
         private List<TargetData> targetDataList;
 
-        [Serializable]
-        public class TargetData
-        {
-            public GameObject target;
-
-            public bool isActive;
-        }
-        
         private void Start()
         {
             MessageBroker.GetSubscriber<Actor, TValue>()
@@ -37,6 +29,14 @@ namespace MH
                     }
                 })
                 .AddTo(this.GetCancellationTokenOnDestroy());
+        }
+
+        [Serializable]
+        public class TargetData
+        {
+            public GameObject target;
+
+            public bool isActive;
         }
     }
 }

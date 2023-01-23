@@ -1,7 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 
-namespace MH
+namespace MH.ActorControllers
 {
     /// <summary>
     /// <see cref="Actor"/>の時間を制御するクラス

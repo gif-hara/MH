@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MH
+namespace MH.ActorControllers
 {
     /// <summary>
     /// <see cref="Actor"/>の攻撃する際に必要なデータ
@@ -13,14 +13,14 @@ namespace MH
         /// 基本攻撃力
         /// </summary>
         public int baseStrength;
-        
+
         public List<MotionData> motionDataList;
 
         [Serializable]
         public class MotionData
         {
             public string motionName;
-            
+
             public AnimationBlendData animationBlendData;
 
             /// <summary>

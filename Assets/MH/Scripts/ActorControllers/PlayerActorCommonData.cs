@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace MH
+namespace MH.ActorControllers
 {
     /// <summary>
     /// プレイヤーが操作する<see cref="Actor"/>の基本データを持つクラス

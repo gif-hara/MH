@@ -5,7 +5,7 @@ using MessagePipe;
 using StandardAssets.Characters.Physics;
 using UnityEngine;
 
-namespace MH
+namespace MH.ActorControllers
 {
     /// <summary>
     /// <see cref="Actor"/>の姿勢を制御するクラス

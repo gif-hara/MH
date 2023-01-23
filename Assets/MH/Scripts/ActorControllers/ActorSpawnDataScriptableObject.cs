@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace MH
+namespace MH.ActorControllers
 {
     /// <summary>
     /// <see cref="ActorSpawnData"/>を持つ<see cref="ScriptableObject"/>

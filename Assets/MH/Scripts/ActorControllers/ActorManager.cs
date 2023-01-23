@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace MH
+namespace MH.ActorControllers
 {
     /// <summary>
     ///

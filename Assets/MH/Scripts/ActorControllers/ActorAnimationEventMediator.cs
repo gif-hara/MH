@@ -1,9 +1,7 @@
-using System;
 using UnityEngine;
 using UnityEngine.Assertions;
-using Object = System.Object;
 
-namespace MH
+namespace MH.ActorControllers
 {
     /// <summary>
     /// アニメーションイベントと<see cref="Actor"/>を繋ぎこむクラス
@@ -14,7 +12,7 @@ namespace MH
         private Actor actor;
 
         private Animator animator;
-        
+
         private void Start()
         {
             this.animator = this.GetComponent<Animator>();
@@ -81,7 +79,7 @@ namespace MH
                 .Publish(this.actor, ActorEvents.InvalidationAttackCollider.Get(colliderName));
         }
 
-        public void RequestSetForce(UnityEngine.Object obj)
+        public void RequestSetForce(Object obj)
         {
             var scriptableVector3 = (ScriptableVector3)obj;
             Assert.IsNotNull(scriptableVector3);
