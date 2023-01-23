@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using MH.ActorControllers;
 using MH.UISystems;
 using UnityEngine;
 
@@ -23,7 +24,8 @@ namespace MH
                 SetupMessageBrokerAsync(),
                 UIManager.SetupAsync(),
                 SetupNetworkSystemAsync(),
-                SetupInputActionAsync()
+                SetupInputActionAsync(),
+                PlayerActorCommonData.SetupAsync()
                 );
 
             IsReady = UniTask.CompletedTask;

@@ -19,8 +19,6 @@ namespace MH.ActorControllers
         /// </summary>
         private readonly DisposableBagBuilder advancedEntryScope = DisposableBag.CreateBuilder();
 
-        private readonly PlayerActorCommonData playerActorCommonData;
-
         private Actor actor;
 
         private CinemachineComposer cinemachineComposer;
@@ -30,11 +28,6 @@ namespace MH.ActorControllers
         private Vector3 lastRotation;
 
         private CinemachineOrbitalTransposer orbitalTransposer;
-
-        public ActorAIPlayer(PlayerActorCommonData playerActorCommonData)
-        {
-            this.playerActorCommonData = playerActorCommonData;
-        }
 
         public void Attach(Actor actor)
         {
@@ -49,6 +42,7 @@ namespace MH.ActorControllers
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
 
+            var playerActorCommonData = PlayerActorCommonData.Instance;
             var inputActions = InputController.InputActions;
             inputActions.Player.Dodge.performed += PerformedDodge;
             inputActions.Player.AttackWeak.performed += PerformedAttackWeak;
@@ -71,7 +65,7 @@ namespace MH.ActorControllers
                     if (velocity.sqrMagnitude >= 0.01f)
                     {
                         MessageBroker.GetPublisher<Actor, ActorEvents.RequestMove>()
-                            .Publish(actor, ActorEvents.RequestMove.Get(velocity * this.playerActorCommonData.MoveSpeed * deltaTime));
+                            .Publish(actor, ActorEvents.RequestMove.Get(velocity * playerActorCommonData.MoveSpeed * deltaTime));
                         lastRotation = velocity;
                     }
                     if (lastRotation.sqrMagnitude >= 0.01f)
@@ -79,27 +73,27 @@ namespace MH.ActorControllers
                         var rotation = Quaternion.Lerp(
                             actor.transform.localRotation,
                             Quaternion.LookRotation(lastRotation),
-                            this.playerActorCommonData.RotationSpeed * deltaTime
+                            playerActorCommonData.RotationSpeed * deltaTime
                             );
                         MessageBroker.GetPublisher<Actor, ActorEvents.RequestRotation>()
                             .Publish(actor, ActorEvents.RequestRotation.Get(rotation));
                     }
 
                     // カメラのスクリーン値の更新
-                    var screenVelocity = input.x * this.playerActorCommonData.ScreenMoveSpeed * deltaTime;
+                    var screenVelocity = input.x * playerActorCommonData.ScreenMoveSpeed * deltaTime;
                     var screenX = Mathf.Clamp(
                         cinemachineComposer.m_ScreenX + screenVelocity,
-                        this.playerActorCommonData.ScreenXMin,
-                        this.playerActorCommonData.ScreenXMax
+                        playerActorCommonData.ScreenXMin,
+                        playerActorCommonData.ScreenXMax
                         );
                     cinemachineComposer.m_ScreenX = screenX;
 
                     // カメラのY方向の回転処理
                     input = InputController.InputActions.Player.Look.ReadValue<Vector2>();
                     var offsetY = Mathf.Clamp(
-                        orbitalTransposer.m_FollowOffset.y + input.y * this.playerActorCommonData.CameraMoveSpeed.y * deltaTime,
-                        this.playerActorCommonData.FollowYMin,
-                        this.playerActorCommonData.FollowYMax
+                        orbitalTransposer.m_FollowOffset.y + input.y * playerActorCommonData.CameraMoveSpeed.y * deltaTime,
+                        playerActorCommonData.FollowYMin,
+                        playerActorCommonData.FollowYMax
                         );
                     orbitalTransposer.m_FollowOffset.y = offsetY;
                 })
@@ -110,6 +104,7 @@ namespace MH.ActorControllers
         {
             this.RegisterAdvancedEntry(() =>
             {
+                var playerActorCommonData = PlayerActorCommonData.Instance;
                 var input = InputController.InputActions.Player.Move.ReadValue<Vector2>();
                 var cameraTransform = cinemachineVirtualCamera.transform;
                 var cameraRight = Vector3.Scale(cameraTransform.right, new Vector3(1, 0, 1));
@@ -124,9 +119,9 @@ namespace MH.ActorControllers
                 var invokeData = new ActorDodgeController.InvokeData
                 {
                     direction = direction,
-                    speed = this.playerActorCommonData.DodgeSpeed,
-                    duration = this.playerActorCommonData.DodgeDuration,
-                    ease = this.playerActorCommonData.DodgeEase
+                    speed = playerActorCommonData.DodgeSpeed,
+                    duration = playerActorCommonData.DodgeDuration,
+                    ease = playerActorCommonData.DodgeEase
                 };
                 MessageBroker.GetPublisher<Actor, ActorEvents.RequestDodge>()
                     .Publish(this.actor, ActorEvents.RequestDodge.Get(invokeData));
@@ -155,11 +150,12 @@ namespace MH.ActorControllers
         {
             entryAction();
 
+            var playerActorCommonData = PlayerActorCommonData.Instance;
             this.advancedEntryScope.Clear();
             this.actor.GetAsyncUpdateTrigger()
                 .Subscribe(_ => entryAction())
                 .AddTo(this.advancedEntryScope);
-            UniTaskAsyncEnumerable.Timer(TimeSpan.FromSeconds(this.playerActorCommonData.AdvancedEntrySeconds))
+            UniTaskAsyncEnumerable.Timer(TimeSpan.FromSeconds(playerActorCommonData.AdvancedEntrySeconds))
                 .Subscribe(_ =>
                 {
                     this.advancedEntryScope.Clear();

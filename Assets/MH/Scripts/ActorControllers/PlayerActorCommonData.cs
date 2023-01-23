@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 
@@ -89,5 +90,12 @@ namespace MH.ActorControllers
         public float ScreenXMax => this.screenXMax;
 
         public float ScreenMoveSpeed => this.screenMoveSpeed;
+
+        public static PlayerActorCommonData Instance { private set; get; }
+
+        public static async UniTask SetupAsync()
+        {
+            Instance = await AssetLoader.LoadAsync<PlayerActorCommonData>("Assets/MH/DataSources/PlayerActorCommonData.asset");
+        }
     }
 }

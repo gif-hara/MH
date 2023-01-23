@@ -16,9 +16,6 @@ namespace MH.NetworkSystems
     public sealed class PlayerNetworkBehaviour : NetworkBehaviour
     {
         [SerializeField]
-        private PlayerActorCommonData playerActorCommonData;
-
-        [SerializeField]
         private ActorSpawnDataScriptableObject actorSpawnData;
 
         [SerializeField]
@@ -44,12 +41,13 @@ namespace MH.NetworkSystems
 
         public override void OnNetworkSpawn()
         {
+            var playerActorCommonData = PlayerActorCommonData.Instance;
             var ct = this.GetCancellationTokenOnDestroy();
             if (this.IsOwner)
             {
                 Instantiate(this.cameraControllerPrefab, this.transform);
                 var spawnData = this.actorSpawnData.data;
-                spawnData.actorAI = new ActorAIPlayer(this.playerActorCommonData);
+                spawnData.actorAI = new ActorAIPlayer();
                 this.actor = this.actorPrefab.Spawn(spawnData, Vector3.zero, Quaternion.identity);
                 this.actor.transform.SetParent(this.transform);
                 UniTaskAsyncEnumerable.Interval(TimeSpan.FromSeconds(0.1f))
@@ -100,17 +98,17 @@ namespace MH.NetworkSystems
                             else
                             {
                                 var sqrMagnitude = difference.sqrMagnitude;
-                                var threshold = this.playerActorCommonData.MoveSpeed * this.playerActorCommonData.MoveSpeed;
+                                var threshold = playerActorCommonData.MoveSpeed * playerActorCommonData.MoveSpeed;
                                 if (sqrMagnitude >= threshold)
                                 {
                                     var direction = difference.normalized;
                                     MessageBroker.GetPublisher<Actor, ActorEvents.RequestMove>()
-                                        .Publish(this.actor, ActorEvents.RequestMove.Get(direction * this.playerActorCommonData.MoveSpeed * this.actor.TimeController.Time.deltaTime));
+                                        .Publish(this.actor, ActorEvents.RequestMove.Get(direction * playerActorCommonData.MoveSpeed * this.actor.TimeController.Time.deltaTime));
                                 }
                                 else if (sqrMagnitude < threshold && sqrMagnitude > 0.01f)
                                 {
                                     MessageBroker.GetPublisher<Actor, ActorEvents.RequestMove>()
-                                        .Publish(this.actor, ActorEvents.RequestMove.Get(difference * this.playerActorCommonData.MoveSpeed * this.actor.TimeController.Time.deltaTime));
+                                        .Publish(this.actor, ActorEvents.RequestMove.Get(difference * playerActorCommonData.MoveSpeed * this.actor.TimeController.Time.deltaTime));
                                 }
                             }
                         }
@@ -119,7 +117,7 @@ namespace MH.NetworkSystems
                             var rotation = Quaternion.Lerp(
                                 this.actor.transform.localRotation,
                                 Quaternion.Euler(0.0f, this.networkRotationY.Value, 0.0f),
-                                this.playerActorCommonData.RotationSpeed * this.actor.TimeController.Time.deltaTime
+                                playerActorCommonData.RotationSpeed * this.actor.TimeController.Time.deltaTime
                                 );
                             MessageBroker.GetPublisher<Actor, ActorEvents.RequestRotation>()
                                 .Publish(this.actor, ActorEvents.RequestRotation.Get(rotation));
