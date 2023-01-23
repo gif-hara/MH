@@ -1,8 +1,6 @@
-using System;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 using Cysharp.Threading.Tasks.Triggers;
-using MessagePipe;
 using MH.ActorControllers;
 using Unity.Collections;
 using Unity.Netcode;
@@ -24,20 +22,15 @@ namespace MH.NetworkSystems
         [SerializeField]
         private CameraController cameraControllerPrefab;
 
-        [SerializeField]
-        private float sendPositionThreshold;
-
-        [SerializeField]
-        private float sendRotationYThreshold;
-
-        [SerializeField]
-        private float warpPositionThreshold;
-
         private readonly NetworkVariable<Vector3> networkPosition = new(Vector3.zero);
 
         private readonly NetworkVariable<float> networkRotationY = new();
 
         private Actor actor;
+
+        public Vector3 NetworkPosition => this.networkPosition.Value;
+
+        public float NetworkRotation => this.networkRotationY.Value;
 
         public override void OnNetworkSpawn()
         {
@@ -47,36 +40,9 @@ namespace MH.NetworkSystems
             {
                 Instantiate(this.cameraControllerPrefab, this.transform);
                 var spawnData = this.actorSpawnData.data;
-                spawnData.actorAI = new ActorAIPlayer();
+                spawnData.actorAI = new ActorAIPlayer(this);
                 this.actor = this.actorPrefab.Spawn(spawnData, Vector3.zero, Quaternion.identity);
                 this.actor.transform.SetParent(this.transform);
-                UniTaskAsyncEnumerable.Interval(TimeSpan.FromSeconds(0.1f))
-                    .Subscribe(_ =>
-                    {
-                        this.TrySubmitPosition();
-                        this.TrySubmitRotationY();
-                    })
-                    .AddTo(ct);
-
-                MessageBroker.GetSubscriber<Actor, ActorEvents.BeginAttack>()
-                    .Subscribe(this.actor, x =>
-                    {
-                        this.SubmitAttackMotionNameServerRpc( new FixedString32Bytes(x.MotionName));
-                    })
-                    .AddTo(ct);
-
-                MessageBroker.GetSubscriber<Actor, ActorEvents.BeginDodge>()
-                    .Subscribe(this.actor, x =>
-                    {
-                        this.SubmitBeginDodgeServerRpc(new DodgeNetworkVariable
-                        {
-                            direction = x.Data.direction,
-                            duration = x.Data.duration,
-                            ease = x.Data.ease,
-                            speed = x.Data.speed
-                        });
-                    })
-                    .AddTo(ct);
             }
             else
             {
@@ -91,14 +57,15 @@ namespace MH.NetworkSystems
                         // 座標の更新
                         {
                             var difference = this.networkPosition.Value - this.actor.transform.localPosition;
-                            if (difference.sqrMagnitude > this.warpPositionThreshold * this.warpPositionThreshold)
+                            var threshold = playerActorCommonData.WarpPositionThreshold;
+                            if (difference.sqrMagnitude > threshold * threshold)
                             {
                                 this.actor.PostureController.Warp(this.networkPosition.Value);
                             }
                             else
                             {
                                 var sqrMagnitude = difference.sqrMagnitude;
-                                var threshold = playerActorCommonData.MoveSpeed * playerActorCommonData.MoveSpeed;
+                                threshold = playerActorCommonData.MoveSpeed * playerActorCommonData.MoveSpeed;
                                 if (sqrMagnitude >= threshold)
                                 {
                                     var direction = difference.normalized;
@@ -127,23 +94,30 @@ namespace MH.NetworkSystems
             }
         }
 
-        private void TrySubmitPosition()
+        public void SubmitPosition(Vector3 newPosition)
         {
-            var distance = (this.actor.transform.localPosition - this.networkPosition.Value).sqrMagnitude;
-            if (distance > this.sendPositionThreshold * this.sendPositionThreshold)
-            {
-                this.SubmitPositionServerRpc(this.actor.transform.localPosition);
-            }
+            this.SubmitPositionServerRpc(newPosition);
         }
 
-        private void TrySubmitRotationY()
+        public void SubmitRotation(float newRotationY)
         {
-            var difference = this.networkRotationY.Value - this.actor.transform.localRotation.eulerAngles.y;
-            difference = difference < 0 ? -difference : difference;
-            if (difference > this.sendRotationYThreshold)
+            this.SubmitRotationYServerRpc(newRotationY);
+        }
+
+        public void SubmitAttackMotionName(string motionName)
+        {
+            this.SubmitAttackMotionNameServerRpc(new FixedString32Bytes(motionName));
+        }
+
+        public void SubmitBeginDodge(ActorDodgeController.InvokeData data)
+        {
+            this.SubmitBeginDodgeServerRpc(new DodgeNetworkVariable
             {
-                this.SubmitRotationYServerRpc(this.actor.transform.localRotation.eulerAngles.y);
-            }
+                direction = data.direction,
+                duration = data.duration,
+                ease = data.ease,
+                speed = data.speed
+            });
         }
 
         [ServerRpc]

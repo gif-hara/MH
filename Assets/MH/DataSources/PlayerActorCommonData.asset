@@ -24,3 +24,6 @@ MonoBehaviour:
   screenXMin: 0.4
   screenXMax: 0.6
   screenMoveSpeed: -0.2
+  sendPositionThreshold: 0.1
+  sendRotationThreshold: 1
+  warpPositionThreshold: 5

@@ -4,7 +4,9 @@ using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 using Cysharp.Threading.Tasks.Triggers;
 using MessagePipe;
+using MH.NetworkSystems;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 
 namespace MH.ActorControllers
@@ -19,6 +21,8 @@ namespace MH.ActorControllers
         /// </summary>
         private readonly DisposableBagBuilder advancedEntryScope = DisposableBag.CreateBuilder();
 
+        private readonly PlayerNetworkBehaviour playerNetworkBehaviour;
+
         private Actor actor;
 
         private CinemachineComposer cinemachineComposer;
@@ -28,6 +32,12 @@ namespace MH.ActorControllers
         private Vector3 lastRotation;
 
         private CinemachineOrbitalTransposer orbitalTransposer;
+
+        public ActorAIPlayer(PlayerNetworkBehaviour playerNetworkBehaviour)
+        {
+            this.playerNetworkBehaviour = playerNetworkBehaviour;
+            Assert.IsTrue(this.playerNetworkBehaviour.IsOwner);
+        }
 
         public void Attach(Actor actor)
         {
@@ -98,6 +108,28 @@ namespace MH.ActorControllers
                     orbitalTransposer.m_FollowOffset.y = offsetY;
                 })
                 .AddTo(ct);
+
+            UniTaskAsyncEnumerable.Interval(TimeSpan.FromSeconds(0.1f))
+                .Subscribe(_ =>
+                {
+                    this.TrySubmitPosition();
+                    this.TrySubmitRotation();
+                })
+                .AddTo(ct);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.BeginAttack>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.playerNetworkBehaviour.SubmitAttackMotionName(x.MotionName);
+                })
+                .AddTo(ct);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.BeginDodge>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.playerNetworkBehaviour.SubmitBeginDodge(x.Data);
+                })
+                .AddTo(ct);
         }
 
         private void PerformedDodge(InputAction.CallbackContext context)
@@ -161,6 +193,27 @@ namespace MH.ActorControllers
                     this.advancedEntryScope.Clear();
                 })
                 .AddTo(this.advancedEntryScope);
+        }
+
+        private void TrySubmitPosition()
+        {
+            var playerActorCommonData = PlayerActorCommonData.Instance;
+            var distance = (this.actor.transform.localPosition - this.playerNetworkBehaviour.NetworkPosition).sqrMagnitude;
+            if (distance > playerActorCommonData.SendPositionThreshold * playerActorCommonData.SendPositionThreshold)
+            {
+                this.playerNetworkBehaviour.SubmitPosition(this.actor.transform.localPosition);
+            }
+        }
+
+        private void TrySubmitRotation()
+        {
+            var playerActorCommonData = PlayerActorCommonData.Instance;
+            var difference = this.playerNetworkBehaviour.NetworkRotation - this.actor.transform.localRotation.eulerAngles.y;
+            difference = difference < 0 ? -difference : difference;
+            if (difference > playerActorCommonData.SendRotationThreshold)
+            {
+                this.playerNetworkBehaviour.SubmitRotation(this.actor.transform.localRotation.eulerAngles.y);
+            }
         }
     }
 }

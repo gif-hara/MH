@@ -67,6 +67,15 @@ namespace MH.ActorControllers
         [SerializeField]
         private float screenMoveSpeed;
 
+        [SerializeField]
+        private float sendPositionThreshold;
+
+        [SerializeField]
+        private float sendRotationThreshold;
+
+        [SerializeField]
+        private float warpPositionThreshold;
+
         public float MoveSpeed => this.moveSpeed;
 
         public float RotationSpeed => this.rotationSpeed;
@@ -90,6 +99,12 @@ namespace MH.ActorControllers
         public float ScreenXMax => this.screenXMax;
 
         public float ScreenMoveSpeed => this.screenMoveSpeed;
+
+        public float SendPositionThreshold => this.sendPositionThreshold;
+
+        public float SendRotationThreshold => this.sendRotationThreshold;
+
+        public float WarpPositionThreshold => this.warpPositionThreshold;
 
         public static PlayerActorCommonData Instance { private set; get; }
 
