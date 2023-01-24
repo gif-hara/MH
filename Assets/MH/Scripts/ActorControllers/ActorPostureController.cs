@@ -24,6 +24,8 @@ namespace MH.ActorControllers
 
         private OpenCharacterController openCharacterController;
 
+        public bool CanRotation { set; get; }
+
         void IActorController.Setup(
             Actor actor,
             IActorDependencyInjector actorDependencyInjector,
@@ -34,8 +36,7 @@ namespace MH.ActorControllers
             this.openCharacterController = actorDependencyInjector.OpenCharacterController;
 
             var ct = this.actor.GetCancellationTokenOnDestroy();
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestSetForce>()
-                .Subscribe(this.actor, x =>
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestSetForce>().Subscribe(this.actor, x =>
                 {
                     this.SetForce(x.Force);
                 })
@@ -101,6 +102,10 @@ namespace MH.ActorControllers
 
         public void Rotate(Quaternion rotation)
         {
+            if (!this.CanRotation)
+            {
+                return;
+            }
             this.actor.transform.localRotation = rotation;
         }
     }

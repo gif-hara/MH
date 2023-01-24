@@ -31,11 +31,6 @@ namespace MH.ActorControllers
         /// </summary>
         private Define.RequestAttackType nextAttackType;
 
-        /// <summary>
-        /// 攻撃時の回転処理を行えるか
-        /// </summary>
-        private bool onAttackCanRotate;
-
         private StateController<State> stateController;
 
         void IActorController.Setup(
@@ -58,6 +53,7 @@ namespace MH.ActorControllers
         private void OnEnterIdle(State previousState, DisposableBagBuilder scope)
         {
             this.actor.AnimationController.Play("Idle");
+            this.actor.PostureController.CanRotation = true;
 
             MessageBroker.GetSubscriber<Actor, ActorEvents.BeginMove>()
                 .Subscribe(this.actor, _ =>
@@ -116,6 +112,7 @@ namespace MH.ActorControllers
         private void OnEnterRun(State previousState, DisposableBagBuilder scope)
         {
             this.actor.AnimationController.Play("Run");
+            this.actor.PostureController.CanRotation = true;
 
             MessageBroker.GetSubscriber<Actor, ActorEvents.EndMove>()
                 .Subscribe(this.actor, _ =>
@@ -221,31 +218,10 @@ namespace MH.ActorControllers
 
         private void OnEnterAttack(State previousState, DisposableBagBuilder scope)
         {
-            this.onAttackCanRotate = false;
-
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestRotation>()
                 .Subscribe(this.actor, x =>
                 {
-                    if (!this.onAttackCanRotate)
-                    {
-                        return;
-                    }
-
                     this.actor.PostureController.Rotate(x.Rotation);
-                })
-                .AddTo(scope);
-
-            MessageBroker.GetSubscriber<Actor, ActorEvents.AcceptRequestRotation>()
-                .Subscribe(this.actor, _ =>
-                {
-                    this.onAttackCanRotate = true;
-                })
-                .AddTo(scope);
-
-            MessageBroker.GetSubscriber<Actor, ActorEvents.CloseRequestRotation>()
-                .Subscribe(this.actor, _ =>
-                {
-                    this.onAttackCanRotate = false;
                 })
                 .AddTo(scope);
 
@@ -320,31 +296,10 @@ namespace MH.ActorControllers
 
         private void OnEnterAttackNetwork(State prevState, DisposableBagBuilder scope)
         {
-            this.onAttackCanRotate = false;
-
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestRotation>()
                 .Subscribe(this.actor, x =>
                 {
-                    if (!this.onAttackCanRotate)
-                    {
-                        return;
-                    }
-
                     this.actor.PostureController.Rotate(x.Rotation);
-                })
-                .AddTo(scope);
-
-            MessageBroker.GetSubscriber<Actor, ActorEvents.AcceptRequestRotation>()
-                .Subscribe(this.actor, _ =>
-                {
-                    this.onAttackCanRotate = true;
-                })
-                .AddTo(scope);
-
-            MessageBroker.GetSubscriber<Actor, ActorEvents.CloseRequestRotation>()
-                .Subscribe(this.actor, _ =>
-                {
-                    this.onAttackCanRotate = false;
                 })
                 .AddTo(scope);
 

@@ -27,8 +27,7 @@ namespace MH.ActorControllers
         /// </remarks>
         public void AcceptRequestRotation()
         {
-            MessageBroker.GetPublisher<Actor, ActorEvents.AcceptRequestRotation>()
-                .Publish(this.actor, ActorEvents.AcceptRequestRotation.Get());
+            this.actor.PostureController.CanRotation = true;
         }
 
         /// <summary>
@@ -39,8 +38,7 @@ namespace MH.ActorControllers
         /// </remarks>
         public void CloseRequestRotation()
         {
-            MessageBroker.GetPublisher<Actor, ActorEvents.CloseRequestRotation>()
-                .Publish(this.actor, ActorEvents.CloseRequestRotation.Get());
+            this.actor.PostureController.CanRotation = false;
         }
 
         /// <summary>
