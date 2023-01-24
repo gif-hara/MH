@@ -30,8 +30,7 @@ namespace MH.ActorControllers
         public async void Invoke()
         {
             var rotation = Quaternion.LookRotation(this.invokeData.direction);
-            this.actor.PostureController.CanRotation = true;
-            this.actor.PostureController.Rotate(rotation);
+            this.actor.PostureController.Rotate(rotation, true);
             this.actor.PostureController.CanRotation = false;
             var tween = DOTween.To(
                     () => this.invokeData.speed,

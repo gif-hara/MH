@@ -100,9 +100,9 @@ namespace MH.ActorControllers
             this.currentGravity = Vector3.zero;
         }
 
-        public void Rotate(Quaternion rotation)
+        public void Rotate(Quaternion rotation, bool isForce = false)
         {
-            if (!this.CanRotation)
+            if (!isForce && !this.CanRotation)
             {
                 return;
             }
