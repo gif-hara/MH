@@ -67,14 +67,6 @@ namespace MH.ActorControllers
                     }
                 })
                 .AddTo(ct);
-
-            this.playerNetworkBehaviour.OnBeginAttackAsyncEnumerable()
-                .Subscribe(x =>
-                {
-                    MessageBroker.GetPublisher<Actor, ActorEvents.RequestAttackNetwork>()
-                        .Publish(this.actor, ActorEvents.RequestAttackNetwork.Get(x));
-                })
-                .AddTo(ct);
         }
     }
 }

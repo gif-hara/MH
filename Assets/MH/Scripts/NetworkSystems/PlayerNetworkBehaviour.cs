@@ -1,5 +1,3 @@
-using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.Linq;
 using MH.ActorControllers;
 using Unity.Collections;
 using Unity.Netcode;
@@ -25,15 +23,11 @@ namespace MH.NetworkSystems
 
         private readonly NetworkVariable<float> networkRotationY = new();
 
-        private readonly UniTaskCompletionSource<string> onBeginAttack = new();
-
         private Actor actor;
 
         public Vector3 NetworkPosition => this.networkPosition.Value;
 
         public float NetworkRotation => this.networkRotationY.Value;
-
-        public IUniTaskAsyncEnumerable<string> OnBeginAttackAsyncEnumerable() => this.onBeginAttack.Task.ToUniTaskAsyncEnumerable();
 
         public override void OnNetworkSpawn()
         {
@@ -102,7 +96,8 @@ namespace MH.NetworkSystems
             {
                 return;
             }
-            this.onBeginAttack.TrySetResult(motionName.Value);
+            MessageBroker.GetPublisher<Actor, ActorEvents.RequestAttackNetwork>()
+                .Publish(this.actor, ActorEvents.RequestAttackNetwork.Get(motionName.Value));
         }
 
         [ServerRpc]
