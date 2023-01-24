@@ -1,6 +1,5 @@
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using Cysharp.Threading.Tasks.Triggers;
 using MH.ActorControllers;
 using Unity.Collections;
 using Unity.Netcode;
@@ -26,72 +25,30 @@ namespace MH.NetworkSystems
 
         private readonly NetworkVariable<float> networkRotationY = new();
 
+        private readonly UniTaskCompletionSource<string> onBeginAttack = new();
+
         private Actor actor;
 
         public Vector3 NetworkPosition => this.networkPosition.Value;
 
         public float NetworkRotation => this.networkRotationY.Value;
 
+        public IUniTaskAsyncEnumerable<string> OnBeginAttackAsyncEnumerable() => this.onBeginAttack.Task.ToUniTaskAsyncEnumerable();
+
         public override void OnNetworkSpawn()
         {
-            var playerActorCommonData = PlayerActorCommonData.Instance;
-            var ct = this.GetCancellationTokenOnDestroy();
+            var spawnData = this.actorSpawnData.data;
             if (this.IsOwner)
             {
-                Instantiate(this.cameraControllerPrefab, this.transform);
-                var spawnData = this.actorSpawnData.data;
                 spawnData.actorAI = new ActorAIPlayer(this);
-                this.actor = this.actorPrefab.Spawn(spawnData, Vector3.zero, Quaternion.identity);
-                this.actor.transform.SetParent(this.transform);
+                Instantiate(this.cameraControllerPrefab, this.transform);
             }
             else
             {
-                var spawnData = this.actorSpawnData.data;
-                spawnData.actorAI = null;
-                this.actor = this.actorPrefab.Spawn(spawnData, Vector3.zero, Quaternion.identity);
-                this.actor.transform.SetParent(this.transform);
-
-                this.GetAsyncUpdateTrigger()
-                    .Subscribe(_ =>
-                    {
-                        // 座標の更新
-                        {
-                            var difference = this.networkPosition.Value - this.actor.transform.localPosition;
-                            var threshold = playerActorCommonData.WarpPositionThreshold;
-                            if (difference.sqrMagnitude > threshold * threshold)
-                            {
-                                this.actor.PostureController.Warp(this.networkPosition.Value);
-                            }
-                            else
-                            {
-                                var sqrMagnitude = difference.sqrMagnitude;
-                                threshold = playerActorCommonData.MoveSpeed * playerActorCommonData.MoveSpeed;
-                                if (sqrMagnitude >= threshold)
-                                {
-                                    var direction = difference.normalized;
-                                    MessageBroker.GetPublisher<Actor, ActorEvents.RequestMove>()
-                                        .Publish(this.actor, ActorEvents.RequestMove.Get(direction * playerActorCommonData.MoveSpeed * this.actor.TimeController.Time.deltaTime));
-                                }
-                                else if (sqrMagnitude < threshold && sqrMagnitude > 0.01f)
-                                {
-                                    MessageBroker.GetPublisher<Actor, ActorEvents.RequestMove>()
-                                        .Publish(this.actor, ActorEvents.RequestMove.Get(difference * playerActorCommonData.MoveSpeed * this.actor.TimeController.Time.deltaTime));
-                                }
-                            }
-                        }
-                        // 回転の更新
-                        {
-                            var rotation = Quaternion.Lerp(
-                                this.actor.transform.localRotation,
-                                Quaternion.Euler(0.0f, this.networkRotationY.Value, 0.0f),
-                                playerActorCommonData.RotationSpeed * this.actor.TimeController.Time.deltaTime
-                                );
-                            MessageBroker.GetPublisher<Actor, ActorEvents.RequestRotation>()
-                                .Publish(this.actor, ActorEvents.RequestRotation.Get(rotation));
-                        }
-                    })
-                    .AddTo(ct);
+                spawnData.actorAI = new ActorAIGhostPlayer(this);
             }
+            this.actor = this.actorPrefab.Spawn(spawnData, Vector3.zero, Quaternion.identity);
+            this.actor.transform.SetParent(this.transform);
         }
 
         public void SubmitPosition(Vector3 newPosition)
@@ -145,8 +102,7 @@ namespace MH.NetworkSystems
             {
                 return;
             }
-            MessageBroker.GetPublisher<Actor, ActorEvents.RequestAttackNetwork>()
-                .Publish(this.actor, ActorEvents.RequestAttackNetwork.Get(motionName.Value));
+            this.onBeginAttack.TrySetResult(motionName.Value);
         }
 
         [ServerRpc]
