@@ -96,8 +96,8 @@ namespace MH.NetworkSystems
             {
                 return;
             }
-            MessageBroker.GetPublisher<Actor, ActorEvents.RequestAttackNetwork>()
-                .Publish(this.actor, ActorEvents.RequestAttackNetwork.Get(motionName.Value));
+            MessageBroker.GetPublisher<Actor, ActorEvents.RequestUniqueMotion>()
+                .Publish(this.actor, ActorEvents.RequestUniqueMotion.Get(motionName.Value));
         }
 
         [ServerRpc]

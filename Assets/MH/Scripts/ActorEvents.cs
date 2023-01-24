@@ -32,6 +32,7 @@ namespace MH
             builder.AddMessageBroker<Actor, InvalidationAttackCollider>();
             builder.AddMessageBroker<HitAttack>();
             builder.AddMessageBroker<Actor, RequestSetForce>();
+            builder.AddMessageBroker<Actor, RequestUniqueMotion>();
         }
 
         /// <summary>
@@ -185,6 +186,17 @@ namespace MH
             /// 衝撃値
             /// </summary>
             public Vector3 Force => this.Param1;
+        }
+
+        /// <summary>
+        /// ユニークモーションの再生をリクエストするメッセージ
+        /// </summary>
+        public sealed class RequestUniqueMotion : Message<RequestUniqueMotion, string>
+        {
+            /// <summary>
+            /// モーション名
+            /// </summary>
+            public string MotionName => this.Param1;
         }
     }
 }

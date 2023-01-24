@@ -80,14 +80,13 @@ namespace MH.ActorControllers
         {
             Assert.AreNotEqual(motionName, "");
             this.currentMotionData = this.motionData[motionName];
-            var animationBlendData = this.currentMotionData.animationBlendData;
 
             try
             {
                 MessageBroker.GetPublisher<Actor, ActorEvents.BeginAttack>()
                     .Publish(actor, ActorEvents.BeginAttack.Get(motionName));
 
-                await actor.AnimationController.PlayAsync(animationBlendData);
+                await actor.AnimationController.PlayAsync(motionName);
 
                 Reset();
                 MessageBroker.GetPublisher<Actor, ActorEvents.EndAttack>()

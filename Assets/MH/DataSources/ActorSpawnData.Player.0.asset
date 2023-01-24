@@ -62,5 +62,29 @@ MonoBehaviour:
         blendData:
           animationClip: {fileID: 7400000, guid: bfb3dc0778d06534d9f67ed90d08e637, type: 2}
           blendSeconds: 0.1
+      - name: WeakAttack.0
+        blendData:
+          animationClip: {fileID: 7400000, guid: f3b2dc672b635c94ca44ea5840839b9b, type: 2}
+          blendSeconds: 0.05
+      - name: WeakAttack.1
+        blendData:
+          animationClip: {fileID: 7400000, guid: 21cf87df0bf7f844fa897953d084176d, type: 2}
+          blendSeconds: 0.05
+      - name: WeakAttack.2
+        blendData:
+          animationClip: {fileID: 7400000, guid: ac13d65b24a4b26439ad3278062a88ed, type: 2}
+          blendSeconds: 0.05
+      - name: WeakAttack.3
+        blendData:
+          animationClip: {fileID: 7400000, guid: 51f48ccbbd9b4b94fbe0dc29a04ee6c6, type: 2}
+          blendSeconds: 0.05
+      - name: DodgeAttack
+        blendData:
+          animationClip: {fileID: 7400000, guid: 7d8ec17e9f150584b9546a02ae167aa4, type: 2}
+          blendSeconds: 0.05
+      - name: StrongAttack.0
+        blendData:
+          animationClip: {fileID: 7400000, guid: d1634fb508b311b4e97d1f627670eda6, type: 2}
+          blendSeconds: 0.05
     extensionPrefabs:
     - {fileID: 5450664224324214380, guid: a4249328f81d12b44ab72ea7e1fb3b98, type: 3}

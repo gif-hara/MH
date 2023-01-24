@@ -1,3 +1,5 @@
+using System;
+using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine.Assertions;
 
@@ -15,8 +17,7 @@ namespace MH.ActorControllers
             Run,
             Dodge,
             Attack,
-
-            AttackNetwork,
+            UniqueMotion,
         }
 
         private Actor actor;
@@ -33,6 +34,8 @@ namespace MH.ActorControllers
 
         private StateController<State> stateController;
 
+        private string uniqueMotionName;
+
         void IActorController.Setup(
             Actor actor,
             IActorDependencyInjector actorDependencyInjector,
@@ -45,7 +48,15 @@ namespace MH.ActorControllers
             this.stateController.Set(State.Run, this.OnEnterRun, null);
             this.stateController.Set(State.Dodge, this.OnEnterDodge, null);
             this.stateController.Set(State.Attack, this.OnEnterAttack, this.OnExitAttack);
-            this.stateController.Set(State.AttackNetwork, this.OnEnterAttackNetwork, null);
+            this.stateController.Set(State.UniqueMotion, this.OnEnterUniqueMotion, null);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestUniqueMotion>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.uniqueMotionName = x.MotionName;
+                    this.stateController.ChangeRequest(State.UniqueMotion);
+                })
+                .AddTo(this.actor.GetCancellationTokenOnDestroy());
 
             this.stateController.ChangeRequest(State.Idle);
         }
@@ -72,14 +83,6 @@ namespace MH.ActorControllers
                 {
                     this.nextAttackType = x.AttackType;
                     this.stateController.ChangeRequest(State.Attack);
-                })
-                .AddTo(scope);
-
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttackNetwork>()
-                .Subscribe(this.actor, x =>
-                {
-                    this.networkAttackMotionName = x.MotionName;
-                    this.stateController.ChangeRequest(State.AttackNetwork);
                 })
                 .AddTo(scope);
 
@@ -118,14 +121,6 @@ namespace MH.ActorControllers
                 {
                     this.nextAttackType = x.AttackType;
                     this.stateController.ChangeRequest(State.Attack);
-                })
-                .AddTo(scope);
-
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttackNetwork>()
-                .Subscribe(this.actor, x =>
-                {
-                    this.networkAttackMotionName = x.MotionName;
-                    this.stateController.ChangeRequest(State.AttackNetwork);
                 })
                 .AddTo(scope);
 
@@ -168,14 +163,6 @@ namespace MH.ActorControllers
                 .Subscribe(this.actor, _ =>
                 {
                     this.stateController.ChangeRequest(State.Idle);
-                })
-                .AddTo(scope);
-
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttackNetwork>()
-                .Subscribe(this.actor, x =>
-                {
-                    this.networkAttackMotionName = x.MotionName;
-                    this.stateController.ChangeRequest(State.AttackNetwork);
                 })
                 .AddTo(scope);
 
@@ -261,32 +248,21 @@ namespace MH.ActorControllers
             this.actor.AttackController.Reset();
         }
 
-        private void OnEnterAttackNetwork(State prevState, DisposableBagBuilder scope)
+        private async void OnEnterUniqueMotion(State prevState, DisposableBagBuilder scope)
         {
-            MessageBroker.GetSubscriber<Actor, ActorEvents.EndAttack>()
-                .Subscribe(this.actor, _ =>
-                {
-                    this.stateController.ChangeRequest(State.Idle);
-                })
-                .AddTo(scope);
-
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttackNetwork>()
-                .Subscribe(this.actor, x =>
-                {
-                    this.networkAttackMotionName = x.MotionName;
-                    this.stateController.ChangeRequest(State.AttackNetwork);
-                })
-                .AddTo(scope);
-
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodgeNetwork>()
-                .Subscribe(this.actor, x =>
-                {
-                    this.actor.DodgeController.Ready(x.Data);
-                    this.stateController.ChangeRequest(State.Dodge);
-                })
-                .AddTo(scope);
-
-            this.actor.AttackController.Invoke(this.networkAttackMotionName);
+            try
+            {
+                await this.actor.AnimationController.PlayAsync(this.uniqueMotionName);
+                this.stateController.ChangeRequest(State.Idle);
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }

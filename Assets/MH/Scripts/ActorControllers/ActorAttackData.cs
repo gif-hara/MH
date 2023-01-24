@@ -21,8 +21,6 @@ namespace MH.ActorControllers
         {
             public string motionName;
 
-            public AnimationBlendData animationBlendData;
-
             /// <summary>
             /// 次に再生できるモーションの名前
             /// </summary>
