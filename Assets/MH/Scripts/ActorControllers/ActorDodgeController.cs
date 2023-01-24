@@ -36,7 +36,10 @@ namespace MH.ActorControllers
                     () => this.invokeData.speed,
                     x =>
                     {
-                        this.actor.PostureController.Move(this.invokeData.direction * x * this.actor.TimeController.Time.deltaTime);
+                        this.actor.PostureController.Move(
+                            this.invokeData.direction * x * this.actor.TimeController.Time.deltaTime,
+                            true
+                            );
                     },
                     0.0f,
                     this.invokeData.duration

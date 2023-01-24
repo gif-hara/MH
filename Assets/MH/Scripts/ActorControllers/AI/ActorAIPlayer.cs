@@ -74,8 +74,7 @@ namespace MH.ActorControllers
                     var velocity = (rightVelocity + forwardVelocity).normalized;
                     if (velocity.sqrMagnitude >= 0.01f)
                     {
-                        MessageBroker.GetPublisher<Actor, ActorEvents.RequestMove>()
-                            .Publish(actor, ActorEvents.RequestMove.Get(velocity * playerActorCommonData.MoveSpeed * deltaTime));
+                        this.actor.PostureController.Move(velocity * playerActorCommonData.MoveSpeed * deltaTime);
                         lastRotation = velocity;
                     }
                     if (lastRotation.sqrMagnitude >= 0.01f)

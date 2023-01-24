@@ -3229,14 +3229,21 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0
-    functionName: CloseRequestRotation
+    functionName: RotationReject
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0
+    functionName: MoveReject
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.11666667
-    functionName: AcceptRequestRotation
+    functionName: RotationAccept
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -3256,15 +3263,15 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.28333333
-    functionName: AcceptNextState
+  - time: 0.26666668
+    functionName: RotationReject
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.36666667
-    functionName: CloseRequestRotation
+  - time: 0.28333333
+    functionName: AcceptNextState
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

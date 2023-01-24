@@ -24,7 +24,9 @@ namespace MH.ActorControllers
 
         private OpenCharacterController openCharacterController;
 
-        public bool CanRotation { set; get; }
+        public bool CanRotation { set; get; } = true;
+
+        public bool CanMove { set; get; } = true;
 
         void IActorController.Setup(
             Actor actor,
@@ -79,8 +81,13 @@ namespace MH.ActorControllers
                 .AddTo(ct);
         }
 
-        public void Move(Vector3 moveVector)
+        public void Move(Vector3 moveVector, bool isForce = false)
         {
+            if (!isForce && !this.CanMove)
+            {
+                return;
+            }
+
             this.currentMoveVector += moveVector;
         }
 

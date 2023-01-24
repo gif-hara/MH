@@ -17,7 +17,6 @@ namespace MH
         {
             builder.AddMessageBroker<Actor, BeginMove>();
             builder.AddMessageBroker<Actor, EndMove>();
-            builder.AddMessageBroker<Actor, RequestMove>();
             builder.AddMessageBroker<Actor, RequestDodge>();
             builder.AddMessageBroker<Actor, RequestDodgeNetwork>();
             builder.AddMessageBroker<Actor, BeginDodge>();
@@ -46,17 +45,6 @@ namespace MH
         /// </summary>
         public sealed class EndMove : Message<EndMove>
         {}
-
-        /// <summary>
-        /// 移動のリクエストを行うメッセージ
-        /// </summary>
-        public sealed class RequestMove : Message<RequestMove, Vector3>
-        {
-            /// <summary>
-            /// 移動量
-            /// </summary>
-            public Vector3 Velocity => this.Param1;
-        }
 
         /// <summary>
         /// 回避のリクエストを行うメッセージ

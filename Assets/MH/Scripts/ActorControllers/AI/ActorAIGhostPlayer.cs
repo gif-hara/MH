@@ -47,13 +47,11 @@ namespace MH.ActorControllers
                             if (sqrMagnitude >= threshold)
                             {
                                 var direction = difference.normalized;
-                                MessageBroker.GetPublisher<Actor, ActorEvents.RequestMove>()
-                                    .Publish(this.actor, ActorEvents.RequestMove.Get(direction * playerActorCommonData.MoveSpeed * this.actor.TimeController.Time.deltaTime));
+                                this.actor.PostureController.Move(direction * playerActorCommonData.MoveSpeed * this.actor.TimeController.Time.deltaTime);
                             }
                             else if (sqrMagnitude < threshold && sqrMagnitude > 0.01f)
                             {
-                                MessageBroker.GetPublisher<Actor, ActorEvents.RequestMove>()
-                                    .Publish(this.actor, ActorEvents.RequestMove.Get(difference * playerActorCommonData.MoveSpeed * this.actor.TimeController.Time.deltaTime));
+                                this.actor.PostureController.Move(difference * playerActorCommonData.MoveSpeed * this.actor.TimeController.Time.deltaTime);
                             }
                         }
                     }

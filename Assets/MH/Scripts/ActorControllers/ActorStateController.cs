@@ -59,13 +59,6 @@ namespace MH.ActorControllers
                 })
                 .AddTo(scope);
 
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestMove>()
-                .Subscribe(this.actor, x =>
-                {
-                    this.actor.PostureController.Move(x.Velocity);
-                })
-                .AddTo(scope);
-
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
                 .Subscribe(this.actor, x =>
                 {
@@ -99,6 +92,7 @@ namespace MH.ActorControllers
                 .AddTo(scope);
 
             this.actor.AnimationController.Play("Idle");
+            this.actor.PostureController.CanMove = true;
             this.actor.PostureController.CanRotation = true;
         }
 
@@ -108,13 +102,6 @@ namespace MH.ActorControllers
                 .Subscribe(this.actor, _ =>
                 {
                     this.stateController.ChangeRequest(State.Idle);
-                })
-                .AddTo(scope);
-
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestMove>()
-                .Subscribe(this.actor, x =>
-                {
-                    this.actor.PostureController.Move(x.Velocity);
                 })
                 .AddTo(scope);
 
@@ -151,6 +138,7 @@ namespace MH.ActorControllers
                 .AddTo(scope);
 
             this.actor.AnimationController.Play("Run");
+            this.actor.PostureController.CanMove = true;
             this.actor.PostureController.CanRotation = true;
         }
 

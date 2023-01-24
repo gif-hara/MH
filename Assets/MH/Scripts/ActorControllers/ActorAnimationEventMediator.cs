@@ -20,25 +20,35 @@ namespace MH.ActorControllers
         }
 
         /// <summary>
-        /// 回転のリクエストの受付を開始する
+        /// 回転可能な状態にする
         /// </summary>
         /// <remarks>
         /// この関数はアニメーションイベントで実行されます
         /// </remarks>
-        public void AcceptRequestRotation()
+        public void RotationAccept()
         {
             this.actor.PostureController.CanRotation = true;
         }
 
         /// <summary>
-        /// 回転のリクエストの受付を終了する
+        /// 回転不可能な状態にする
         /// </summary>
         /// <remarks>
         /// この関数はアニメーションイベントで実行されます
         /// </remarks>
-        public void CloseRequestRotation()
+        public void RotationReject()
         {
             this.actor.PostureController.CanRotation = false;
+        }
+
+        public void MoveAccept()
+        {
+            this.actor.PostureController.CanMove = true;
+        }
+
+        public void MoveReject()
+        {
+            this.actor.PostureController.CanMove = false;
         }
 
         /// <summary>

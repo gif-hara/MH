@@ -21,7 +21,7 @@ namespace MH.ActorControllers
 
         private void OnAnimatorMove()
         {
-            this.actor.PostureController.Move(this.animator.deltaPosition);
+            this.actor.PostureController.Move(this.animator.deltaPosition, true);
         }
     }
 }
