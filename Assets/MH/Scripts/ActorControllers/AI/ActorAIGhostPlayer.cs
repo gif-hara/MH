@@ -76,6 +76,14 @@ namespace MH.ActorControllers
                         .Publish(this.actor, ActorEvents.RequestDodge.Get(x.Data, true));
                 })
                 .AddTo(ct);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.NetworkRequestUniqueMotion>()
+                .Subscribe(this.actor, x =>
+                {
+                    MessageBroker.GetPublisher<Actor, ActorEvents.RequestUniqueMotion>()
+                        .Publish(this.actor, ActorEvents.RequestUniqueMotion.Get(x.MotionName));
+                })
+                .AddTo(ct);
         }
     }
 }

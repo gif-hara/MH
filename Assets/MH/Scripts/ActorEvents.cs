@@ -31,6 +31,7 @@ namespace MH
             builder.AddMessageBroker<HitAttack>();
             builder.AddMessageBroker<Actor, RequestSetForce>();
             builder.AddMessageBroker<Actor, RequestUniqueMotion>();
+            builder.AddMessageBroker<Actor, NetworkRequestUniqueMotion>();
         }
 
         /// <summary>
@@ -187,6 +188,17 @@ namespace MH
         /// ユニークモーションの再生をリクエストするメッセージ
         /// </summary>
         public sealed class RequestUniqueMotion : Message<RequestUniqueMotion, string>
+        {
+            /// <summary>
+            /// モーション名
+            /// </summary>
+            public string MotionName => this.Param1;
+        }
+
+        /// <summary>
+        /// ネットワーク上でユニークモーションの再生をリクエストするメッセージ
+        /// </summary>
+        public sealed class NetworkRequestUniqueMotion : Message<NetworkRequestUniqueMotion, string>
         {
             /// <summary>
             /// モーション名

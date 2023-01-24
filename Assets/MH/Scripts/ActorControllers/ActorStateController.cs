@@ -25,11 +25,6 @@ namespace MH.ActorControllers
         private bool canNextState;
 
         /// <summary>
-        /// ネットワーク上で受け取った攻撃のモーション名
-        /// </summary>
-        private string networkAttackMotionName;
-
-        /// <summary>
         /// 次の攻撃のリクエストタイプ
         /// </summary>
         private Define.RequestAttackType nextAttackType;
