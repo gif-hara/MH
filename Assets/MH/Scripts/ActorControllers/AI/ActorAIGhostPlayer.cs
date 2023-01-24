@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 using Cysharp.Threading.Tasks.Triggers;
+using MessagePipe;
 using MH.NetworkSystems;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -65,6 +66,14 @@ namespace MH.ActorControllers
                             );
                         this.actor.PostureController.Rotate(rotation);
                     }
+                })
+                .AddTo(ct);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.NetworkRequestDodge>()
+                .Subscribe(this.actor, x =>
+                {
+                    MessageBroker.GetPublisher<Actor, ActorEvents.RequestDodge>()
+                        .Publish(this.actor, ActorEvents.RequestDodge.Get(x.Data));
                 })
                 .AddTo(ct);
         }

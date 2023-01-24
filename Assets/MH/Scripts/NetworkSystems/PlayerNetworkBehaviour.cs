@@ -57,7 +57,7 @@ namespace MH.NetworkSystems
 
         public void SubmitAttackMotionName(string motionName)
         {
-            this.SubmitAttackMotionNameServerRpc(new FixedString32Bytes(motionName));
+            this.SubmitRequestUniqueMotionServerRpc(new FixedString32Bytes(motionName));
         }
 
         public void SubmitBeginDodge(ActorDodgeController.InvokeData data)
@@ -84,13 +84,13 @@ namespace MH.NetworkSystems
         }
 
         [ServerRpc]
-        private void SubmitAttackMotionNameServerRpc(FixedString32Bytes motionName, ServerRpcParams rpcParams = default)
+        private void SubmitRequestUniqueMotionServerRpc(FixedString32Bytes motionName, ServerRpcParams rpcParams = default)
         {
-            this.SubmitAttackMotionNameClientRpc(motionName);
+            this.SubmitRequestUniqueMotionClientRpc(motionName);
         }
 
         [ClientRpc]
-        private void SubmitAttackMotionNameClientRpc(FixedString32Bytes motionName, ClientRpcParams rpcParams = default)
+        private void SubmitRequestUniqueMotionClientRpc(FixedString32Bytes motionName, ClientRpcParams rpcParams = default)
         {
             if (this.IsOwner)
             {
@@ -113,8 +113,8 @@ namespace MH.NetworkSystems
             {
                 return;
             }
-            MessageBroker.GetPublisher<Actor, ActorEvents.RequestDodgeNetwork>()
-                .Publish(this.actor, ActorEvents.RequestDodgeNetwork.Get(data.ToInvokeData));
+            MessageBroker.GetPublisher<Actor, ActorEvents.NetworkRequestDodge>()
+                .Publish(this.actor, ActorEvents.NetworkRequestDodge.Get(data.ToInvokeData));
         }
     }
 }

@@ -9,7 +9,6 @@ namespace MH
     /// </summary>
     public sealed class ActorEvents
     {
-
         /// <summary>
         /// イベントの登録を行う
         /// </summary>
@@ -18,11 +17,10 @@ namespace MH
             builder.AddMessageBroker<Actor, BeginMove>();
             builder.AddMessageBroker<Actor, EndMove>();
             builder.AddMessageBroker<Actor, RequestDodge>();
-            builder.AddMessageBroker<Actor, RequestDodgeNetwork>();
+            builder.AddMessageBroker<Actor, NetworkRequestDodge>();
             builder.AddMessageBroker<Actor, BeginDodge>();
             builder.AddMessageBroker<Actor, EndDodge>();
             builder.AddMessageBroker<Actor, RequestAttack>();
-            builder.AddMessageBroker<Actor, RequestAttackNetwork>();
             builder.AddMessageBroker<Actor, BeginAttack>();
             builder.AddMessageBroker<Actor, EndAttack>();
             builder.AddMessageBroker<Actor, AcceptNextState>();
@@ -58,7 +56,7 @@ namespace MH
         /// <summary>
         /// ネットワーク上で回避のリクエストを行うメッセージ
         /// </summary>
-        public sealed class RequestDodgeNetwork : Message<RequestDodgeNetwork, ActorDodgeController.InvokeData>
+        public sealed class NetworkRequestDodge : Message<NetworkRequestDodge, ActorDodgeController.InvokeData>
         {
             public ActorDodgeController.InvokeData Data => this.Param1;
         }
@@ -86,17 +84,6 @@ namespace MH
             /// リクエストタイプ
             /// </summary>
             public Define.RequestAttackType AttackType => this.Param1;
-        }
-
-        /// <summary>
-        /// ネットワーク上で攻撃のリクエストを行うメッセージ
-        /// </summary>
-        public sealed class RequestAttackNetwork : Message<RequestAttackNetwork, string>
-        {
-            /// <summary>
-            /// モーションの名前
-            /// </summary>
-            public string MotionName => this.Param1;
         }
 
         /// <summary>

@@ -50,13 +50,15 @@ namespace MH.ActorControllers
             this.stateController.Set(State.Attack, this.OnEnterAttack, this.OnExitAttack);
             this.stateController.Set(State.UniqueMotion, this.OnEnterUniqueMotion, null);
 
+            var ct = this.actor.GetCancellationTokenOnDestroy();
+
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestUniqueMotion>()
                 .Subscribe(this.actor, x =>
                 {
                     this.uniqueMotionName = x.MotionName;
                     this.stateController.ChangeRequest(State.UniqueMotion);
                 })
-                .AddTo(this.actor.GetCancellationTokenOnDestroy());
+                .AddTo(ct);
 
             this.stateController.ChangeRequest(State.Idle);
         }
@@ -83,14 +85,6 @@ namespace MH.ActorControllers
                 {
                     this.nextAttackType = x.AttackType;
                     this.stateController.ChangeRequest(State.Attack);
-                })
-                .AddTo(scope);
-
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodgeNetwork>()
-                .Subscribe(this.actor, x =>
-                {
-                    this.actor.DodgeController.Ready(x.Data);
-                    this.stateController.ChangeRequest(State.Dodge);
                 })
                 .AddTo(scope);
 
@@ -121,14 +115,6 @@ namespace MH.ActorControllers
                 {
                     this.nextAttackType = x.AttackType;
                     this.stateController.ChangeRequest(State.Attack);
-                })
-                .AddTo(scope);
-
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodgeNetwork>()
-                .Subscribe(this.actor, x =>
-                {
-                    this.actor.DodgeController.Ready(x.Data);
-                    this.stateController.ChangeRequest(State.Dodge);
                 })
                 .AddTo(scope);
 
@@ -166,14 +152,6 @@ namespace MH.ActorControllers
                 })
                 .AddTo(scope);
 
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodgeNetwork>()
-                .Subscribe(this.actor, x =>
-                {
-                    this.actor.DodgeController.Ready(x.Data);
-                    this.stateController.ChangeRequest(State.Dodge);
-                })
-                .AddTo(scope);
-
             this.actor.DodgeController.Invoke();
         }
 
@@ -203,14 +181,6 @@ namespace MH.ActorControllers
                 .Subscribe(this.actor, _ =>
                 {
                     this.stateController.ChangeRequest(State.Idle);
-                })
-                .AddTo(scope);
-
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodgeNetwork>()
-                .Subscribe(this.actor, x =>
-                {
-                    this.actor.DodgeController.Ready(x.Data);
-                    this.stateController.ChangeRequest(State.Dodge);
                 })
                 .AddTo(scope);
 
