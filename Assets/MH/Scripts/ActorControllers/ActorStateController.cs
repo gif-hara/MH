@@ -22,6 +22,8 @@ namespace MH.ActorControllers
 
         private Actor actor;
 
+        private bool canNextState;
+
         /// <summary>
         /// ネットワーク上で受け取った攻撃のモーション名
         /// </summary>
@@ -57,6 +59,19 @@ namespace MH.ActorControllers
                 {
                     this.uniqueMotionName = x.MotionName;
                     this.stateController.ChangeRequest(State.UniqueMotion);
+                })
+                .AddTo(ct);
+
+            // 強制的な回避リクエストの場合は受け付ける
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
+                .Subscribe(this.actor, x =>
+                {
+                    if (!x.IsForce)
+                    {
+                        return;
+                    }
+                    this.actor.DodgeController.Ready(x.Data);
+                    this.stateController.ChangeRequest(State.Dodge);
                 })
                 .AddTo(ct);
 
@@ -128,20 +143,31 @@ namespace MH.ActorControllers
             MessageBroker.GetSubscriber<Actor, ActorEvents.AcceptNextState>()
                 .Subscribe(this.actor, _ =>
                 {
-                    MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
-                        .Subscribe(this.actor, x =>
-                        {
-                            this.nextAttackType = x.AttackType;
-                            this.stateController.ChangeRequest(State.Attack);
-                        })
-                        .AddTo(scope);
-                    MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
-                        .Subscribe(this.actor, x =>
-                        {
-                            this.actor.DodgeController.Ready(x.Data);
-                            this.stateController.ChangeRequest(State.Dodge);
-                        })
-                        .AddTo(scope);
+                    this.canNextState = true;
+                })
+                .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
+                .Subscribe(this.actor, x =>
+                {
+                    if (!this.canNextState)
+                    {
+                        return;
+                    }
+                    this.nextAttackType = x.AttackType;
+                    this.stateController.ChangeRequest(State.Attack);
+                })
+                .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
+                .Subscribe(this.actor, x =>
+                {
+                    if (!this.canNextState)
+                    {
+                        return;
+                    }
+                    this.actor.DodgeController.Ready(x.Data);
+                    this.stateController.ChangeRequest(State.Dodge);
                 })
                 .AddTo(scope);
 
@@ -153,6 +179,7 @@ namespace MH.ActorControllers
                 .AddTo(scope);
 
             this.actor.DodgeController.Invoke();
+            this.canNextState = false;
         }
 
         private void OnEnterAttack(State previousState, DisposableBagBuilder scope)
@@ -160,20 +187,31 @@ namespace MH.ActorControllers
             MessageBroker.GetSubscriber<Actor, ActorEvents.AcceptNextState>()
                 .Subscribe(this.actor, _ =>
                 {
-                    MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
-                        .Subscribe(this.actor, x =>
-                        {
-                            this.nextAttackType = x.AttackType;
-                            this.stateController.ChangeRequest(State.Attack);
-                        })
-                        .AddTo(scope);
-                    MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
-                        .Subscribe(this.actor, x =>
-                        {
-                            this.actor.DodgeController.Ready(x.Data);
-                            this.stateController.ChangeRequest(State.Dodge);
-                        })
-                        .AddTo(scope);
+                    this.canNextState = true;
+                })
+                .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
+                .Subscribe(this.actor, x =>
+                {
+                    if (!this.canNextState)
+                    {
+                        return;
+                    }
+                    this.nextAttackType = x.AttackType;
+                    this.stateController.ChangeRequest(State.Attack);
+                })
+                .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
+                .Subscribe(this.actor, x =>
+                {
+                    if (!this.canNextState)
+                    {
+                        return;
+                    }
+                    this.actor.DodgeController.Ready(x.Data);
+                    this.stateController.ChangeRequest(State.Dodge);
                 })
                 .AddTo(scope);
 
@@ -206,6 +244,7 @@ namespace MH.ActorControllers
             }
 
             this.actor.AttackController.Invoke(attackType);
+            this.canNextState = false;
         }
 
         private void OnExitAttack(State nextState)

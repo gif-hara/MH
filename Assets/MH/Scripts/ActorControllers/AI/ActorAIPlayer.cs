@@ -154,7 +154,7 @@ namespace MH.ActorControllers
                     ease = playerActorCommonData.DodgeEase
                 };
                 MessageBroker.GetPublisher<Actor, ActorEvents.RequestDodge>()
-                    .Publish(this.actor, ActorEvents.RequestDodge.Get(invokeData));
+                    .Publish(this.actor, ActorEvents.RequestDodge.Get(invokeData, false));
             });
         }
 

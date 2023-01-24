@@ -73,7 +73,7 @@ namespace MH.ActorControllers
                 .Subscribe(this.actor, x =>
                 {
                     MessageBroker.GetPublisher<Actor, ActorEvents.RequestDodge>()
-                        .Publish(this.actor, ActorEvents.RequestDodge.Get(x.Data));
+                        .Publish(this.actor, ActorEvents.RequestDodge.Get(x.Data, true));
                 })
                 .AddTo(ct);
         }

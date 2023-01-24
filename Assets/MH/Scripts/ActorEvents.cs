@@ -48,9 +48,17 @@ namespace MH
         /// <summary>
         /// 回避のリクエストを行うメッセージ
         /// </summary>
-        public sealed class RequestDodge : Message<RequestDodge, ActorDodgeController.InvokeData>
+        public sealed class RequestDodge : Message<RequestDodge, ActorDodgeController.InvokeData, bool>
         {
+            /// <summary>
+            /// 回避データ
+            /// </summary>
             public ActorDodgeController.InvokeData Data => this.Param1;
+
+            /// <summary>
+            /// 強制的に実行するか
+            /// </summary>
+            public bool IsForce => this.Param2;
         }
 
         /// <summary>
