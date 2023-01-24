@@ -65,8 +65,7 @@ namespace MH.ActorControllers
                             Quaternion.Euler(0.0f, this.playerNetworkBehaviour.NetworkRotation, 0.0f),
                             playerActorCommonData.RotationSpeed * this.actor.TimeController.Time.deltaTime
                             );
-                        MessageBroker.GetPublisher<Actor, ActorEvents.RequestRotation>()
-                            .Publish(this.actor, ActorEvents.RequestRotation.Get(rotation));
+                        this.actor.PostureController.Rotate(rotation);
                     }
                 })
                 .AddTo(ct);

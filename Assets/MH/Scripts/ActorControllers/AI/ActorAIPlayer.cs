@@ -85,8 +85,7 @@ namespace MH.ActorControllers
                             Quaternion.LookRotation(lastRotation),
                             playerActorCommonData.RotationSpeed * deltaTime
                             );
-                        MessageBroker.GetPublisher<Actor, ActorEvents.RequestRotation>()
-                            .Publish(actor, ActorEvents.RequestRotation.Get(rotation));
+                        this.actor.PostureController.Rotate(rotation);
                     }
 
                     // カメラのスクリーン値の更新

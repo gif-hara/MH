@@ -52,9 +52,6 @@ namespace MH.ActorControllers
 
         private void OnEnterIdle(State previousState, DisposableBagBuilder scope)
         {
-            this.actor.AnimationController.Play("Idle");
-            this.actor.PostureController.CanRotation = true;
-
             MessageBroker.GetSubscriber<Actor, ActorEvents.BeginMove>()
                 .Subscribe(this.actor, _ =>
                 {
@@ -69,13 +66,6 @@ namespace MH.ActorControllers
                 })
                 .AddTo(scope);
 
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestRotation>()
-                .Subscribe(this.actor, x =>
-                {
-                    this.actor.PostureController.Rotate(x.Rotation);
-                })
-                .AddTo(scope);
-
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
                 .Subscribe(this.actor, x =>
                 {
@@ -107,13 +97,13 @@ namespace MH.ActorControllers
                     this.stateController.ChangeRequest(State.Dodge);
                 })
                 .AddTo(scope);
+
+            this.actor.AnimationController.Play("Idle");
+            this.actor.PostureController.CanRotation = true;
         }
 
         private void OnEnterRun(State previousState, DisposableBagBuilder scope)
         {
-            this.actor.AnimationController.Play("Run");
-            this.actor.PostureController.CanRotation = true;
-
             MessageBroker.GetSubscriber<Actor, ActorEvents.EndMove>()
                 .Subscribe(this.actor, _ =>
                 {
@@ -128,13 +118,6 @@ namespace MH.ActorControllers
                 })
                 .AddTo(scope);
 
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestRotation>()
-                .Subscribe(this.actor, x =>
-                {
-                    this.actor.PostureController.Rotate(x.Rotation);
-                })
-                .AddTo(scope);
-
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
                 .Subscribe(this.actor, x =>
                 {
@@ -166,6 +149,9 @@ namespace MH.ActorControllers
                     this.stateController.ChangeRequest(State.Dodge);
                 })
                 .AddTo(scope);
+
+            this.actor.AnimationController.Play("Run");
+            this.actor.PostureController.CanRotation = true;
         }
 
         private void OnEnterDodge(State previousState, DisposableBagBuilder scope)
@@ -218,13 +204,6 @@ namespace MH.ActorControllers
 
         private void OnEnterAttack(State previousState, DisposableBagBuilder scope)
         {
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestRotation>()
-                .Subscribe(this.actor, x =>
-                {
-                    this.actor.PostureController.Rotate(x.Rotation);
-                })
-                .AddTo(scope);
-
             MessageBroker.GetSubscriber<Actor, ActorEvents.AcceptNextState>()
                 .Subscribe(this.actor, _ =>
                 {
@@ -296,13 +275,6 @@ namespace MH.ActorControllers
 
         private void OnEnterAttackNetwork(State prevState, DisposableBagBuilder scope)
         {
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestRotation>()
-                .Subscribe(this.actor, x =>
-                {
-                    this.actor.PostureController.Rotate(x.Rotation);
-                })
-                .AddTo(scope);
-
             MessageBroker.GetSubscriber<Actor, ActorEvents.EndAttack>()
                 .Subscribe(this.actor, _ =>
                 {

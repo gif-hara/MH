@@ -18,7 +18,6 @@ namespace MH
             builder.AddMessageBroker<Actor, BeginMove>();
             builder.AddMessageBroker<Actor, EndMove>();
             builder.AddMessageBroker<Actor, RequestMove>();
-            builder.AddMessageBroker<Actor, RequestRotation>();
             builder.AddMessageBroker<Actor, RequestDodge>();
             builder.AddMessageBroker<Actor, RequestDodgeNetwork>();
             builder.AddMessageBroker<Actor, BeginDodge>();
@@ -57,17 +56,6 @@ namespace MH
             /// 移動量
             /// </summary>
             public Vector3 Velocity => this.Param1;
-        }
-
-        /// <summary>
-        /// 回転のリクエストを行うメッセージ
-        /// </summary>
-        public sealed class RequestRotation : Message<RequestRotation, Quaternion>
-        {
-            /// <summary>
-            /// 回転の目的地
-            /// </summary>
-            public Quaternion Rotation => this.Param1;
         }
 
         /// <summary>
