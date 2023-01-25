@@ -379,12 +379,104 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1689262406764164045, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
   m_PrefabInstance: {fileID: 4668942642230370327}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 6321397659681280989}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67c315d4cab395a4c82c9f6c88d84a2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &6321397659681280989 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1689262406764164042, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
+  m_PrefabInstance: {fileID: 4668942642230370327}
+  m_PrefabAsset: {fileID: 0}
+--- !u!195 &4093485235480863140
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6321397659681280989}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 5
+  m_Speed: 7
+  m_Acceleration: 18
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 0
+  m_AutoRepath: 1
+  m_Height: 6
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &5228128325161133662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6321397659681280989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1950a3a062b3f2d42ab52246365db05c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 6321397659681280986}
+  navMeshAgent: {fileID: 4093485235480863140}
+  targetActor: {fileID: 0}
+--- !u!114 &6028067440701087372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6321397659681280989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7b55c7ecdb49a4a89fa5e6f9022861, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startWhenEnabled: 1
+  asynchronousLoad: 0
+  pauseWhenDisabled: 0
+  restartWhenComplete: 1
+  logTaskChanges: 0
+  group: 0
+  resetValuesOnRestart: 0
+  externalBehavior: {fileID: 0}
+  mBehaviorSource:
+    behaviorName: Behavior
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(217.200012,53.8000031)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Parallel","NodeData":{"Offset":"(4.713853,131.069458)"},"ID":1,"Name":"Parallel","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"MH.BehaviourDesignerControllers.SetTargetActor","NodeData":{"Offset":"(-440,330)"},"ID":2,"Name":"Set
+        Target Actor","Instant":true,"SharedEnemyBehaviourTreeCorecore":{"Type":"MH.BehaviourDesignerControllers.SharedEnemyBehaviourTreeCore","Name":null,"EnemyBehaviourTreeCoremValue":0}},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-50,330)"},"ID":3,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Unity.Math.FloatComparison","NodeData":{"Offset":"(-206.666748,180)"},"ID":4,"Name":"Float
+        Comparison","Instant":true,"Operationoperation":"GreaterThanOrEqualTo","SharedFloatfloat1":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"Core.TargetDistance","IsShared":true,"PropertyMapping":"MH.BehaviourDesignerControllers.EnemyBehaviourTreeCore/TargetDistance","PropertyMappingOwner":1,"SinglemValue":0},"SharedFloatfloat2":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":10}},{"Type":"MH.BehaviourDesignerControllers.MoveToTargetWithNavMesh","NodeData":{"Offset":"(176.6665,180)"},"ID":5,"Name":"Move
+        To Target With Nav Mesh","Instant":true,"SharedEnemyBehaviourTreeCorecore":{"Type":"MH.BehaviourDesignerControllers.SharedEnemyBehaviourTreeCore","Name":null,"EnemyBehaviourTreeCoremValue":2},"SinglemoveSpeed":7,"SinglerotateSpeed":3}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(530,330)"},"ID":6,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Unity.Math.FloatComparison","NodeData":{"Offset":"(-95.7143555,180)"},"ID":7,"Name":"Float
+        Comparison","Instant":true,"Operationoperation":"LessThan","SharedFloatfloat1":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"Core.TargetDistance","IsShared":true,"PropertyMapping":"MH.BehaviourDesignerControllers.EnemyBehaviourTreeCore/TargetDistance","PropertyMappingOwner":3,"SinglemValue":0},"SharedFloatfloat2":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":10}},{"Type":"BehaviorDesigner.Runtime.Tasks.Log","NodeData":{"Offset":"(104.712769,183.926514)"},"ID":8,"Name":"Log","Instant":true,"SharedStringtext":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":null,"StringmValue":"Attack"},"SharedBoollogError":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedBoollogTime":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false}}]}]},"Variables":[{"Type":"MH.BehaviourDesignerControllers.SharedEnemyBehaviourTreeCore","Name":"Core","IsShared":true,"EnemyBehaviourTreeCoremValue":4},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"Core.TargetDistance","IsShared":true,"PropertyMapping":"MH.BehaviourDesignerControllers.EnemyBehaviourTreeCore/TargetDistance","PropertyMappingOwner":5,"SinglemValue":0}]}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects:
+        - {fileID: 5228128325161133662}
+        - {fileID: 6321397659681280989}
+        - {fileID: 5228128325161133662}
+        - {fileID: 6321397659681280989}
+        - {fileID: 5228128325161133662}
+        - {fileID: 6321397659681280989}
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.4
+  gizmoViewMode: 2
+  showBehaviorDesignerGizmo: 1
 --- !u!4 &6321397659712215965 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1689262406736378762, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}

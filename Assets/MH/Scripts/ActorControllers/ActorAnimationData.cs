@@ -19,6 +19,9 @@ namespace MH.ActorControllers
 
         public AnimationBlendData GetAnimationBlendData(string name)
         {
+#if UNITY_EDITOR
+            this.runtimeDataDictionary = null;
+#endif
             this.runtimeDataDictionary ??= this.dataList.ToDictionary(x => x.name, x => x.blendData);
             Assert.IsTrue(this.runtimeDataDictionary.ContainsKey(name), $"{name} is not found.");
             return this.runtimeDataDictionary[name];

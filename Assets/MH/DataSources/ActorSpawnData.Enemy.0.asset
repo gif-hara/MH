@@ -24,4 +24,8 @@ MonoBehaviour:
         blendData:
           animationClip: {fileID: 7400000, guid: ec32a4841c4beea4680bf398cf67ea2d, type: 2}
           blendSeconds: 0.1
+      - name: Run
+        blendData:
+          animationClip: {fileID: 7400000, guid: ec32a4841c4beea4680bf398cf67ea2d, type: 2}
+          blendSeconds: 0.1
     extensionPrefabs: []
