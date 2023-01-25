@@ -61,4 +61,5 @@ crashlytics-build.properties
 UserSettings*
 .idea*
 Assets/AddressableAssetsData/link.xml*
+Assets/Behavior Designer*
 
