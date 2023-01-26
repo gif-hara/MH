@@ -71,6 +71,11 @@ namespace MH.ActorControllers
                 .AddTo(ct);
 
             this.stateController.ChangeRequest(State.Idle);
+            this.stateController.onChanged += (previousState, currentState) =>
+            {
+                MessageBroker.GetPublisher<Actor, ActorEvents.ChangedState>()
+                    .Publish(this.actor, ActorEvents.ChangedState.Get(previousState, currentState));
+            };
         }
 
         private void OnEnterIdle(State previousState, DisposableBagBuilder scope)

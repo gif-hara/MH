@@ -32,6 +32,7 @@ namespace MH
             builder.AddMessageBroker<Actor, RequestSetForce>();
             builder.AddMessageBroker<Actor, RequestUniqueMotion>();
             builder.AddMessageBroker<Actor, NetworkRequestUniqueMotion>();
+            builder.AddMessageBroker<Actor, ChangedState>();
         }
 
         /// <summary>
@@ -204,6 +205,22 @@ namespace MH
             /// モーション名
             /// </summary>
             public string MotionName => this.Param1;
+        }
+
+        /// <summary>
+        /// ステートが切り替わった際のメッセージ
+        /// </summary>
+        public sealed class ChangedState : Message<ChangedState, ActorStateController.State, ActorStateController.State>
+        {
+            /// <summary>
+            /// 前のステート
+            /// </summary>
+            public ActorStateController.State PreviousState => this.Param1;
+
+            /// <summary>
+            /// 今のステート
+            /// </summary>
+            public ActorStateController.State CurrentState => this.Param2;
         }
     }
 }

@@ -11,6 +11,8 @@ namespace MH.ActorControllers
 
         private ActorAnimationData data;
 
+        public string CurrentAnimationName { private set; get; }
+
         void IActorController.Setup(
             Actor actor,
             IActorDependencyInjector actorDependencyInjector,
@@ -30,22 +32,14 @@ namespace MH.ActorControllers
 
         public void Play(string animationName)
         {
+            this.CurrentAnimationName = animationName;
             this.animationController.Play(this.data.GetAnimationBlendData(animationName));
-        }
-
-        public void Play(AnimationBlendData data)
-        {
-            this.animationController.Play(data);
         }
 
         public UniTask<AnimationController.CompleteType> PlayAsync(string animationName)
         {
+            this.CurrentAnimationName = animationName;
             return this.animationController.PlayAsync(this.data.GetAnimationBlendData(animationName));
-        }
-
-        public UniTask<AnimationController.CompleteType> PlayAsync(AnimationBlendData data)
-        {
-            return this.animationController.PlayAsync(data);
         }
     }
 }
