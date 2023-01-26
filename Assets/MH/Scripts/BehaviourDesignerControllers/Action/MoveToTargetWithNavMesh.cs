@@ -1,4 +1,5 @@
 using BehaviorDesigner.Runtime.Tasks;
+using MH.ActorControllers;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -17,6 +18,28 @@ namespace MH.BehaviourDesignerControllers
 
         public float rotateSpeed;
 
+        public bool canMove;
+
+        public bool canRotate;
+
+        public RotateMode rotateMode;
+
+        /// <summary>
+        /// 回転処理のモード
+        /// </summary>
+        public enum RotateMode
+        {
+            /// <summary>
+            /// NavMeshAgentの目標地点へ向く
+            /// </summary>
+            NavMeshAgent,
+
+            /// <summary>
+            /// 攻撃対象の<see cref="Actor"/>の方へ向く
+            /// </summary>
+            TargetActor
+        }
+
         public override TaskStatus OnUpdate()
         {
             var c = this.core.Value;
@@ -27,21 +50,26 @@ namespace MH.BehaviourDesignerControllers
             }
 
             c.navMeshAgent.destination = c.targetActor.transform.position;
-            var nextPosition = GetNextPosition(c.navMeshAgent.path);
-            var direction = Vector3.Scale(
-                nextPosition - c.owner.transform.position,
-                new Vector3(1.0f, 0.0f, 1.0f)
-                ).normalized;
-            c.owner.PostureController.Move(
-                direction * this.moveSpeed * c.owner.TimeController.Time.deltaTime
-                );
-            var rotation = Quaternion.Lerp(
-                c.owner.transform.rotation,
-                Quaternion.LookRotation(direction),
-                this.rotateSpeed * c.owner.TimeController.Time.deltaTime
-                );
-            c.owner.PostureController.Rotate(rotation);
-            c.navMeshAgent.nextPosition = c.owner.transform.position;
+
+            if (this.canMove)
+            {
+                c.owner.PostureController.Move(
+                    this.GetDirectionFromNavMesh() * this.moveSpeed * c.owner.TimeController.Time.deltaTime
+                    );
+                c.navMeshAgent.nextPosition = c.owner.transform.position;
+            }
+            if (this.canRotate)
+            {
+                var direction = this.rotateMode == RotateMode.NavMeshAgent
+                    ? this.GetDirectionFromNavMesh()
+                    : this.GetDirectionFromTargetActor();
+                var rotation = Quaternion.Lerp(
+                    c.owner.transform.rotation,
+                    Quaternion.LookRotation(direction),
+                    this.rotateSpeed * c.owner.TimeController.Time.deltaTime
+                    );
+                c.owner.PostureController.Rotate(rotation);
+            }
 
             return TaskStatus.Success;
         }
@@ -54,6 +82,25 @@ namespace MH.BehaviourDesignerControllers
             }
 
             return path.corners[0];
+        }
+
+        private Vector3 GetDirectionFromNavMesh()
+        {
+            var c = this.core.Value;
+            var nextPosition = GetNextPosition(c.navMeshAgent.path);
+            return Vector3.Scale(
+                nextPosition - c.owner.transform.position,
+                new Vector3(1.0f, 0.0f, 1.0f)
+                ).normalized;
+        }
+
+        private Vector3 GetDirectionFromTargetActor()
+        {
+            var c = this.core.Value;
+            return Vector3.Scale(
+                c.targetActor.transform.position - c.owner.transform.position,
+                new Vector3(1.0f, 0.0f, 1.0f)
+                ).normalized;
         }
     }
 }

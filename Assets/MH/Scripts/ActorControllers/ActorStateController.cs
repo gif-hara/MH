@@ -33,6 +33,8 @@ namespace MH.ActorControllers
 
         private string uniqueMotionName;
 
+        public State CurrentState => this.stateController.CurrentState;
+
         void IActorController.Setup(
             Actor actor,
             IActorDependencyInjector actorDependencyInjector,
