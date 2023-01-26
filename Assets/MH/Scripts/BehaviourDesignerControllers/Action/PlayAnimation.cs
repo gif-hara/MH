@@ -18,17 +18,17 @@ namespace MH
 
         public string animationName;
 
-        private bool isInitialized;
-
         private IDisposable scope;
+
+        private TaskStatus taskStatus;
 
         public override TaskStatus OnUpdate()
         {
             var a = this.actor.Value;
 
-            if (!this.isInitialized)
+            if (this.taskStatus == TaskStatus.Inactive)
             {
-                this.isInitialized = true;
+                this.taskStatus = TaskStatus.Failure;
                 MessageBroker.GetPublisher<Actor, ActorEvents.RequestUniqueMotion>()
                     .Publish(a, ActorEvents.RequestUniqueMotion.Get(this.animationName));
                 this.scope = MessageBroker.GetSubscriber<Actor, ActorEvents.ChangedState>()
@@ -37,18 +37,24 @@ namespace MH
                         if (x.PreviousState == ActorStateController.State.UniqueMotion)
                         {
                             this.scope?.Dispose();
-                            this.isInitialized = false;
+                            this.taskStatus = TaskStatus.Success;
                         }
                     });
             }
 
-            return TaskStatus.Success;
+            if (this.taskStatus == TaskStatus.Success)
+            {
+                this.taskStatus = TaskStatus.Inactive;
+                return TaskStatus.Success;
+            }
+
+            return this.taskStatus;
         }
 
         public override void OnReset()
         {
             base.OnReset();
-            this.isInitialized = false;
+            this.taskStatus = TaskStatus.Inactive;
         }
     }
 }
