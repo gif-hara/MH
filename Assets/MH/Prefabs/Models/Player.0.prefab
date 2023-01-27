@@ -1751,6 +1751,14 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1837738750827128339, guid: 2391362baec99414ab96c8c75c163a53, type: 3}
+      propertyPath: dataList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1837738750827128339, guid: 2391362baec99414ab96c8c75c163a53, type: 3}
+      propertyPath: dataList.Array.data[0].part
+      value: 
+      objectReference: {fileID: 5248200749450140600}
     - target: {fileID: 2684247860361833696, guid: 2391362baec99414ab96c8c75c163a53, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1

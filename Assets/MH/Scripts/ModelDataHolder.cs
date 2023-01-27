@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace MH
 {
@@ -9,14 +11,18 @@ namespace MH
     public sealed class ModelDataHolder : MonoBehaviour
     {
         /// <summary>
-        /// 右手
+        /// モデルのパーツタイプ
         /// </summary>
+        public enum PartType
+        {
+            /// <summary>右手</summary>
+            RightHand,
+        }
+
         [SerializeField]
-        private Transform rightHand;
+        private List<PartData> dataList;
 
         private List<MeshRenderer> meshRenderers;
-
-        public Transform RightHand => this.rightHand;
 
         public IReadOnlyList<MeshRenderer> MeshRenderers
         {
@@ -25,6 +31,28 @@ namespace MH
                 this.meshRenderers ??= new List<MeshRenderer>(this.GetComponentsInChildren<MeshRenderer>());
                 return this.meshRenderers;
             }
+        }
+
+        public Transform GetPart(PartType type)
+        {
+            var result = this.dataList.Find(x => x.Type == type);
+            Assert.IsNotNull(result, $"{type}に紐づくデータがありません");
+
+            return result.Part;
+        }
+
+        [Serializable]
+        public class PartData
+        {
+            [SerializeField]
+            private PartType type;
+
+            [SerializeField]
+            private Transform part;
+
+            public PartType Type => this.type;
+
+            public Transform Part => this.part;
         }
     }
 }

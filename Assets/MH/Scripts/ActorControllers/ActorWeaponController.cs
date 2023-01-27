@@ -37,7 +37,7 @@ namespace MH.ActorControllers
             colliderDictionary = colliders.ToDictionary(x => x.name);
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void OnTriggerStay(Collider other)
         {
             if (actor.gameObject == other.gameObject)
             {
@@ -77,10 +77,6 @@ namespace MH.ActorControllers
         )
         {
             this.actor = actor;
-            var t = transform;
-            t.SetParent(this.actor.ModelController.ModelDataHolder.RightHand, false);
-            t.localPosition = Vector3.zero;
-            t.localRotation = Quaternion.identity;
             var ct = this.actor.GetCancellationTokenOnDestroy();
 
             MessageBroker.GetSubscriber<Actor, ActorEvents.ValidationAttackCollider>()
