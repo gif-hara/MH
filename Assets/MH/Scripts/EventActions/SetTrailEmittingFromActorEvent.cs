@@ -20,6 +20,12 @@ namespace MH
 
         private void Start()
         {
+            if (this.actor == null)
+            {
+                Debug.LogWarning($"{nameof(actor)} is null.");
+                return;
+            }
+
             MessageBroker.GetSubscriber<Actor, TValue>()
                 .Subscribe(this.actor, _ =>
                 {

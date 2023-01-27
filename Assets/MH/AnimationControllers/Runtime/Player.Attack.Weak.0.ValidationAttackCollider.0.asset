@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea4a8bfd77449d44fa51a167ccc99dc4, type: 3}
-  m_Name: Player.StrongAttack0.RequestSetForce0
+  m_Script: {fileID: 11500000, guid: 9a8e66c537509d24b87565c9d9d17f39, type: 3}
+  m_Name: Player.Attack.Weak.0.ValidationAttackCollider.0
   m_EditorClassIdentifier: 
-  vector3: {x: 0, y: 30, z: 0}
+  colliderName: Common

@@ -12,6 +12,9 @@ namespace MH.ActorControllers
     public sealed class ActorWeaponController : MonoBehaviour, IActorController
     {
         [SerializeField]
+        private Actor actor;
+
+        [SerializeField]
         private float hitStopTimeScale;
 
         [SerializeField]
@@ -24,8 +27,6 @@ namespace MH.ActorControllers
         private GameObject hitEffectPrefab;
 
         private readonly HashSet<Rigidbody> collidedRigidbodies = new();
-
-        private Actor actor;
 
         private Dictionary<string, GameObject> colliderDictionary;
 
@@ -92,7 +93,7 @@ namespace MH.ActorControllers
                 .Subscribe(this.actor, x =>
                 {
                     this.collidedRigidbodies.Clear();
-                    this.colliderDictionary[x.ColliderName].SetActive(true);
+                    this.colliderDictionary[x.Data.ColliderName].SetActive(true);
                 })
                 .AddTo(bag);
 

@@ -69,10 +69,12 @@ namespace MH.ActorControllers
         /// <remarks>
         /// この関数はアニメーションイベントで実行されます
         /// </remarks>
-        public void ValidationAttackCollider(string colliderName)
+        public void ValidationAttackCollider(Object obj)
         {
+            var data = (ValidationAttackColliderData)obj;
+            Assert.IsNotNull(data, $"{this.actor.name}の攻撃データが存在しません");
             MessageBroker.GetPublisher<Actor, ActorEvents.ValidationAttackCollider>()
-                .Publish(this.actor, ActorEvents.ValidationAttackCollider.Get(colliderName));
+                .Publish(this.actor, ActorEvents.ValidationAttackCollider.Get(data));
         }
 
         /// <summary>
@@ -87,6 +89,12 @@ namespace MH.ActorControllers
                 .Publish(this.actor, ActorEvents.InvalidationAttackCollider.Get(colliderName));
         }
 
+        /// <summary>
+        /// 物理的な力を与えます
+        /// </summary>
+        /// <remarks>
+        /// この関数はアニメーションイベントで実行されます
+        /// </remarks>
         public void RequestSetForce(Object obj)
         {
             var scriptableVector3 = (ScriptableVector3)obj;

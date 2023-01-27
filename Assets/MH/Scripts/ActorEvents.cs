@@ -144,12 +144,12 @@ namespace MH
         /// <summary>
         /// 攻撃判定の有効化を行うメッセージ
         /// </summary>
-        public sealed class ValidationAttackCollider : Message<ValidationAttackCollider, string>
+        public sealed class ValidationAttackCollider : Message<ValidationAttackCollider, ValidationAttackColliderData>
         {
             /// <summary>
-            /// 有効にする攻撃判定の名前
+            /// データ
             /// </summary>
-            public string ColliderName => this.Param1;
+            public ValidationAttackColliderData Data => this.Param1;
         }
 
         /// <summary>
