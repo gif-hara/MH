@@ -23,8 +23,7 @@ namespace MH.ActorControllers
         [SerializeField]
         private List<GameObject> colliders;
 
-        [SerializeField]
-        private GameObject hitEffectPrefab;
+        private PoolablePrefab hitEffectPrefab;
 
         private readonly HashSet<Rigidbody> collidedRigidbodies = new();
 
@@ -68,7 +67,8 @@ namespace MH.ActorControllers
                 rotation = transform.rotation
             };
 
-            Instantiate(hitEffectPrefab, hitData.position, hitData.rotation);
+            MessageBroker.GetPublisher<PoolablePrefabEvents.RequestCreate>()
+                .Publish(PoolablePrefabEvents.RequestCreate.Get(this.hitEffectPrefab, hitData.position, hitData.rotation));
 
             MessageBroker.GetPublisher<ActorEvents.HitAttack>()
                 .Publish(ActorEvents.HitAttack.Get(hitData));
@@ -94,6 +94,7 @@ namespace MH.ActorControllers
                 {
                     this.collidedRigidbodies.Clear();
                     this.colliderDictionary[x.Data.ColliderName].SetActive(true);
+                    this.hitEffectPrefab = x.Data.HitEffectPrefab;
                 })
                 .AddTo(bag);
 

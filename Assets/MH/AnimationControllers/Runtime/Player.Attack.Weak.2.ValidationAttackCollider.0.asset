@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Player.Attack.Weak.2.ValidationAttackCollider.0
   m_EditorClassIdentifier: 
   colliderName: Common
+  hitEffectPrefab: {fileID: 2832563910145863357, guid: 79ca9ec421fbbc447b5ccda5d2045bf2, type: 3}
