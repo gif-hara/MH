@@ -3533,3 +3533,17 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
+  - time: 1.85
+    functionName: ValidationAttackCollider
+    data: 
+    objectReferenceParameter: {fileID: 11400000, guid: 985ec18e896e8ed47aa48a54f0ca8501, type: 2}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1.9166666
+    functionName: InvalidationAttackCollider
+    data: Weapon.0
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
