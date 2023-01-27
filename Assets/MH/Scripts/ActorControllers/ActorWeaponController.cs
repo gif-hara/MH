@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine;
 
@@ -27,8 +27,6 @@ namespace MH.ActorControllers
 
         private Dictionary<string, GameObject> colliderDictionary;
 
-        private IDisposable scope;
-
         private void Awake()
         {
             foreach (var i in colliders)
@@ -37,11 +35,6 @@ namespace MH.ActorControllers
             }
 
             colliderDictionary = colliders.ToDictionary(x => x.name);
-        }
-
-        private void OnDestroy()
-        {
-            scope?.Dispose();
         }
 
         private void OnTriggerEnter(Collider other)
@@ -88,7 +81,7 @@ namespace MH.ActorControllers
             t.SetParent(this.actor.ModelController.ModelDataHolder.RightHand, false);
             t.localPosition = Vector3.zero;
             t.localRotation = Quaternion.identity;
-            var bag = DisposableBag.CreateBuilder();
+            var ct = this.actor.GetCancellationTokenOnDestroy();
 
             MessageBroker.GetSubscriber<Actor, ActorEvents.ValidationAttackCollider>()
                 .Subscribe(this.actor, x =>
@@ -99,16 +92,14 @@ namespace MH.ActorControllers
                     this.hitStopTimeScale = x.Data.HitStopTimeScale;
                     this.hitStopDurationSeconds = x.Data.HitStopDurationSeconds;
                 })
-                .AddTo(bag);
+                .AddTo(ct);
 
             MessageBroker.GetSubscriber<Actor, ActorEvents.InvalidationAttackCollider>()
                 .Subscribe(this.actor, x =>
                 {
                     this.colliderDictionary[x.ColliderName].SetActive(false);
                 })
-                .AddTo(bag);
-
-            scope = bag.Build();
+                .AddTo(ct);
         }
     }
 }
