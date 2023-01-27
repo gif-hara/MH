@@ -15,15 +15,13 @@ namespace MH.ActorControllers
         private Actor actor;
 
         [SerializeField]
-        private float hitStopTimeScale;
-
-        [SerializeField]
-        private float hitStopSeconds;
-
-        [SerializeField]
         private List<GameObject> colliders;
 
         private PoolablePrefab hitEffectPrefab;
+
+        private float hitStopTimeScale;
+
+        private float hitStopDurationSeconds;
 
         private readonly HashSet<Rigidbody> collidedRigidbodies = new();
 
@@ -73,7 +71,10 @@ namespace MH.ActorControllers
             MessageBroker.GetPublisher<ActorEvents.HitAttack>()
                 .Publish(ActorEvents.HitAttack.Get(hitData));
 
-            actor.TimeController.BeginHitStop(hitStopTimeScale, hitStopSeconds);
+            if (this.hitStopDurationSeconds > 0.0f)
+            {
+                actor.TimeController.BeginHitStop(hitStopTimeScale, hitStopDurationSeconds);
+            }
         }
 
         void IActorController.Setup(
@@ -95,6 +96,8 @@ namespace MH.ActorControllers
                     this.collidedRigidbodies.Clear();
                     this.colliderDictionary[x.Data.ColliderName].SetActive(true);
                     this.hitEffectPrefab = x.Data.HitEffectPrefab;
+                    this.hitStopTimeScale = x.Data.HitStopTimeScale;
+                    this.hitStopDurationSeconds = x.Data.HitStopDurationSeconds;
                 })
                 .AddTo(bag);
 

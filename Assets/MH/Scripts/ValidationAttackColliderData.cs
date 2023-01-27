@@ -14,8 +14,18 @@ namespace MH
         [SerializeField]
         private PoolablePrefab hitEffectPrefab;
 
+        [SerializeField]
+        private float hitStopTimeScale;
+
+        [SerializeField]
+        private float hitStopDurationSeconds;
+
         public string ColliderName => this.colliderName;
 
         public PoolablePrefab HitEffectPrefab => this.hitEffectPrefab;
+
+        public float HitStopTimeScale => this.hitStopTimeScale;
+
+        public float HitStopDurationSeconds => this.hitStopDurationSeconds;
     }
 }

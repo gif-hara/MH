@@ -61,4 +61,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63ef94b7bebb51a458ace3fa5c616741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actor: {fileID: 0}
+  hitStopTimeScale: 0
+  hitStopSeconds: 0
   colliders: []
