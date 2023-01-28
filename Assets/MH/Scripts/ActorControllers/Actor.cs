@@ -68,6 +68,11 @@ namespace MH.ActorControllers
             this.StatusController = this.CreateActorController<ActorStatusController>(spawnData);
             this.AIController = this.CreateActorController<ActorAIController>(spawnData);
 
+            if (this.CompareTag("Player"))
+            {
+                this.CreateActorController<OnTriggerLeave>(spawnData);
+            }
+
             foreach (var prefab in spawnData.extensionPrefabs)
             {
                 Instantiate(prefab, this.transform);

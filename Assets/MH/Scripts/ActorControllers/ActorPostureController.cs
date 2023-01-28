@@ -28,6 +28,8 @@ namespace MH.ActorControllers
 
         public bool CanMove { set; get; } = true;
 
+        public float Radius => this.openCharacterController.scaledRadius;
+
         void IActorController.Setup(
             Actor actor,
             IActorDependencyInjector actorDependencyInjector,

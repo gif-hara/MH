@@ -17,6 +17,11 @@ namespace MH.ActorControllers
         public ActorAnimationData animationData;
 
         /// <summary>
+        /// 敵と接触した際に離れる距離
+        /// </summary>
+        public float leaveDistance;
+
+        /// <summary>
         /// <see cref="Actor"/>にアタッチするプレハブリスト
         /// </summary>
         /// <remarks>
