@@ -65,14 +65,17 @@ namespace MH.BehaviourDesignerControllers
                 var direction = this.rotateMode == RotateMode.NavMeshAgent
                     ? this.GetDirectionFromNavMesh()
                     : this.GetDirectionFromTargetActor();
-                var to = Quaternion.LookRotation(direction);
-                to = Quaternion.Euler(to.eulerAngles + new Vector3(0.0f, this.rotateOffset, 0.0f));
-                var rotation = Quaternion.Lerp(
-                    c.owner.transform.rotation,
-                    to,
-                    this.rotateSpeed * c.owner.TimeController.Time.deltaTime
-                    );
-                c.owner.PostureController.Rotate(rotation);
+                if (direction != Vector3.zero)
+                {
+                    var to = Quaternion.LookRotation(direction);
+                    to = Quaternion.Euler(to.eulerAngles + new Vector3(0.0f, this.rotateOffset, 0.0f));
+                    var rotation = Quaternion.Lerp(
+                        c.owner.transform.rotation,
+                        to,
+                        this.rotateSpeed * c.owner.TimeController.Time.deltaTime
+                        );
+                    c.owner.PostureController.Rotate(rotation);
+                }
             }
 
             return TaskStatus.Success;
