@@ -23,7 +23,9 @@ namespace MH.ActorControllers
 
         private float hitStopDurationSeconds;
 
-        private readonly HashSet<Rigidbody> collidedRigidbodies = new();
+        private int power;
+
+        private readonly HashSet<Actor> collidedRigidbodies = new();
 
         private Dictionary<string, GameObject> colliderDictionary;
 
@@ -39,18 +41,19 @@ namespace MH.ActorControllers
 
         private void OnTriggerStay(Collider other)
         {
-            if (actor.gameObject == other.gameObject)
+            if (this.actor.gameObject == other.gameObject)
             {
                 return;
             }
 
-            var targetRigidbody = other.attachedRigidbody;
-            if (this.collidedRigidbodies.Contains(targetRigidbody))
+            var targetActor = other.GetComponentInParent<Actor>();
+
+            if (this.collidedRigidbodies.Contains(targetActor))
             {
                 return;
             }
 
-            this.collidedRigidbodies.Add(targetRigidbody);
+            this.collidedRigidbodies.Add(targetActor);
 
             var hitData = new HitData
             {
@@ -66,8 +69,10 @@ namespace MH.ActorControllers
 
             if (this.hitStopDurationSeconds > 0.0f)
             {
-                actor.TimeController.BeginHitStop(hitStopTimeScale, hitStopDurationSeconds);
+                targetActor.TimeController.BeginHitStop(hitStopTimeScale, hitStopDurationSeconds);
             }
+
+            targetActor.StatusController.ReceiveDamage(this.power);
         }
 
         void IActorController.Setup(
@@ -87,6 +92,7 @@ namespace MH.ActorControllers
                     this.hitEffectPrefab = x.Data.HitEffectPrefab;
                     this.hitStopTimeScale = x.Data.HitStopTimeScale;
                     this.hitStopDurationSeconds = x.Data.HitStopDurationSeconds;
+                    this.power = x.Data.Power;
                 })
                 .AddTo(ct);
 

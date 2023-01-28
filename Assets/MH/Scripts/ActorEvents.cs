@@ -33,6 +33,8 @@ namespace MH
             builder.AddMessageBroker<Actor, RequestUniqueMotion>();
             builder.AddMessageBroker<Actor, NetworkRequestUniqueMotion>();
             builder.AddMessageBroker<Actor, ChangedState>();
+            builder.AddMessageBroker<Actor, ReceivedDamage>();
+            builder.AddMessageBroker<Actor, Died>();
         }
 
         /// <summary>
@@ -221,6 +223,24 @@ namespace MH
             /// 今のステート
             /// </summary>
             public ActorStateController.State CurrentState => this.Param2;
+        }
+
+        /// <summary>
+        /// ダメージを受けた際のメッセージ
+        /// </summary>
+        public sealed class ReceivedDamage : Message<ReceivedDamage, int>
+        {
+            /// <summary>
+            /// 受けたダメージ
+            /// </summary>
+            public int Damage => this.Param1;
+        }
+
+        /// <summary>
+        /// 死亡した際のメッセージ
+        /// </summary>
+        public sealed class Died : Message<Died>
+        {
         }
     }
 }
