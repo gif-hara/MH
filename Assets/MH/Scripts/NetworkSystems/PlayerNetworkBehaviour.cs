@@ -43,6 +43,7 @@ namespace MH.NetworkSystems
             }
             this.actor = this.actorPrefab.Spawn(spawnData, Vector3.zero, Quaternion.identity);
             this.actor.transform.SetParent(this.transform);
+            this.actor.NetworkController.NetworkBehaviour = this;
         }
 
         public void SubmitPosition(Vector3 newPosition)

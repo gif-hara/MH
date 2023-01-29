@@ -1,7 +1,9 @@
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using MessagePipe;
 using MH.ActorControllers;
 using MH.NetworkSystems;
+using MH.UISystems;
 using UnityEngine;
 
 namespace MH.SceneControllers
@@ -22,6 +24,9 @@ namespace MH.SceneControllers
 
         [SerializeField]
         private Transform enemySpawnPoint;
+
+        [SerializeField]
+        private BattleUIView battleUIView;
 
         private async void Start()
         {
@@ -48,6 +53,22 @@ namespace MH.SceneControllers
             {
                 MultiPlayManager.StartAsSinglePlay();
             }
+
+            var uiView = UIManager.Open(this.battleUIView);
+            var ownerActor = ActorManager.OwnerActor;
+            var s = ownerActor.StatusController;
+            ownerActor.StatusController.HitPoint
+                .Subscribe(x =>
+                {
+                    uiView.HitPointSlider.value = (float)s.HitPoint.Value / s.HitPointMax.Value;
+                })
+                .AddTo(ct);
+            ownerActor.StatusController.HitPointMax
+                .Subscribe(x =>
+                {
+                    uiView.HitPointSlider.value = (float)s.HitPoint.Value / s.HitPointMax.Value;
+                })
+                .AddTo(ct);
 
             this.enemyPrefab.Spawn(this.debugData.enemySpawnData.data, this.enemySpawnPoint);
         }

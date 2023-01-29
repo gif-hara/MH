@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine.Assertions;
 
 namespace MH.ActorControllers
 {
@@ -18,6 +19,23 @@ namespace MH.ActorControllers
         public static IReadOnlyList<Actor> Players => players;
 
         public static IReadOnlyList<Actor> Enemies => enemies;
+
+        public static Actor OwnerActor
+        {
+            get
+            {
+                foreach (var player in Players)
+                {
+                    if (player.NetworkController.IsOwner)
+                    {
+                        return player;
+                    }
+                }
+
+                Assert.IsTrue(false, "OwnerなActorが存在しません");
+                return null;
+            }
+        }
 
         public static void AddActor(Actor actor)
         {
