@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 10
   rotationSpeed: 10
-  dodgeSpeed: 50
+  dodgeSpeed: 30
   dodgeDuration: 0.5
   dodgeEase: 6
   advancedEntrySeconds: 0.25
