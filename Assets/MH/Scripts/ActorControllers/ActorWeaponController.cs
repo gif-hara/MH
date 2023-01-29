@@ -69,7 +69,7 @@ namespace MH.ActorControllers
 
             if (this.hitStopDurationSeconds > 0.0f)
             {
-                targetActor.TimeController.BeginHitStop(hitStopTimeScale, hitStopDurationSeconds);
+                this.actor.TimeController.BeginHitStop(this.hitStopTimeScale, this.hitStopDurationSeconds).Forget();
             }
 
             targetActor.StatusController.ReceiveDamage(this.power);

@@ -22,7 +22,7 @@ namespace MH.ActorControllers
         /// <summary>
         /// ヒットストップを開始する
         /// </summary>
-        public async void BeginHitStop(float timeScale, float hitStopSeconds)
+        public async UniTaskVoid BeginHitStop(float timeScale, float hitStopSeconds)
         {
             this.Time.timeScale = timeScale;
 
