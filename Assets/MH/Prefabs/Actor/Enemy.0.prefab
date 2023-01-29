@@ -1,5 +1,86 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &585628235122323018
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3749828587402843822}
+  - component: {fileID: 1504847490319787001}
+  m_Layer: 11
+  m_Name: Move.0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3749828587402843822
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585628235122323018}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7065135730636863504}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1504847490319787001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585628235122323018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7b55c7ecdb49a4a89fa5e6f9022861, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startWhenEnabled: 0
+  asynchronousLoad: 0
+  pauseWhenDisabled: 0
+  restartWhenComplete: 1
+  logTaskChanges: 0
+  group: 0
+  resetValuesOnRestart: 0
+  externalBehavior: {fileID: 0}
+  mBehaviorSource:
+    behaviorName: Attack.0
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(847.199646,113.799942)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(0,130.00032)"},"ID":1,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"MH.BehaviourDesignerControllers.MoveToTargetWithNavMesh","NodeData":{"Offset":"(-204.614746,200)"},"ID":2,"Name":"Move
+        To Target With Nav Mesh","Instant":true,"SharedEnemyBehaviourTreeCorecore":{"Type":"MH.BehaviourDesignerControllers.SharedEnemyBehaviourTreeCore","Name":null,"EnemyBehaviourTreeCoremValue":0},"SinglemoveSpeed":0,"SinglerotateSpeed":9,"SinglerotateOffset":0,"BooleancanMove":false,"BooleancanRotate":true,"RotateModerotateMode":"TargetActor"},{"Type":"MH.PlayAnimation","NodeData":{"Offset":"(-4.61487961,200)"},"ID":3,"Name":"Play
+        Animation","Instant":true,"SharedActoractor":{"Type":"MH.BehaviourDesignerControllers.SharedActor","Name":null,"ActormValue":1},"StringanimationName":"Move.0"},{"Type":"BehaviorDesigner.Runtime.Tasks.StartBehaviorTree","NodeData":{"Offset":"(172.423645,199.038116)"},"ID":4,"Name":"Start
+        Behavior Tree","Instant":true,"SharedGameObjectbehaviorGameObject":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":null,"GameObjectmValue":2},"SharedIntgroup":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolwaitForCompletion":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedBoolsynchronizeVariables":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false}},{"Type":"BehaviorDesigner.Runtime.Tasks.StopBehaviorTree","NodeData":{"Offset":"(323.6137,197.847626)"},"ID":5,"Name":"Stop
+        Behavior Tree","Instant":true,"SharedGameObjectbehaviorGameObject":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":null,"GameObjectmValue":3},"SharedIntgroup":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":1},"SharedBoolpauseBehavior":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false}}]},"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"Core.TargetDistance","IsShared":true,"PropertyMapping":"MH.BehaviourDesignerControllers.EnemyBehaviourTreeCore/TargetDistance","PropertyMappingOwner":4,"SinglemValue":0}]}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects:
+        - {fileID: 5228128325161133662}
+        - {fileID: 6321397659681280986}
+        - {fileID: 2940778733458904620}
+        - {fileID: 585628235122323018}
+        - {fileID: 6321397659681280989}
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.4
+  gizmoViewMode: 2
+  showBehaviorDesignerGizmo: 1
 --- !u!1 &752788377210145992
 GameObject:
   m_ObjectHideFlags: 0
@@ -221,9 +302,11 @@ MonoBehaviour:
         State Comparison","Instant":true,"SharedActoractor":{"Type":"MH.BehaviourDesignerControllers.SharedActor","Name":null,"ActormValue":1},"Statestate":"Idle"},{"Type":"MH.BehaviourDesignerControllers.ActorStateComparison","NodeData":{"Offset":"(69.99997,110)"},"ID":6,"Name":"Actor
         State Comparison","Instant":true,"SharedActoractor":{"Type":"MH.BehaviourDesignerControllers.SharedActor","Name":null,"ActormValue":2},"Statestate":"Run"}]},{"Type":"MH.BehaviourDesignerControllers.MoveToTargetWithNavMesh","NodeData":{"Offset":"(288.749969,181.875076)"},"ID":7,"Name":"Move
         To Target With Nav Mesh","Instant":true,"SharedEnemyBehaviourTreeCorecore":{"Type":"MH.BehaviourDesignerControllers.SharedEnemyBehaviourTreeCore","Name":null,"EnemyBehaviourTreeCoremValue":3},"SinglemoveSpeed":12,"SinglerotateSpeed":3,"SinglerotateOffset":0,"BooleancanMove":true,"BooleancanRotate":true,"RotateModerotateMode":"NavMeshAgent"}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(290,156.129028)"},"ID":8,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Unity.Math.FloatComparison","NodeData":{"Offset":"(-100,180)"},"ID":9,"Name":"Float
-        Comparison","Instant":true,"Operationoperation":"LessThan","SharedFloatfloat1":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"Core.TargetDistance","IsShared":true,"PropertyMapping":"MH.BehaviourDesignerControllers.EnemyBehaviourTreeCore/TargetDistance","PropertyMappingOwner":4,"SinglemValue":0},"SharedFloatfloat2":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":6}},{"Type":"BehaviorDesigner.Runtime.Tasks.StartBehaviorTree","NodeData":{"Offset":"(64.13031,183.888885)","WatchedFields":["behaviorGameObject"]},"ID":10,"Name":"Start
-        Behavior Tree","Instant":true,"SharedGameObjectbehaviorGameObject":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":null,"GameObjectmValue":5},"SharedIntgroup":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolwaitForCompletion":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedBoolsynchronizeVariables":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false}},{"Type":"BehaviorDesigner.Runtime.Tasks.StopBehaviorTree","NodeData":{"Offset":"(450.000061,180)","WatchedFields":["behaviorGameObject"]},"ID":11,"Name":"Stop
-        Behavior Tree","Instant":true,"SharedGameObjectbehaviorGameObject":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":null,"GameObjectmValue":6},"SharedIntgroup":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolpauseBehavior":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false}}]}]},"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"Core.TargetDistance","IsShared":true,"PropertyMapping":"MH.BehaviourDesignerControllers.EnemyBehaviourTreeCore/TargetDistance","PropertyMappingOwner":7,"SinglemValue":0}]}'
+        Comparison","Instant":true,"Operationoperation":"LessThan","SharedFloatfloat1":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"Core.TargetDistance","IsShared":true,"PropertyMapping":"MH.BehaviourDesignerControllers.EnemyBehaviourTreeCore/TargetDistance","PropertyMappingOwner":4,"SinglemValue":0},"SharedFloatfloat2":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":6}},{"Type":"MH.BehaviourDesignerControllers.RandomSelector","NodeData":{"Offset":"(181.042847,177.6128)"},"ID":10,"Name":"Random
+        Selector","Instant":true,"SharedEnemyBehaviourTreeCorecore":{"Type":"MH.BehaviourDesignerControllers.SharedEnemyBehaviourTreeCore","Name":null,"EnemyBehaviourTreeCoremValue":5},"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.StartBehaviorTree","NodeData":{"Offset":"(-190,170)","WatchedFields":["behaviorGameObject"]},"ID":11,"Name":"Start
+        Behavior Tree","Instant":true,"SharedGameObjectbehaviorGameObject":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":null,"GameObjectmValue":6},"SharedIntgroup":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolwaitForCompletion":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedBoolsynchronizeVariables":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false}},{"Type":"BehaviorDesigner.Runtime.Tasks.StartBehaviorTree","NodeData":{"Offset":"(190,170)","WatchedFields":["behaviorGameObject"]},"ID":12,"Name":"Start
+        Behavior Tree","Instant":true,"SharedGameObjectbehaviorGameObject":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":null,"GameObjectmValue":7},"SharedIntgroup":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolwaitForCompletion":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedBoolsynchronizeVariables":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false}}]},{"Type":"BehaviorDesigner.Runtime.Tasks.StopBehaviorTree","NodeData":{"Offset":"(450.000061,180)","WatchedFields":["behaviorGameObject"]},"ID":13,"Name":"Stop
+        Behavior Tree","Instant":true,"SharedGameObjectbehaviorGameObject":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":null,"GameObjectmValue":8},"SharedIntgroup":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolpauseBehavior":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false}}]}]},"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"Core.TargetDistance","IsShared":true,"PropertyMapping":"MH.BehaviourDesignerControllers.EnemyBehaviourTreeCore/TargetDistance","PropertyMappingOwner":9,"SinglemValue":0}]}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 
@@ -235,7 +318,9 @@ MonoBehaviour:
         - {fileID: 6321397659681280986}
         - {fileID: 5228128325161133662}
         - {fileID: 6321397659681280989}
+        - {fileID: 5228128325161133662}
         - {fileID: 752788377210145992}
+        - {fileID: 585628235122323018}
         - {fileID: 2940778733458904620}
         - {fileID: 6321397659681280989}
         byteData: 
@@ -355,6 +440,7 @@ Transform:
   - {fileID: 4384273276594328803}
   - {fileID: 3171680861646724973}
   - {fileID: 4137285608522749914}
+  - {fileID: 3749828587402843822}
   m_Father: {fileID: 6321397659681280985}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

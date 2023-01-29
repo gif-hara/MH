@@ -119,6 +119,7 @@ namespace MH.BehaviourDesignerControllers
             var prevState = Random.state;
             Random.state = this.thinkState;
             var result = randomSelector();
+            this.thinkState = Random.state;
             Random.state = prevState;
 
             return result;

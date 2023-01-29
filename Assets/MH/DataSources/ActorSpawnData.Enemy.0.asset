@@ -41,5 +41,10 @@ MonoBehaviour:
         blendData:
           animationClip: {fileID: 7400000, guid: f04f852845b96224687e41d50a45ede1, type: 2}
           blendSeconds: 0.05
+      - name: Move.0
+        blendData:
+          animationClip: {fileID: 7400000, guid: a500e80744398ce40a858e08d607dd63, type: 2}
+          blendSeconds: 0.05
     leaveDistance: 0
+    onFlinchRotationOppose: 0
     extensionPrefabs: []
