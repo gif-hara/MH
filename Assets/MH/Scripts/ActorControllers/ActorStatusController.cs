@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using UnityEngine.Assertions;
 
 namespace MH.ActorControllers
 {
@@ -15,9 +17,18 @@ namespace MH.ActorControllers
 
         private readonly AsyncReactiveProperty<int> hitPoint = new(0);
 
+        /// <summary>
+        /// 基礎となる部位データ
+        /// </summary>
+        private readonly Dictionary<string, ActorStatus.PartData> basePartDataList = new();
+
+        private readonly Dictionary<string, int> currentEndurances = new();
+
         public IAsyncReactiveProperty<int> HitPointMax => this.hitPointMax;
 
         public IAsyncReactiveProperty<int> HitPoint => this.hitPoint;
+
+        public IReadOnlyDictionary<string, ActorStatus.PartData> BasePartDataList => this.basePartDataList;
 
         public bool IsDead => this.hitPoint.Value <= 0;
 
@@ -31,9 +42,14 @@ namespace MH.ActorControllers
             this.BaseStatus = new ActorStatus(spawnData.actorStatus);
             this.hitPointMax.Value = this.BaseStatus.hitPoint;
             this.hitPoint.Value = this.BaseStatus.hitPoint;
+            foreach (var partData in this.BaseStatus.partDataList)
+            {
+                this.basePartDataList.Add(partData.PartName, partData);
+                this.currentEndurances.Add(partData.PartName, 0);
+            }
         }
 
-        public void ReceiveDamage(int damage)
+        public void ReceiveDamage(int damage, string partName)
         {
             if (this.IsDead)
             {
@@ -41,6 +57,7 @@ namespace MH.ActorControllers
             }
 
             this.hitPoint.Value -= damage;
+            this.currentEndurances[partName] += damage;
             MessageBroker.GetPublisher<Actor, ActorEvents.ReceivedDamage>()
                 .Publish(this.actor, ActorEvents.ReceivedDamage.Get(damage));
             if (this.IsDead)
@@ -48,6 +65,14 @@ namespace MH.ActorControllers
                 MessageBroker.GetPublisher<Actor, ActorEvents.Died>()
                     .Publish(this.actor, ActorEvents.Died.Get());
             }
+        }
+
+        public float GetPartDamageRate(string partName)
+        {
+            var result = this.basePartDataList[partName];
+            Assert.IsNotNull(result, $"{partName}という部位は存在しません");
+
+            return result.DamageRate;
         }
     }
 }

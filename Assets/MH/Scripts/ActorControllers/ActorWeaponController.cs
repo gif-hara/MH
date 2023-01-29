@@ -15,6 +15,9 @@ namespace MH.ActorControllers
         private Actor actor;
 
         [SerializeField]
+        private int weaponPower;
+
+        [SerializeField]
         private List<GameObject> colliders;
 
         private PoolablePrefab hitEffectPrefab;
@@ -23,7 +26,7 @@ namespace MH.ActorControllers
 
         private float hitStopDurationSeconds;
 
-        private int power;
+        private int motionPower;
 
         private readonly HashSet<Actor> collidedRigidbodies = new();
 
@@ -72,7 +75,10 @@ namespace MH.ActorControllers
                 this.actor.TimeController.BeginHitStop(this.hitStopTimeScale, this.hitStopDurationSeconds).Forget();
             }
 
-            targetActor.StatusController.ReceiveDamage(this.power);
+            var partName = targetActor.PartController.GetPart(other.gameObject).PartName;
+            var damageRate = targetActor.PartController.GetDamageRate(other.gameObject);
+            var damage = Calculator.GetDamage(this.weaponPower, this.motionPower, damageRate);
+            targetActor.StatusController.ReceiveDamage(damage, partName);
         }
 
         void IActorController.Setup(
@@ -92,7 +98,7 @@ namespace MH.ActorControllers
                     this.hitEffectPrefab = x.Data.HitEffectPrefab;
                     this.hitStopTimeScale = x.Data.HitStopTimeScale;
                     this.hitStopDurationSeconds = x.Data.HitStopDurationSeconds;
-                    this.power = x.Data.Power;
+                    this.motionPower = x.Data.Power;
                 })
                 .AddTo(ct);
 

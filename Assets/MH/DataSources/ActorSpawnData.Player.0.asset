@@ -16,6 +16,10 @@ MonoBehaviour:
     actorStatus:
       actorType: 0
       hitPoint: 100
+      partDataList:
+      - partName: Body
+        endurance: 0
+        damageRate: 1
     attackData:
       baseStrength: 0
       motionDataList:
