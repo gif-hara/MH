@@ -49,7 +49,7 @@ MonoBehaviour:
   pauseWhenDisabled: 0
   restartWhenComplete: 1
   logTaskChanges: 0
-  group: 1
+  group: 0
   resetValuesOnRestart: 0
   externalBehavior: {fileID: 0}
   mBehaviorSource:
