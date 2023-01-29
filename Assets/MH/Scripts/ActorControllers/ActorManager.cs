@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace MH.ActorControllers
@@ -44,6 +45,7 @@ namespace MH.ActorControllers
             if (actor.StatusController.BaseStatus.actorType == Define.ActorType.Player)
             {
                 players.Add(actor);
+                Debug.Log(actor);
             }
             else if(actor.StatusController.BaseStatus.actorType == Define.ActorType.Enemy)
             {

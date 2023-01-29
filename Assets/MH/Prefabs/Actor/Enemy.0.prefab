@@ -60,7 +60,7 @@ MonoBehaviour:
       parentIndex: 
       startIndex: 
       variableStartIndex: 
-      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(847.199646,113.799942)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(10,130.00032)"},"ID":1,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"MH.BehaviourDesignerControllers.MoveToTargetWithNavMesh","NodeData":{"Offset":"(-204.614746,200)"},"ID":2,"Name":"Move
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(847.199646,113.799942)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(0,130.00032)"},"ID":1,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"MH.BehaviourDesignerControllers.MoveToTargetWithNavMesh","NodeData":{"Offset":"(-204.614746,200)"},"ID":2,"Name":"Move
         To Target With Nav Mesh","Instant":true,"SharedEnemyBehaviourTreeCorecore":{"Type":"MH.BehaviourDesignerControllers.SharedEnemyBehaviourTreeCore","Name":null,"EnemyBehaviourTreeCoremValue":0},"SinglemoveSpeed":7,"SinglerotateSpeed":15,"SinglerotateOffset":0,"BooleancanMove":false,"BooleancanRotate":true,"RotateModerotateMode":"TargetActor"},{"Type":"MH.PlayAnimation","NodeData":{"Offset":"(-4.61487961,200)"},"ID":3,"Name":"Play
         Animation","Instant":true,"SharedActoractor":{"Type":"MH.BehaviourDesignerControllers.SharedActor","Name":null,"ActormValue":1},"StringanimationName":"Attack.0"},{"Type":"BehaviorDesigner.Runtime.Tasks.StartBehaviorTree","NodeData":{"Offset":"(172.423645,199.038116)"},"ID":4,"Name":"Start
         Behavior Tree","Instant":true,"SharedGameObjectbehaviorGameObject":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":null,"GameObjectmValue":2},"SharedIntgroup":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolwaitForCompletion":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedBoolsynchronizeVariables":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false}},{"Type":"BehaviorDesigner.Runtime.Tasks.StopBehaviorTree","NodeData":{"Offset":"(323.6137,197.847626)"},"ID":5,"Name":"Stop
@@ -265,7 +265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d7b55c7ecdb49a4a89fa5e6f9022861, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startWhenEnabled: 1
+  startWhenEnabled: 0
   asynchronousLoad: 0
   pauseWhenDisabled: 0
   restartWhenComplete: 1
@@ -281,8 +281,8 @@ MonoBehaviour:
       parentIndex: 
       startIndex: 
       variableStartIndex: 
-      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(217.200012,53.8000031)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-3.7722168,122.133255)"},"ID":1,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"MH.BehaviourDesignerControllers.RequestNetworkNewPosture","NodeData":{"Offset":"(-380.7,183)"},"ID":2,"Name":"Request
-        Network New Posture","Instant":true,"SharedEnemyBehaviourTreeCorecore":{"Type":"MH.BehaviourDesignerControllers.SharedEnemyBehaviourTreeCore","Name":null,"EnemyBehaviourTreeCoremValue":0}},{"Type":"MH.BehaviourDesignerControllers.SetTargetActor","NodeData":{"Offset":"(-190,180.555573)"},"ID":3,"Name":"Set
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(217.200012,53.8000031)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-3.7722168,122.133255)"},"ID":1,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"MH.BehaviourDesignerControllers.SetThinkData","NodeData":{"Offset":"(-392.7,176)"},"ID":2,"Name":"Set
+        Think Data","Instant":true,"SharedEnemyBehaviourTreeCorecore":{"Type":"MH.BehaviourDesignerControllers.SharedEnemyBehaviourTreeCore","Name":null,"EnemyBehaviourTreeCoremValue":0}},{"Type":"MH.BehaviourDesignerControllers.SetTargetActor","NodeData":{"Offset":"(-190,180.555573)"},"ID":3,"Name":"Set
         Target Actor","Instant":true,"SharedEnemyBehaviourTreeCorecore":{"Type":"MH.BehaviourDesignerControllers.SharedEnemyBehaviourTreeCore","Name":null,"EnemyBehaviourTreeCoremValue":1}},{"Type":"BehaviorDesigner.Runtime.Tasks.StartBehaviorTree","NodeData":{"Offset":"(4.838806,176.577637)"},"ID":4,"Name":"Start
         Behavior Tree","Instant":true,"SharedGameObjectbehaviorGameObject":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":null,"GameObjectmValue":2},"SharedIntgroup":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolwaitForCompletion":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedBoolsynchronizeVariables":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false}},{"Type":"BehaviorDesigner.Runtime.Tasks.StopBehaviorTree","NodeData":{"Offset":"(188.727753,181.022064)"},"ID":5,"Name":"Stop
         Behavior Tree","Instant":true,"SharedGameObjectbehaviorGameObject":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":null,"GameObjectmValue":3},"SharedIntgroup":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolpauseBehavior":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false}}]},"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"Core.TargetDistance","IsShared":true,"PropertyMapping":"MH.BehaviourDesignerControllers.EnemyBehaviourTreeCore/TargetDistance","PropertyMappingOwner":4,"SinglemValue":0}]}'
@@ -806,6 +806,7 @@ MonoBehaviour:
   owner: {fileID: 6321397659681280986}
   navMeshAgent: {fileID: 4093485235480863140}
   targetActor: {fileID: 0}
+  entryPointTree: {fileID: 6978290270167524618}
 --- !u!4 &6321397659712215965 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1689262406736378762, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}

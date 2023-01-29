@@ -1,6 +1,7 @@
 using BehaviorDesigner.Runtime.Tasks;
 using MH.ActorControllers;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace MH.BehaviourDesignerControllers
 {
@@ -8,7 +9,7 @@ namespace MH.BehaviourDesignerControllers
     ///
     /// </summary>
     [TaskCategory("MH")]
-    public sealed class RequestNetworkNewPosture : Action
+    public sealed class SetThinkData : Action
     {
         public SharedEnemyBehaviourTreeCore core;
 
@@ -20,8 +21,11 @@ namespace MH.BehaviourDesignerControllers
             }
 
             var c = this.core.Value;
-            MessageBroker.GetPublisher<Actor, ActorEvents.RequestNetworkNewPosture>()
-                .Publish(c.owner, ActorEvents.RequestNetworkNewPosture.Get());
+            var t = c.owner.transform;
+            var seed = (int)(Random.value * 100000000);
+            c.InitState(seed);
+            MessageBroker.GetPublisher<Actor, ActorEvents.RequestSubmitNewThinkData>()
+                .Publish(c.owner, ActorEvents.RequestSubmitNewThinkData.Get(t.position, t.rotation.eulerAngles.y, seed));
 
             return TaskStatus.Success;
         }

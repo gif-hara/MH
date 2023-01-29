@@ -30,11 +30,10 @@ namespace MH.NetworkSystems
             this.actor.transform.SetParent(this.transform, false);
 
             var ct = this.GetCancellationTokenOnDestroy();
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestNetworkNewPosture>()
-                .Subscribe(this.actor, _ =>
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestSubmitNewThinkData>()
+                .Subscribe(this.actor, x =>
                 {
-                    var t = this.actor.transform;
-                    this.SubmitPostureServerRpc(t.position, t.rotation.eulerAngles.y);
+                    this.SubmitPostureServerRpc(x.Position, x.RotationY, x.Seed);
                 })
                 .AddTo(ct);
         }
@@ -45,21 +44,21 @@ namespace MH.NetworkSystems
         }
 
         [ServerRpc]
-        private void SubmitPostureServerRpc(Vector3 newPosition, float newRotationY, ServerRpcParams rpcParams = default)
+        private void SubmitPostureServerRpc(Vector3 newPosition, float newRotationY, int thinkSeed, ServerRpcParams rpcParams = default)
         {
-            this.SubmitPostureClientRpc(newPosition, newRotationY);
+            this.SubmitPostureClientRpc(newPosition, newRotationY, thinkSeed);
         }
 
         [ClientRpc]
-        private void SubmitPostureClientRpc(Vector3 newPosition, float newRotationY, ClientRpcParams rpcParams = default)
+        private void SubmitPostureClientRpc(Vector3 newPosition, float newRotationY, int thinkSeed, ClientRpcParams rpcParams = default)
         {
             if (this.IsOwner)
             {
                 return;
             }
 
-            this.actor.PostureController.Warp(newPosition);
-            this.actor.PostureController.Rotate(Quaternion.Euler(0.0f, newRotationY, 0.0f));
+            MessageBroker.GetPublisher<Actor, ActorEvents.ReceivedNewThinkData>()
+                .Publish(this.actor, ActorEvents.ReceivedNewThinkData.Get(newPosition, newRotationY, thinkSeed));
         }
     }
 }

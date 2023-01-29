@@ -15,12 +15,9 @@ namespace MH.BehaviourDesignerControllers
 
         public override TaskStatus OnUpdate()
         {
-            if (this.core.Value.targetActor != null)
-            {
-                return TaskStatus.Success;
-            }
-
-            this.core.Value.targetActor = ActorManager.Players[Random.Range(0, ActorManager.Players.Count)];
+            var c = this.core.Value;
+            var index = c.GetRandom(() => Random.Range(0, ActorManager.Players.Count));
+            c.targetActor = ActorManager.Players[index];
 
             return TaskStatus.Success;
         }

@@ -35,8 +35,8 @@ namespace MH
             builder.AddMessageBroker<Actor, ChangedState>();
             builder.AddMessageBroker<Actor, ReceivedDamage>();
             builder.AddMessageBroker<Actor, Died>();
-            builder.AddMessageBroker<Actor, RequestNetworkNewPosture>();
-            builder.AddMessageBroker<Actor, ReceivedNetworkNewPosture>();
+            builder.AddMessageBroker<Actor, RequestSubmitNewThinkData>();
+            builder.AddMessageBroker<Actor, ReceivedNewThinkData>();
         }
 
         /// <summary>
@@ -246,13 +246,27 @@ namespace MH
         }
 
         /// <summary>
-        /// サーバーへ新しい姿勢をリクエストする際のメッセージ
+        /// 新しい思考データの送信のリクエストをするメッセージ
         /// </summary>
         /// <remarks>
         /// 現状敵のみ利用しています
         /// </remarks>
-        public sealed class RequestNetworkNewPosture : Message<RequestNetworkNewPosture>
+        public sealed class RequestSubmitNewThinkData : Message<RequestSubmitNewThinkData, Vector3, float, int>
         {
+            /// <summary>
+            /// 座標
+            /// </summary>
+            public Vector3 Position => this.Param1;
+
+            /// <summary>
+            /// 回転値
+            /// </summary>
+            public float RotationY => this.Param2;
+
+            /// <summary>
+            /// 乱数のシード値
+            /// </summary>
+            public int Seed => this.Param3;
         }
 
         /// <summary>
@@ -261,7 +275,7 @@ namespace MH
         /// <remarks>
         /// 現状敵のみ利用しています
         /// </remarks>
-        public sealed class ReceivedNetworkNewPosture : Message<ReceivedNetworkNewPosture, Vector3, float>
+        public sealed class ReceivedNewThinkData : Message<ReceivedNewThinkData, Vector3, float, int>
         {
             /// <summary>
             /// 座標
@@ -272,6 +286,11 @@ namespace MH
             /// Y回転軸
             /// </summary>
             public float RotationY => this.Param2;
+
+            /// <summary>
+            /// 乱数のシード値
+            /// </summary>
+            public int Seed => this.Param3;
         }
     }
 }

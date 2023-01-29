@@ -1,8 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using BehaviorDesigner.Runtime;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 using MH.ActorControllers;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 namespace MH.BehaviourDesignerControllers
 {
@@ -19,6 +25,12 @@ namespace MH.BehaviourDesignerControllers
         /// 攻撃対象となる<see cref="Actor"/>
         /// </summary>
         public Actor targetActor;
+
+        public BehaviorTree entryPointTree;
+
+        private Random.State thinkState;
+
+        private List<BehaviorTree> trees;
 
         public float TargetDistance
         {
@@ -43,13 +55,30 @@ namespace MH.BehaviourDesignerControllers
 
         private void Start()
         {
+            this.trees = this.GetComponentsInChildren<BehaviorTree>().ToList();
+            foreach (var behaviorTree in this.trees)
+            {
+                behaviorTree.DisableBehavior();
+            }
+
+            if (NetworkManager.Singleton.IsHost)
+            {
+                this.entryPointTree.EnableBehavior();
+            }
+
             var ct = this.GetCancellationTokenOnDestroy();
-            MessageBroker.GetSubscriber<Actor, ActorEvents.ReceivedNetworkNewPosture>()
+            MessageBroker.GetSubscriber<Actor, ActorEvents.ReceivedNewThinkData>()
                 .Subscribe(this.owner, x =>
                 {
                     var t = this.owner.transform;
-                    t.position = x.Position;
-                    t.rotation = Quaternion.Euler(0.0f, x.RotationY, 0.0f);
+                    this.owner.PostureController.Warp(x.Position);
+                    this.owner.PostureController.Rotate(Quaternion.Euler(0.0f, x.RotationY, 0.0f));
+                    this.InitState(x.Seed);
+                    foreach (var behaviorTree in this.trees)
+                    {
+                        behaviorTree.DisableBehavior();
+                    }
+                    this.entryPointTree.EnableBehavior();
                 })
                 .AddTo(ct);
         }
@@ -61,6 +90,24 @@ namespace MH.BehaviourDesignerControllers
                 Gizmos.color = Color.red;
                 Gizmos.DrawSphere(corner, 1.0f);
             }
+        }
+
+        public void InitState(int seed)
+        {
+            var prevState = Random.state;
+            Random.InitState(seed);
+            this.thinkState = Random.state;
+            Random.state = prevState;
+        }
+
+        public T GetRandom<T>(Func<T> randomSelector)
+        {
+            var prevState = Random.state;
+            Random.state = this.thinkState;
+            var result = randomSelector();
+            Random.state = prevState;
+
+            return result;
         }
     }
 }
