@@ -81,6 +81,20 @@ namespace MH.BehaviourDesignerControllers
                     this.entryPointTree.EnableBehavior();
                 })
                 .AddTo(ct);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.BeginFlinch>()
+                .Subscribe(this.owner, x =>
+                {
+                    this.DisableAllBehaviourTrees();
+                })
+                .AddTo(ct);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.EndFlinch>()
+                .Subscribe(this.owner, _ =>
+                {
+                    this.entryPointTree.EnableBehavior();
+                })
+                .AddTo(ct);
         }
 
         private void OnDrawGizmos()
@@ -108,6 +122,14 @@ namespace MH.BehaviourDesignerControllers
             Random.state = prevState;
 
             return result;
+        }
+
+        private void DisableAllBehaviourTrees()
+        {
+            foreach (var behaviorTree in this.trees)
+            {
+                behaviorTree.DisableBehavior();
+            }
         }
     }
 }

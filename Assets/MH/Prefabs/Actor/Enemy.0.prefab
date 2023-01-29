@@ -769,6 +769,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1689262406764164042, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5228128325161133662}
+    - targetCorrespondingSourceObject: {fileID: 1689262406764164042, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8727118916998964614}
   m_SourcePrefab: {fileID: 100100000, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
 --- !u!4 &6321397659681280985 stripped
 Transform:
@@ -829,6 +832,19 @@ MonoBehaviour:
   navMeshAgent: {fileID: 4093485235480863140}
   targetActor: {fileID: 0}
   entryPointTree: {fileID: 6978290270167524618}
+--- !u!114 &8727118916998964614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6321397659681280989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79b8915e548d99048b48bf2ca2c3353c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  partName: Body
 --- !u!4 &6321397659712215965 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1689262406736378762, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}

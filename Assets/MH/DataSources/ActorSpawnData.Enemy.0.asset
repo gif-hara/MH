@@ -37,5 +37,9 @@ MonoBehaviour:
         blendData:
           animationClip: {fileID: 7400000, guid: d3c01633bb9e0b74fa1da112d891fa7c, type: 2}
           blendSeconds: 0.1
+      - name: Flinch.0
+        blendData:
+          animationClip: {fileID: 7400000, guid: f04f852845b96224687e41d50a45ede1, type: 2}
+          blendSeconds: 0.05
     leaveDistance: 0
     extensionPrefabs: []

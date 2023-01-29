@@ -37,6 +37,8 @@ namespace MH
             builder.AddMessageBroker<Actor, Died>();
             builder.AddMessageBroker<Actor, RequestSubmitNewThinkData>();
             builder.AddMessageBroker<Actor, ReceivedNewThinkData>();
+            builder.AddMessageBroker<Actor, BeginFlinch>();
+            builder.AddMessageBroker<Actor, EndFlinch>();
         }
 
         /// <summary>
@@ -291,6 +293,20 @@ namespace MH
             /// 乱数のシード値
             /// </summary>
             public int Seed => this.Param3;
+        }
+
+        /// <summary>
+        /// ひるみを開始した際のメッセージ
+        /// </summary>
+        public sealed class BeginFlinch : Message<BeginFlinch>
+        {
+        }
+
+        /// <summary>
+        /// ひるみを終了した際のメッセージ
+        /// </summary>
+        public sealed class EndFlinch : Message<EndFlinch>
+        {
         }
     }
 }

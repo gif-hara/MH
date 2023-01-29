@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace MH.ActorControllers
@@ -49,7 +50,7 @@ namespace MH.ActorControllers
             }
         }
 
-        public void ReceiveDamage(int damage, string partName)
+        public void ReceiveDamage(int damage, string partName, Vector3 opposePosition)
         {
             if (this.IsDead)
             {
@@ -57,13 +58,23 @@ namespace MH.ActorControllers
             }
 
             this.hitPoint.Value -= damage;
-            this.currentEndurances[partName] += damage;
+            Debug.Log($"{this.actor.name} hitPoint = {this.hitPoint.Value}");
             MessageBroker.GetPublisher<Actor, ActorEvents.ReceivedDamage>()
                 .Publish(this.actor, ActorEvents.ReceivedDamage.Get(damage));
+            
             if (this.IsDead)
             {
                 MessageBroker.GetPublisher<Actor, ActorEvents.Died>()
                     .Publish(this.actor, ActorEvents.Died.Get());
+            }
+            else
+            {
+                this.currentEndurances[partName] += damage;
+                if (this.currentEndurances[partName] >= this.basePartDataList[partName].Endurance)
+                {
+                    this.currentEndurances[partName] = 0;
+                    this.actor.StateController.ForceFlinch(opposePosition);
+                }
             }
         }
 

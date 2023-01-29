@@ -16,3 +16,4 @@ MonoBehaviour:
   hitEffectPrefab: {fileID: 2832563910145863357, guid: 79ca9ec421fbbc447b5ccda5d2045bf2, type: 3}
   hitStopTimeScale: 0
   hitStopDurationSeconds: 0.1
+  power: 15

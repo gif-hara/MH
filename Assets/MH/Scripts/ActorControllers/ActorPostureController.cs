@@ -20,8 +20,6 @@ namespace MH.ActorControllers
 
         private Vector3 currentMoveVector;
 
-        private bool isMoving = true;
-
         private OpenCharacterController openCharacterController;
 
         public bool CanRotation { set; get; } = true;
@@ -29,6 +27,8 @@ namespace MH.ActorControllers
         public bool CanMove { set; get; } = true;
 
         public float Radius => this.openCharacterController.scaledRadius;
+
+        public bool IsMoving { get; private set; } = true;
 
         void IActorController.Setup(
             Actor actor,
@@ -51,18 +51,18 @@ namespace MH.ActorControllers
                 {
                     if (this.currentMoveVector.sqrMagnitude > 0.0f)
                     {
-                        if (!this.isMoving)
+                        if (!this.IsMoving)
                         {
-                            this.isMoving = true;
+                            this.IsMoving = true;
                             MessageBroker.GetPublisher<Actor, ActorEvents.BeginMove>()
                                 .Publish(this.actor, ActorEvents.BeginMove.Get());
                         }
                     }
                     else
                     {
-                        if (this.isMoving)
+                        if (this.IsMoving)
                         {
-                            this.isMoving = false;
+                            this.IsMoving = false;
                             MessageBroker.GetPublisher<Actor, ActorEvents.EndMove>()
                                 .Publish(this.actor, ActorEvents.EndMove.Get());
                         }

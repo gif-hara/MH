@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace MH.ActorControllers
@@ -18,6 +19,7 @@ namespace MH.ActorControllers
             Dodge,
             Attack,
             UniqueMotion,
+            Flinch,
         }
 
         private Actor actor;
@@ -33,6 +35,11 @@ namespace MH.ActorControllers
 
         private string uniqueMotionName;
 
+        /// <summary>
+        /// ひるんだ時に相手の方向へ向き直すか
+        /// </summary>
+        public bool onFlinchRotationOppose;
+
         public State CurrentState => this.stateController.CurrentState;
 
         void IActorController.Setup(
@@ -42,12 +49,14 @@ namespace MH.ActorControllers
         )
         {
             this.actor = actor;
+            this.onFlinchRotationOppose = spawnData.onFlinchRotationOppose;
             this.stateController = new StateController<State>(State.Invalid);
             this.stateController.Set(State.Idle, this.OnEnterIdle, null);
             this.stateController.Set(State.Run, this.OnEnterRun, null);
             this.stateController.Set(State.Dodge, this.OnEnterDodge, null);
             this.stateController.Set(State.Attack, this.OnEnterAttack, this.OnExitAttack);
             this.stateController.Set(State.UniqueMotion, this.OnEnterUniqueMotion, null);
+            this.stateController.Set(State.Flinch, this.OnEnterFlinch, null);
 
             var ct = this.actor.GetCancellationTokenOnDestroy();
 
@@ -80,6 +89,37 @@ namespace MH.ActorControllers
             };
         }
 
+        public void ForceChange(State state)
+        {
+            this.stateController.ChangeRequest(state);
+        }
+
+        public void ForceFlinch(Vector3 opposePosition)
+        {
+            if (this.onFlinchRotationOppose)
+            {
+                var direction = Vector3.Scale(
+                    opposePosition - this.actor.transform.position,
+                    new Vector3(1.0f, 0.0f, 1.0f)
+                    );
+                this.actor.PostureController.Rotate(Quaternion.LookRotation(direction), true);
+            }
+
+            this.stateController.ChangeRequest(State.Flinch);
+        }
+
+        private void ToIdle()
+        {
+            if (this.actor.PostureController.IsMoving)
+            {
+                this.ForceChange(State.Run);
+            }
+            else
+            {
+                this.ForceChange(State.Idle);
+            }
+        }
+
         private void OnEnterIdle(State previousState, DisposableBagBuilder scope)
         {
             MessageBroker.GetSubscriber<Actor, ActorEvents.BeginMove>()
@@ -108,6 +148,10 @@ namespace MH.ActorControllers
             this.actor.AnimationController.Play("Idle");
             this.actor.PostureController.CanMove = true;
             this.actor.PostureController.CanRotation = true;
+            if (this.actor.PostureController.IsMoving)
+            {
+                this.stateController.ChangeRequest(State.Run);
+            }
         }
 
         private void OnEnterRun(State previousState, DisposableBagBuilder scope)
@@ -138,6 +182,10 @@ namespace MH.ActorControllers
             this.actor.AnimationController.Play("Run");
             this.actor.PostureController.CanMove = true;
             this.actor.PostureController.CanRotation = true;
+            if (!this.actor.PostureController.IsMoving)
+            {
+                this.stateController.ChangeRequest(State.Idle);
+            }
         }
 
         private void OnEnterDodge(State previousState, DisposableBagBuilder scope)
@@ -176,7 +224,7 @@ namespace MH.ActorControllers
             MessageBroker.GetSubscriber<Actor, ActorEvents.EndDodge>()
                 .Subscribe(this.actor, _ =>
                 {
-                    this.stateController.ChangeRequest(State.Idle);
+                    this.ToIdle();
                 })
                 .AddTo(scope);
 
@@ -220,7 +268,7 @@ namespace MH.ActorControllers
             MessageBroker.GetSubscriber<Actor, ActorEvents.EndAttack>()
                 .Subscribe(this.actor, _ =>
                 {
-                    this.stateController.ChangeRequest(State.Idle);
+                    this.ToIdle();
                 })
                 .AddTo(scope);
 
@@ -264,7 +312,32 @@ namespace MH.ActorControllers
             try
             {
                 await this.actor.AnimationController.PlayAsync(this.uniqueMotionName);
-                this.stateController.ChangeRequest(State.Idle);
+                this.ToIdle();
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        private async void OnEnterFlinch(State previousState, DisposableBagBuilder scope)
+        {
+            try
+            {
+                this.actor.PostureController.CanMove = false;
+                this.actor.PostureController.CanRotation = false;
+                MessageBroker.GetPublisher<Actor, ActorEvents.BeginFlinch>()
+                    .Publish(this.actor, ActorEvents.BeginFlinch.Get());
+                await this.actor.AnimationController.PlayAsync("Flinch.0");
+                this.actor.PostureController.CanMove = true;
+                this.actor.PostureController.CanRotation = true;
+                this.ToIdle();
+                MessageBroker.GetPublisher<Actor, ActorEvents.EndFlinch>()
+                    .Publish(this.actor, ActorEvents.EndFlinch.Get());
             }
             catch (OperationCanceledException)
             {

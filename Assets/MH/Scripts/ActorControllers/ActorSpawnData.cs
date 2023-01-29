@@ -22,6 +22,11 @@ namespace MH.ActorControllers
         public float leaveDistance;
 
         /// <summary>
+        /// ひるんだ時に相手の方向へ向き直すか
+        /// </summary>
+        public bool onFlinchRotationOppose;
+
+        /// <summary>
         /// <see cref="Actor"/>にアタッチするプレハブリスト
         /// </summary>
         /// <remarks>
