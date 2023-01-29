@@ -70,7 +70,6 @@ namespace MH.BehaviourDesignerControllers
             MessageBroker.GetSubscriber<Actor, ActorEvents.ReceivedNewThinkData>()
                 .Subscribe(this.owner, x =>
                 {
-                    var t = this.owner.transform;
                     this.owner.PostureController.Warp(x.Position);
                     this.owner.PostureController.Rotate(Quaternion.Euler(0.0f, x.RotationY, 0.0f));
                     this.InitState(x.Seed);
@@ -79,6 +78,7 @@ namespace MH.BehaviourDesignerControllers
                         behaviorTree.DisableBehavior();
                     }
                     this.entryPointTree.EnableBehavior();
+                    this.owner.StateController.ForceChange(ActorStateController.State.Idle);
                 })
                 .AddTo(ct);
 
