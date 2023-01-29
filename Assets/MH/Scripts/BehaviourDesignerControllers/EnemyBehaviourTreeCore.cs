@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using MessagePipe;
 using MH.ActorControllers;
 using UnityEngine;
 using UnityEngine.AI;
@@ -37,6 +39,19 @@ namespace MH.BehaviourDesignerControllers
         {
             this.navMeshAgent.updatePosition = false;
             this.navMeshAgent.updateRotation = false;
+        }
+
+        private void Start()
+        {
+            var ct = this.GetCancellationTokenOnDestroy();
+            MessageBroker.GetSubscriber<Actor, ActorEvents.ReceivedNetworkNewPosture>()
+                .Subscribe(this.owner, x =>
+                {
+                    var t = this.owner.transform;
+                    t.position = x.Position;
+                    t.rotation = Quaternion.Euler(0.0f, x.RotationY, 0.0f);
+                })
+                .AddTo(ct);
         }
 
         private void OnDrawGizmos()

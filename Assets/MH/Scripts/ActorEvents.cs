@@ -35,6 +35,8 @@ namespace MH
             builder.AddMessageBroker<Actor, ChangedState>();
             builder.AddMessageBroker<Actor, ReceivedDamage>();
             builder.AddMessageBroker<Actor, Died>();
+            builder.AddMessageBroker<Actor, RequestNetworkNewPosture>();
+            builder.AddMessageBroker<Actor, ReceivedNetworkNewPosture>();
         }
 
         /// <summary>
@@ -241,6 +243,35 @@ namespace MH
         /// </summary>
         public sealed class Died : Message<Died>
         {
+        }
+
+        /// <summary>
+        /// サーバーへ新しい姿勢をリクエストする際のメッセージ
+        /// </summary>
+        /// <remarks>
+        /// 現状敵のみ利用しています
+        /// </remarks>
+        public sealed class RequestNetworkNewPosture : Message<RequestNetworkNewPosture>
+        {
+        }
+
+        /// <summary>
+        /// サーバーから新しい姿勢を受け取った際のメッセージ
+        /// </summary>
+        /// <remarks>
+        /// 現状敵のみ利用しています
+        /// </remarks>
+        public sealed class ReceivedNetworkNewPosture : Message<ReceivedNetworkNewPosture, Vector3, float>
+        {
+            /// <summary>
+            /// 座標
+            /// </summary>
+            public Vector3 Position => this.Param1;
+
+            /// <summary>
+            /// Y回転軸
+            /// </summary>
+            public float RotationY => this.Param2;
         }
     }
 }

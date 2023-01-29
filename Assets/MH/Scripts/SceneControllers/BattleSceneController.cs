@@ -4,6 +4,7 @@ using MessagePipe;
 using MH.ActorControllers;
 using MH.NetworkSystems;
 using MH.UISystems;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace MH.SceneControllers
@@ -14,7 +15,7 @@ namespace MH.SceneControllers
     public sealed class BattleSceneController : MonoBehaviour
     {
         [SerializeField]
-        private Actor enemyPrefab;
+        private EnemyNetworkBehaviour enemyPrefab;
 
         [SerializeField]
         private BattleSceneDebugData debugData;
@@ -70,7 +71,11 @@ namespace MH.SceneControllers
                 })
                 .AddTo(ct);
 
-            this.enemyPrefab.Spawn(this.debugData.enemySpawnData.data, this.enemySpawnPoint);
+            if (NetworkManager.Singleton.IsHost)
+            {
+                var enemy = Instantiate(this.enemyPrefab, this.enemySpawnPoint.position, this.enemySpawnPoint.rotation);
+                enemy.SpawnToNetwork();
+            }
         }
     }
 }
