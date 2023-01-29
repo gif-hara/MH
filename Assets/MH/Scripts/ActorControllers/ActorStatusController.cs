@@ -61,7 +61,7 @@ namespace MH.ActorControllers
             Debug.Log($"{this.actor.name} hitPoint = {this.hitPoint.Value}");
             MessageBroker.GetPublisher<Actor, ActorEvents.ReceivedDamage>()
                 .Publish(this.actor, ActorEvents.ReceivedDamage.Get(damage));
-            
+
             if (this.IsDead)
             {
                 MessageBroker.GetPublisher<Actor, ActorEvents.Died>()
