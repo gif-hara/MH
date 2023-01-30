@@ -47,6 +47,8 @@ namespace MH.BehaviourDesignerControllers
             }
         }
 
+        public bool IsHost => NetworkManager.Singleton.IsHost;
+
         private void Awake()
         {
             this.navMeshAgent.updatePosition = false;

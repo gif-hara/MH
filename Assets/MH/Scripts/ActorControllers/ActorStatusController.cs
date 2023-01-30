@@ -58,7 +58,6 @@ namespace MH.ActorControllers
             }
 
             this.hitPoint.Value -= damage;
-            Debug.Log($"{this.actor.name} hitPoint = {this.hitPoint.Value}");
             MessageBroker.GetPublisher<Actor, ActorEvents.ReceivedDamage>()
                 .Publish(this.actor, ActorEvents.ReceivedDamage.Get(damage));
 
