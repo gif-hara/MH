@@ -36,7 +36,7 @@ namespace MH.ActorControllers
 
         public float GetDamageRate(GameObject partObject)
         {
-            return this.actor.StatusController.GetPartDamageRate(this.GetPart(partObject).PartName);
+            return this.actor.StatusController.GetPartDamageRate(this.GetPart(partObject).PartType);
         }
     }
 }

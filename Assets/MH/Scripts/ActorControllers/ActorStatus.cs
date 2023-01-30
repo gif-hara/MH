@@ -27,10 +27,10 @@ namespace MH.ActorControllers
         public class PartData
         {
             /// <summary>
-            /// 部位の名前
+            /// 部位タイプ
             /// </summary>
             [SerializeField]
-            private string partName;
+            private Define.PartType partType;
 
             /// <summary>
             /// 耐久値
@@ -47,7 +47,7 @@ namespace MH.ActorControllers
             [SerializeField][Range(0.0f, 1.0f)]
             private float damageRate;
 
-            public string PartName => this.partName;
+            public Define.PartType PartType => this.partType;
 
             public int Endurance => this.endurance;
 

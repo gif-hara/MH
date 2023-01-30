@@ -31,5 +31,13 @@ namespace MH
             /// </summary>
             Strong,
         }
+
+        /// <summary>
+        /// 部位タイプ
+        /// </summary>
+        public enum PartType
+        {
+            Body,
+        }
     }
 }

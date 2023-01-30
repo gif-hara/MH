@@ -8,8 +8,8 @@ namespace MH.ActorControllers
     public sealed class ActorPartComponent : MonoBehaviour
     {
         [SerializeField]
-        private string partName;
+        private Define.PartType partType;
 
-        public string PartName => this.partName;
+        public Define.PartType PartType => this.partType;
     }
 }

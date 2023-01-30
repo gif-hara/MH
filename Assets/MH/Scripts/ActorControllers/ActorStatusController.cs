@@ -21,15 +21,15 @@ namespace MH.ActorControllers
         /// <summary>
         /// 基礎となる部位データ
         /// </summary>
-        private readonly Dictionary<string, ActorStatus.PartData> basePartDataList = new();
+        private readonly Dictionary<Define.PartType, ActorStatus.PartData> basePartDataList = new();
 
-        private readonly Dictionary<string, int> currentEndurances = new();
+        private readonly Dictionary<Define.PartType, int> currentEndurances = new();
 
         public IAsyncReactiveProperty<int> HitPointMax => this.hitPointMax;
 
         public IAsyncReactiveProperty<int> HitPoint => this.hitPoint;
 
-        public IReadOnlyDictionary<string, ActorStatus.PartData> BasePartDataList => this.basePartDataList;
+        public IReadOnlyDictionary<Define.PartType, ActorStatus.PartData> BasePartDataList => this.basePartDataList;
 
         public bool IsDead => this.hitPoint.Value <= 0;
 
@@ -45,12 +45,12 @@ namespace MH.ActorControllers
             this.hitPoint.Value = this.BaseStatus.hitPoint;
             foreach (var partData in this.BaseStatus.partDataList)
             {
-                this.basePartDataList.Add(partData.PartName, partData);
-                this.currentEndurances.Add(partData.PartName, 0);
+                this.basePartDataList.Add(partData.PartType, partData);
+                this.currentEndurances.Add(partData.PartType, 0);
             }
         }
 
-        public void ReceiveDamage(int damage, string partName, Vector3 opposePosition)
+        public void ReceiveDamage(int damage, Define.PartType partType, Vector3 opposePosition)
         {
             if (this.IsDead)
             {
@@ -68,19 +68,19 @@ namespace MH.ActorControllers
             }
             else
             {
-                this.currentEndurances[partName] += damage;
-                if (this.currentEndurances[partName] >= this.basePartDataList[partName].Endurance)
+                this.currentEndurances[partType] += damage;
+                if (this.currentEndurances[partType] >= this.basePartDataList[partType].Endurance)
                 {
-                    this.currentEndurances[partName] = 0;
+                    this.currentEndurances[partType] = 0;
                     this.actor.StateController.ForceFlinch(opposePosition);
                 }
             }
         }
 
-        public float GetPartDamageRate(string partName)
+        public float GetPartDamageRate(Define.PartType partType)
         {
-            var result = this.basePartDataList[partName];
-            Assert.IsNotNull(result, $"{partName}という部位は存在しません");
+            var result = this.basePartDataList[partType];
+            Assert.IsNotNull(result, $"{partType}という部位は存在しません");
 
             return result.DamageRate;
         }

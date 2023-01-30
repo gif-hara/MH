@@ -75,7 +75,7 @@ namespace MH.ActorControllers
                 this.actor.TimeController.BeginHitStop(this.hitStopTimeScale, this.hitStopDurationSeconds).Forget();
             }
 
-            var partName = targetActor.PartController.GetPart(other.gameObject).PartName;
+            var partName = targetActor.PartController.GetPart(other.gameObject).PartType;
             var damageRate = targetActor.PartController.GetDamageRate(other.gameObject);
             var damage = Calculator.GetDamage(this.weaponPower, this.motionPower, damageRate);
             targetActor.StatusController.ReceiveDamage(damage, partName, this.actor.transform.position);
