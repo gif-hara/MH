@@ -97,7 +97,10 @@ namespace MH.BehaviourDesignerControllers
             MessageBroker.GetSubscriber<Actor, ActorEvents.EndFlinch>()
                 .Subscribe(this.owner, _ =>
                 {
-                    this.entryPointTree.EnableBehavior();
+                    if (this.IsHost)
+                    {
+                        this.entryPointTree.EnableBehavior();
+                    }
                 })
                 .AddTo(ct);
         }
