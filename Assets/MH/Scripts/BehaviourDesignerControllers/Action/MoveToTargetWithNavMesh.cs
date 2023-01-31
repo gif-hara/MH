@@ -12,7 +12,7 @@ namespace MH.BehaviourDesignerControllers
     [TaskDescription("NavMeshを利用して攻撃対象へと移動します")]
     public sealed class MoveToTargetWithNavMesh : Action
     {
-        public SharedEnemyBehaviourTreeCore core;
+        public SharedEnemyActorBehaviour enemy;
 
         public float moveSpeed;
 
@@ -44,21 +44,21 @@ namespace MH.BehaviourDesignerControllers
 
         public override TaskStatus OnUpdate()
         {
-            var c = this.core.Value;
-            if (c.targetActor == null)
+            var e = this.enemy.Value;
+            if (e.targetActor == null)
             {
                 Debug.LogWarning("攻撃対象が存在しません");
                 return TaskStatus.Failure;
             }
 
-            c.navMeshAgent.destination = c.targetActor.transform.position;
+            e.navMeshAgent.destination = e.targetActor.transform.position;
 
             if (this.canMove)
             {
-                c.owner.PostureController.Move(
-                    this.GetDirectionFromNavMesh() * this.moveSpeed * c.owner.TimeController.Time.deltaTime
+                e.owner.PostureController.Move(
+                    this.GetDirectionFromNavMesh() * this.moveSpeed * e.owner.TimeController.Time.deltaTime
                     );
-                c.navMeshAgent.nextPosition = c.owner.transform.position;
+                e.navMeshAgent.nextPosition = e.owner.transform.position;
             }
             if (this.canRotate)
             {
@@ -70,11 +70,11 @@ namespace MH.BehaviourDesignerControllers
                     var to = Quaternion.LookRotation(direction);
                     to = Quaternion.Euler(to.eulerAngles + new Vector3(0.0f, this.rotateOffset, 0.0f));
                     var rotation = Quaternion.Lerp(
-                        c.owner.transform.rotation,
+                        e.owner.transform.rotation,
                         to,
-                        this.rotateSpeed * c.owner.TimeController.Time.deltaTime
+                        this.rotateSpeed * e.owner.TimeController.Time.deltaTime
                         );
-                    c.owner.PostureController.Rotate(rotation);
+                    e.owner.PostureController.Rotate(rotation);
                 }
             }
 
@@ -93,7 +93,7 @@ namespace MH.BehaviourDesignerControllers
 
         private Vector3 GetDirectionFromNavMesh()
         {
-            var c = this.core.Value;
+            var c = this.enemy.Value;
             var nextPosition = GetNextPosition(c.navMeshAgent.path);
             return Vector3.Scale(
                 nextPosition - c.owner.transform.position,
@@ -103,7 +103,7 @@ namespace MH.BehaviourDesignerControllers
 
         private Vector3 GetDirectionFromTargetActor()
         {
-            var c = this.core.Value;
+            var c = this.enemy.Value;
             return Vector3.Scale(
                 c.targetActor.transform.position - c.owner.transform.position,
                 new Vector3(1.0f, 0.0f, 1.0f)

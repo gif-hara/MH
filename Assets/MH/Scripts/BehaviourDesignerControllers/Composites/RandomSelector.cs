@@ -8,14 +8,14 @@ namespace MH.BehaviourDesignerControllers
     [TaskCategory("MH")]
     public class RandomSelector : Composite
     {
-        public SharedEnemyBehaviourTreeCore core;
+        public SharedEnemyActorBehaviour enemy;
 
         // The task status of the last child ran.
         private TaskStatus executionStatus = TaskStatus.Inactive;
 
         public override int CurrentChildIndex()
         {
-            return this.core.Value.GetRandom(() => Random.Range(0, this.children.Count));
+            return this.enemy.Value.GetRandom(() => Random.Range(0, this.children.Count));
         }
 
         public override bool CanExecute()

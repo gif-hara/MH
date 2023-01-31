@@ -13,9 +13,9 @@ using Random = UnityEngine.Random;
 namespace MH.BehaviourDesignerControllers
 {
     /// <summary>
-    /// 敵アクターとBehaviour Designerとを繫げこむクラス
+    /// 敵の<see cref="Actor"/>を制御するクラス
     /// </summary>
-    public sealed class EnemyBehaviourTreeCore : MonoBehaviour
+    public sealed class EnemyActorBehaviour : MonoBehaviour
     {
         public Actor owner;
 

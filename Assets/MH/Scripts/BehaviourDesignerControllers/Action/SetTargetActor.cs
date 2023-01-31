@@ -11,13 +11,13 @@ namespace MH.BehaviourDesignerControllers
     [TaskDescription("攻撃対象となるActorを設定します")]
     public sealed class SetTargetActor : Action
     {
-        public SharedEnemyBehaviourTreeCore core;
+        public SharedEnemyActorBehaviour enemy;
 
         public override TaskStatus OnUpdate()
         {
-            var c = this.core.Value;
-            var index = c.GetRandom(() => Random.Range(0, ActorManager.Players.Count));
-            c.targetActor = ActorManager.Players[index];
+            var e = this.enemy.Value;
+            var index = e.GetRandom(() => Random.Range(0, ActorManager.Players.Count));
+            e.targetActor = ActorManager.Players[index];
 
             return TaskStatus.Success;
         }
