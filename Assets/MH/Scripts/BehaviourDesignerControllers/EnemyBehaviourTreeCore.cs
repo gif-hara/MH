@@ -58,10 +58,7 @@ namespace MH.BehaviourDesignerControllers
         private void Start()
         {
             this.trees = this.GetComponentsInChildren<BehaviorTree>().ToList();
-            foreach (var behaviorTree in this.trees)
-            {
-                behaviorTree.DisableBehavior();
-            }
+            this.DisableAllBehaviourTrees();
 
             if (NetworkManager.Singleton.IsHost)
             {
@@ -75,10 +72,7 @@ namespace MH.BehaviourDesignerControllers
                     this.owner.PostureController.Warp(x.Position);
                     this.owner.PostureController.Rotate(Quaternion.Euler(0.0f, x.RotationY, 0.0f));
                     this.InitState(x.Seed);
-                    foreach (var behaviorTree in this.trees)
-                    {
-                        behaviorTree.DisableBehavior();
-                    }
+                    this.DisableAllBehaviourTrees();
                     this.entryPointTree.EnableBehavior();
                     this.owner.StateController.ForceChange(ActorStateController.State.Idle);
                 })
