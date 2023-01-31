@@ -32,6 +32,12 @@ namespace MH.BehaviourDesignerControllers
 
         private List<BehaviorTree> trees;
 
+        /// <summary>
+        /// ターゲットとの距離を返す
+        /// </summary>
+        /// <remarks>
+        /// Behaviour Treeで利用しています
+        /// </remarks>
         public float TargetDistance
         {
             get
@@ -47,20 +53,23 @@ namespace MH.BehaviourDesignerControllers
             }
         }
 
+        /// <summary>
+        /// ホストであるか返す
+        /// </summary>
+        /// <remarks>
+        /// Behaviour Treeで利用しています
+        /// </remarks>
         public bool IsHost => NetworkManager.Singleton.IsHost;
-
-        private void Awake()
-        {
-            this.navMeshAgent.updatePosition = false;
-            this.navMeshAgent.updateRotation = false;
-        }
 
         private void Start()
         {
+            this.navMeshAgent.updatePosition = false;
+            this.navMeshAgent.updateRotation = false;
+
             this.trees = this.GetComponentsInChildren<BehaviorTree>().ToList();
             this.DisableAllBehaviourTrees();
 
-            if (NetworkManager.Singleton.IsHost)
+            if (this.IsHost)
             {
                 this.entryPointTree.EnableBehavior();
             }
