@@ -58,17 +58,11 @@ namespace MH.ActorControllers
 
             this.collidedRigidbodies.Add(targetActor);
 
-            var hitData = new HitData
-            {
-                position = other.ClosestPoint(transform.position),
-                rotation = transform.rotation
-            };
-
+            var t = this.transform;
+            var hitPosition = other.ClosestPoint(t.position);
+            var hitRotation = t.rotation;
             MessageBroker.GetPublisher<PoolablePrefabEvents.RequestCreate>()
-                .Publish(PoolablePrefabEvents.RequestCreate.Get(this.hitEffectPrefab, hitData.position, hitData.rotation));
-
-            MessageBroker.GetPublisher<ActorEvents.HitAttack>()
-                .Publish(ActorEvents.HitAttack.Get(hitData));
+                .Publish(PoolablePrefabEvents.RequestCreate.Get(this.hitEffectPrefab, hitPosition, hitRotation));
 
             if (this.hitStopDurationSeconds > 0.0f)
             {
@@ -77,11 +71,11 @@ namespace MH.ActorControllers
 
             var partName = targetActor.PartController.GetPart(other.gameObject).PartType;
             var damageRate = targetActor.PartController.GetDamageRate(other.gameObject);
-            var damage = Calculator.GetDamage(this.weaponPower, this.motionPower, damageRate);
-            targetActor.StatusController.ReceiveDamage(damage, partName, this.actor.transform.position);
+            var damageData = Calculator.GetDamageData(this.weaponPower, this.motionPower, damageRate);
+            targetActor.StatusController.ReceiveDamage(damageData, partName, this.actor.transform.position);
 
             MessageBroker.GetPublisher<Actor, ActorEvents.GaveDamage>()
-                .Publish( this.actor, ActorEvents.GaveDamage.Get(damage));
+                .Publish( this.actor, ActorEvents.GaveDamage.Get(damageData));
         }
 
         void IActorController.Setup(

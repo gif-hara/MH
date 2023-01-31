@@ -50,16 +50,16 @@ namespace MH.ActorControllers
             }
         }
 
-        public void ReceiveDamage(int damage, Define.PartType partType, Vector3 opposePosition)
+        public void ReceiveDamage(DamageData damageData, Define.PartType partType, Vector3 opposePosition)
         {
             if (this.IsDead)
             {
                 return;
             }
 
-            this.hitPoint.Value -= damage;
+            this.hitPoint.Value -= damageData.damage;
             MessageBroker.GetPublisher<Actor, ActorEvents.ReceivedDamage>()
-                .Publish(this.actor, ActorEvents.ReceivedDamage.Get(damage));
+                .Publish(this.actor, ActorEvents.ReceivedDamage.Get(damageData));
 
             if (this.IsDead)
             {
@@ -68,7 +68,7 @@ namespace MH.ActorControllers
             }
             else
             {
-                this.currentEndurances[partType] += damage;
+                this.currentEndurances[partType] += damageData.damage;
                 if (this.currentEndurances[partType] >= this.basePartDataList[partType].Endurance)
                 {
                     this.currentEndurances[partType] = 0;

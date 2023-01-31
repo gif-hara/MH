@@ -7,9 +7,12 @@ namespace MH
     /// </summary>
     public static class Calculator
     {
-        public static int GetDamage(int weaponStrength, int motionPower, float partRate)
+        public static DamageData GetDamageData(int weaponStrength, int motionPower, float partRate)
         {
-            return Mathf.FloorToInt((weaponStrength * motionPower) * partRate);
+            return new DamageData
+            {
+                damage = Mathf.FloorToInt((weaponStrength * motionPower) * partRate)
+            };
         }
     }
 }

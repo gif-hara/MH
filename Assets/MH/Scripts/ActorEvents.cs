@@ -28,7 +28,6 @@ namespace MH
             builder.AddMessageBroker<RemovedActor>();
             builder.AddMessageBroker<Actor, ValidationAttackCollider>();
             builder.AddMessageBroker<Actor, InvalidationAttackCollider>();
-            builder.AddMessageBroker<HitAttack>();
             builder.AddMessageBroker<Actor, RequestSetForce>();
             builder.AddMessageBroker<Actor, RequestUniqueMotion>();
             builder.AddMessageBroker<Actor, NetworkRequestUniqueMotion>();
@@ -171,17 +170,6 @@ namespace MH
         }
 
         /// <summary>
-        /// 攻撃が当たった際のメッセージ
-        /// </summary>
-        public sealed class HitAttack : Message<HitAttack, HitData>
-        {
-            /// <summary>
-            /// ヒットデータ
-            /// </summary>
-            public HitData HitData => this.Param1;
-        }
-
-        /// <summary>
         /// 衝撃値の設定をリクエストするメッセージ
         /// </summary>
         public sealed class RequestSetForce : Message<RequestSetForce, Vector3>
@@ -233,23 +221,23 @@ namespace MH
         /// <summary>
         /// ダメージを与えた際のメッセージ
         /// </summary>
-        public sealed class GaveDamage : Message<GaveDamage, int>
+        public sealed class GaveDamage : Message<GaveDamage, DamageData>
         {
             /// <summary>
-            /// 受けたダメージ
+            /// ダメージデータ
             /// </summary>
-            public int Damage => this.Param1;
+            public DamageData Data => this.Param1;
         }
 
         /// <summary>
         /// ダメージを受けた際のメッセージ
         /// </summary>
-        public sealed class ReceivedDamage : Message<ReceivedDamage, int>
+        public sealed class ReceivedDamage : Message<ReceivedDamage, DamageData>
         {
             /// <summary>
-            /// 受けたダメージ
+            /// ダメージデータ
             /// </summary>
-            public int Damage => this.Param1;
+            public DamageData Data => this.Param1;
         }
 
         /// <summary>
