@@ -14,6 +14,8 @@ namespace MH.ActorControllers
 
         private static readonly List<Actor> enemies = new();
 
+        private static readonly Dictionary<ulong, Actor> networkObjectIdMap = new ();
+
         public static IReadOnlyList<Actor> Actors => actors;
 
         public static IReadOnlyList<Actor> Players => players;
@@ -40,6 +42,7 @@ namespace MH.ActorControllers
         public static void AddActor(Actor actor)
         {
             actors.Add(actor);
+            networkObjectIdMap.Add(actor.NetworkController.NetworkObjectId, actor);
 
             if (actor.StatusController.BaseStatus.actorType == Define.ActorType.Player)
             {
@@ -57,6 +60,7 @@ namespace MH.ActorControllers
         public static void RemoveActor(Actor actor)
         {
             actors.Remove(actor);
+            networkObjectIdMap.Remove(actor.NetworkController.NetworkObjectId);
 
             if (actor.StatusController.BaseStatus.actorType == Define.ActorType.Player)
             {
@@ -69,6 +73,15 @@ namespace MH.ActorControllers
 
             MessageBroker.GetPublisher<ActorEvents.RemovedActor>()
                 .Publish(ActorEvents.RemovedActor.Get(actor));
+        }
+
+        /// <summary>
+        /// NetworkObjectIdから<see cref="Actor"/>を返す
+        /// </summary>
+        public static Actor GetActorFromNetworkObjectId(ulong networkObjectId)
+        {
+            Assert.IsTrue(networkObjectIdMap.ContainsKey(networkObjectId), $"{nameof(networkObjectId)} = {networkObjectId} is not found.");
+            return networkObjectIdMap[networkObjectId];
         }
     }
 }
