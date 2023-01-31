@@ -4,7 +4,7 @@ using UnityEngine.Assertions;
 namespace MH.ActorControllers
 {
     /// <summary>
-    ///
+    /// <see cref="Actor"/>を管理するクラス
     /// </summary>
     public static class ActorManager
     {
@@ -14,7 +14,7 @@ namespace MH.ActorControllers
 
         private static readonly List<Actor> enemies = new();
 
-        private static readonly Dictionary<ulong, Actor> networkObjectIdMap = new ();
+        private static readonly Dictionary<ulong, Actor> networkObjectIdMap = new();
 
         public static IReadOnlyList<Actor> Actors => actors;
 
@@ -48,7 +48,7 @@ namespace MH.ActorControllers
             {
                 players.Add(actor);
             }
-            else if(actor.StatusController.BaseStatus.actorType == Define.ActorType.Enemy)
+            else if (actor.StatusController.BaseStatus.actorType == Define.ActorType.Enemy)
             {
                 enemies.Add(actor);
             }
@@ -66,7 +66,7 @@ namespace MH.ActorControllers
             {
                 players.Remove(actor);
             }
-            else if(actor.StatusController.BaseStatus.actorType == Define.ActorType.Enemy)
+            else if (actor.StatusController.BaseStatus.actorType == Define.ActorType.Enemy)
             {
                 enemies.Remove(actor);
             }
