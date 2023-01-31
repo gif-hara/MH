@@ -4,26 +4,29 @@ using Cysharp.Threading.Tasks.Triggers;
 using MessagePipe;
 using MH.NetworkSystems;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace MH.ActorControllers
 {
     /// <summary>
-    ///
+    /// 他プレイヤーが操作する<see cref="Actor"/>の制御を行うクラス
     /// </summary>
-    public sealed class ActorAIGhostPlayer : IActorAI
+    public sealed class GhostPlayerActorBehaviour
     {
-        private readonly PlayerNetworkBehaviour playerNetworkBehaviour;
-
         private Actor actor;
 
-        public ActorAIGhostPlayer(PlayerNetworkBehaviour playerNetworkBehaviour)
+        private PlayerNetworkBehaviour playerNetworkBehaviour;
+
+        public static void Attach(Actor actor, PlayerNetworkBehaviour playerNetworkBehaviour)
         {
-            this.playerNetworkBehaviour = playerNetworkBehaviour;
-            Assert.IsFalse(this.playerNetworkBehaviour.IsOwner);
+            var instance = new GhostPlayerActorBehaviour();
+            instance._Attach(actor, playerNetworkBehaviour);
         }
 
-        public void Attach(Actor actor)
+        private GhostPlayerActorBehaviour()
+        {
+        }
+
+        public void _Attach(Actor actor, PlayerNetworkBehaviour playerNetworkBehaviour)
         {
             this.actor = actor;
             var ct = this.actor.GetCancellationTokenOnDestroy();

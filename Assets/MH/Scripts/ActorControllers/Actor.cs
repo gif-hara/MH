@@ -31,8 +31,6 @@ namespace MH.ActorControllers
 
         public ActorStatusController StatusController { private set; get; }
 
-        public ActorAIController AIController { private set; get; }
-
         public ActorNetworkController NetworkController { private set; get; }
 
         public ActorPartController PartController { private set; get; }
@@ -70,7 +68,6 @@ namespace MH.ActorControllers
             this.DodgeController = this.CreateActorController<ActorDodgeController>(spawnData);
             this.AttackController = this.CreateActorController<ActorAttackController>(spawnData);
             this.StatusController = this.CreateActorController<ActorStatusController>(spawnData);
-            this.AIController = this.CreateActorController<ActorAIController>(spawnData);
             this.NetworkController = this.CreateActorController<ActorNetworkController>(spawnData);
             this.PartController = this.CreateActorController<ActorPartController>(spawnData);
 

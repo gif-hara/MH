@@ -31,19 +31,19 @@ namespace MH.NetworkSystems
 
         public override void OnNetworkSpawn()
         {
-            var spawnData = this.actorSpawnData.data;
+            this.actor = this.actorPrefab.Spawn(this.actorSpawnData.data, Vector3.zero, Quaternion.identity);
+            this.actor.transform.SetParent(this.transform);
+            this.actor.NetworkController.NetworkBehaviour = this;
+
             if (this.IsOwner)
             {
-                spawnData.actorAI = new ActorAIPlayer(this);
                 Instantiate(this.cameraControllerPrefab, this.transform);
+                OwnerPlayerActorBehaviour.Attach(this.actor, this);
             }
             else
             {
-                spawnData.actorAI = new ActorAIGhostPlayer(this);
+                GhostPlayerActorBehaviour.Attach(this.actor, this);
             }
-            this.actor = this.actorPrefab.Spawn(spawnData, Vector3.zero, Quaternion.identity);
-            this.actor.transform.SetParent(this.transform);
-            this.actor.NetworkController.NetworkBehaviour = this;
         }
 
         public void SubmitPosition(Vector3 newPosition)

@@ -6,22 +6,21 @@ using Cysharp.Threading.Tasks.Triggers;
 using MessagePipe;
 using MH.NetworkSystems;
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 
 namespace MH.ActorControllers
 {
     /// <summary>
-    ///
+    /// プレイヤーが操作する<see cref="Actor"/>の制御を行うクラス
     /// </summary>
-    public sealed class ActorAIPlayer : IActorAI
+    public sealed class OwnerPlayerActorBehaviour
     {
         /// <summary>
         /// 先行入力を行っている処理
         /// </summary>
         private readonly DisposableBagBuilder advancedEntryScope = DisposableBag.CreateBuilder();
 
-        private readonly PlayerNetworkBehaviour playerNetworkBehaviour;
+        private PlayerNetworkBehaviour playerNetworkBehaviour;
 
         private Actor actor;
 
@@ -33,15 +32,20 @@ namespace MH.ActorControllers
 
         private CinemachineOrbitalTransposer orbitalTransposer;
 
-        public ActorAIPlayer(PlayerNetworkBehaviour playerNetworkBehaviour)
+        public static void Attach(Actor actor, PlayerNetworkBehaviour playerNetworkBehaviour)
         {
-            this.playerNetworkBehaviour = playerNetworkBehaviour;
-            Assert.IsTrue(this.playerNetworkBehaviour.IsOwner);
+            var instance = new OwnerPlayerActorBehaviour();
+            instance._Attach(actor, playerNetworkBehaviour);
         }
 
-        public void Attach(Actor actor)
+        private OwnerPlayerActorBehaviour()
+        {
+        }
+
+        private void _Attach(Actor actor, PlayerNetworkBehaviour playerNetworkBehaviour)
         {
             this.actor = actor;
+            this.playerNetworkBehaviour = playerNetworkBehaviour;
             this.cinemachineVirtualCamera = CameraController.Instance.Player;
             var t = this.actor.transform;
             this.cinemachineVirtualCamera.Follow = t;
@@ -59,7 +63,7 @@ namespace MH.ActorControllers
             inputActions.Player.AttackStrong.performed += PerformedAttackStrong;
             inputActions.Enable();
 
-            var ct = actor.GetCancellationTokenOnDestroy();
+            var ct = this.actor.GetCancellationTokenOnDestroy();
             actor.GetAsyncUpdateTrigger()
                 .Subscribe(_ =>
                 {
@@ -129,8 +133,7 @@ namespace MH.ActorControllers
                 })
                 .AddTo(ct);
         }
-
-        private void PerformedDodge(InputAction.CallbackContext context)
+                private void PerformedDodge(InputAction.CallbackContext context)
         {
             this.RegisterAdvancedEntry(() =>
             {
