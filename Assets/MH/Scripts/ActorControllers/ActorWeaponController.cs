@@ -28,7 +28,7 @@ namespace MH.ActorControllers
 
         private int motionPower;
 
-        private readonly HashSet<Actor> collidedRigidbodies = new();
+        private readonly HashSet<Actor> collidedActors = new();
 
         private Dictionary<string, GameObject> colliderDictionary;
 
@@ -51,12 +51,13 @@ namespace MH.ActorControllers
 
             var targetActor = other.GetComponentInParent<Actor>();
 
-            if (this.collidedRigidbodies.Contains(targetActor))
+            // 連続ヒットを避けるため、既に処理済みのActorは無視する
+            if (this.collidedActors.Contains(targetActor))
             {
                 return;
             }
 
-            this.collidedRigidbodies.Add(targetActor);
+            this.collidedActors.Add(targetActor);
 
             var t = this.transform;
             var hitPosition = other.ClosestPoint(t.position);
@@ -90,7 +91,7 @@ namespace MH.ActorControllers
             MessageBroker.GetSubscriber<Actor, ActorEvents.ValidationAttackCollider>()
                 .Subscribe(this.actor, x =>
                 {
-                    this.collidedRigidbodies.Clear();
+                    this.collidedActors.Clear();
                     this.colliderDictionary[x.Data.ColliderName].SetActive(true);
                     this.hitEffectPrefab = x.Data.HitEffectPrefab;
                     this.hitStopTimeScale = x.Data.HitStopTimeScale;
