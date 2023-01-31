@@ -4,7 +4,6 @@ using UnityEngine.Assertions;
 namespace MH.ActorControllers
 {
     /// <summary>
-    ///
     /// </summary>
     public sealed class ActorAnimatorMove : MonoBehaviour
     {
@@ -13,7 +12,7 @@ namespace MH.ActorControllers
 
         private Animator animator;
 
-        private void Start()
+        private void Awake()
         {
             this.animator = this.GetComponent<Animator>();
             Assert.IsNotNull(this.animator);
