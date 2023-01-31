@@ -76,7 +76,7 @@ namespace MH.ActorControllers
             targetActor.StatusController.ReceiveDamage(damageData, partName, this.actor.transform.position);
 
             MessageBroker.GetPublisher<Actor, ActorEvents.GaveDamage>()
-                .Publish( this.actor, ActorEvents.GaveDamage.Get(damageData));
+                .Publish(this.actor, ActorEvents.GaveDamage.Get(damageData));
         }
 
         void IActorController.Setup(
