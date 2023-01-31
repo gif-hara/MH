@@ -29,6 +29,7 @@ namespace MH.ActorControllers
         public void _Attach(Actor actor, PlayerNetworkBehaviour playerNetworkBehaviour)
         {
             this.actor = actor;
+            this.playerNetworkBehaviour = playerNetworkBehaviour;
             var ct = this.actor.GetCancellationTokenOnDestroy();
             this.actor.GetAsyncUpdateTrigger()
                 .Subscribe(_ =>
