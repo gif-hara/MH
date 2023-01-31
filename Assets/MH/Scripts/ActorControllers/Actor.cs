@@ -1,3 +1,4 @@
+using MH.NetworkSystems;
 using StandardAssets.Characters.Physics;
 using UnityEngine;
 
@@ -46,19 +47,19 @@ namespace MH.ActorControllers
 
         OpenCharacterController IActorDependencyInjector.OpenCharacterController => this.openCharacterController;
 
-        public Actor Spawn(ActorSpawnData data, Vector3 position, Quaternion rotation)
+        public Actor Spawn(ActorSpawnData data, ActorNetworkBehaviour networkBehaviour, Vector3 position, Quaternion rotation)
         {
             var instance = Instantiate(this, position, rotation);
-            instance.Initialize(data);
+            instance.Initialize(data, networkBehaviour);
             return instance;
         }
 
-        public Actor Spawn(ActorSpawnData data, Transform spawnPoint)
+        public Actor Spawn(ActorSpawnData data, ActorNetworkBehaviour networkBehaviour, Transform spawnPoint)
         {
-            return Spawn(data, spawnPoint.position, spawnPoint.rotation);
+            return Spawn(data, networkBehaviour, spawnPoint.position, spawnPoint.rotation);
         }
 
-        private void Initialize(ActorSpawnData spawnData)
+        private void Initialize(ActorSpawnData spawnData, ActorNetworkBehaviour networkBehaviour)
         {
             this.PostureController = this.CreateActorController<ActorPostureController>(spawnData);
             this.TimeController = this.CreateActorController<ActorTimeController>(spawnData);
@@ -70,6 +71,8 @@ namespace MH.ActorControllers
             this.StatusController = this.CreateActorController<ActorStatusController>(spawnData);
             this.NetworkController = this.CreateActorController<ActorNetworkController>(spawnData);
             this.PartController = this.CreateActorController<ActorPartController>(spawnData);
+
+            this.NetworkController.NetworkBehaviour = networkBehaviour;
 
             if (this.CompareTag("Player"))
             {

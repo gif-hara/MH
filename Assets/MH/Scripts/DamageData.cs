@@ -1,3 +1,5 @@
+using MH.ActorControllers;
+
 namespace MH
 {
     /// <summary>
@@ -6,5 +8,10 @@ namespace MH
     public struct DamageData
     {
         public int damage;
+
+        /// <summary>
+        /// ダメージを受けた<see cref="Actor"/>
+        /// </summary>
+        public Actor receiveActor;
     }
 }

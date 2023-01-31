@@ -73,8 +73,7 @@ namespace MH.SceneControllers
 
             if (NetworkManager.Singleton.IsHost)
             {
-                var enemy = Instantiate(this.enemyPrefab, this.enemySpawnPoint.position, this.enemySpawnPoint.rotation);
-                enemy.SpawnToNetwork();
+                Instantiate(this.enemyPrefab, this.enemySpawnPoint.position, this.enemySpawnPoint.rotation);
             }
         }
     }

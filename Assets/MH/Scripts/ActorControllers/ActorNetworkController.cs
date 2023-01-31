@@ -1,13 +1,12 @@
-using Unity.Netcode;
+using MH.NetworkSystems;
 
 namespace MH.ActorControllers
 {
     /// <summary>
-    ///
     /// </summary>
     public sealed class ActorNetworkController : IActorController
     {
-        public NetworkBehaviour NetworkBehaviour { set; private get; }
+        public ActorNetworkBehaviour NetworkBehaviour { set; get; }
 
         public bool IsOwner => this.NetworkBehaviour.IsOwner;
 
@@ -17,7 +16,7 @@ namespace MH.ActorControllers
             Actor actor,
             IActorDependencyInjector actorDependencyInjector,
             ActorSpawnData spawnData
-            )
+        )
         {
         }
     }

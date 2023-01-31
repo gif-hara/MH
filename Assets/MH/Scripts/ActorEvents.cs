@@ -5,7 +5,7 @@ using UnityEngine;
 namespace MH
 {
     /// <summary>
-    ///
+    /// <see cref="Actor"/>に関するイベント
     /// </summary>
     public sealed class ActorEvents
     {
@@ -45,13 +45,15 @@ namespace MH
         /// 移動を開始した際のメッセージ
         /// </summary>
         public sealed class BeginMove : Message<BeginMove>
-        {}
+        {
+        }
 
         /// <summary>
         /// 移動を終了した際のメッセージ
         /// </summary>
         public sealed class EndMove : Message<EndMove>
-        {}
+        {
+        }
 
         /// <summary>
         /// 回避のリクエストを行うメッセージ
@@ -89,7 +91,8 @@ namespace MH
         /// 回避が終了した際のメッセージ
         /// </summary>
         public sealed class EndDodge : Message<EndDodge>
-        {}
+        {
+        }
 
         /// <summary>
         /// 攻撃のリクエストを行うメッセージ
@@ -117,13 +120,15 @@ namespace MH
         /// 攻撃が終了した際のメッセージ
         /// </summary>
         public sealed class EndAttack : Message<EndAttack>
-        {}
+        {
+        }
 
         /// <summary>
         /// 次の行動を選択可能な状態にするメッセージ
         /// </summary>
         public sealed class AcceptNextState : Message<AcceptNextState>
-        {}
+        {
+        }
 
         /// <summary>
         /// <see cref="Actor"/>が追加された際のメッセージ

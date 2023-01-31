@@ -9,25 +9,22 @@ namespace MH.NetworkSystems
     /// <summary>
     /// 敵を管理する<see cref="NetworkBehaviour"/>
     /// </summary>
-    public sealed class EnemyNetworkBehaviour : NetworkBehaviour
+    public sealed class EnemyNetworkBehaviour : ActorNetworkBehaviour
     {
         [SerializeField]
         private NetworkObject networkObject;
 
-        [SerializeField]
-        private Actor actorPrefab;
-
-        [SerializeField]
-        private ActorSpawnDataScriptableObject spawnData;
-
-        private Actor actor;
+        void Start()
+        {
+            if (NetworkManager.Singleton.IsHost)
+            {
+                this.networkObject.Spawn(true);
+            }
+        }
 
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-
-            this.actor = this.actorPrefab.Spawn(this.spawnData.data, this.transform);
-            this.actor.transform.SetParent(this.transform, false);
 
             var ct = this.GetCancellationTokenOnDestroy();
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestSubmitNewThinkData>()
@@ -36,11 +33,6 @@ namespace MH.NetworkSystems
                     this.SubmitPostureServerRpc(x.Position, x.RotationY, x.Seed);
                 })
                 .AddTo(ct);
-        }
-
-        public void SpawnToNetwork()
-        {
-            this.networkObject.Spawn(true);
         }
 
         [ServerRpc]

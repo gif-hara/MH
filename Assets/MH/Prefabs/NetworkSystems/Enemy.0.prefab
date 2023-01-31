@@ -61,6 +61,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a55ff7717450da841830d87ee528ef83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkObject: {fileID: -2335771149346920012}
+  actorSpawnData: {fileID: 11400000, guid: a690bc1cf5dd01d4eb1bc28074f5ead7, type: 2}
   actorPrefab: {fileID: 6321397659681280986, guid: 822a6d5e163b2754dad4f40394f5cb29, type: 3}
-  spawnData: {fileID: 11400000, guid: a690bc1cf5dd01d4eb1bc28074f5ead7, type: 2}
+  networkObject: {fileID: -2335771149346920012}

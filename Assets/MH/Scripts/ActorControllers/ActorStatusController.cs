@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace MH.ActorControllers
 {
     /// <summary>
-    ///
     /// </summary>
     public sealed class ActorStatusController : IActorController
     {
@@ -37,7 +37,7 @@ namespace MH.ActorControllers
             Actor actor,
             IActorDependencyInjector actorDependencyInjector,
             ActorSpawnData spawnData
-            )
+        )
         {
             this.actor = actor;
             this.BaseStatus = new ActorStatus(spawnData.actorStatus);
@@ -83,6 +83,11 @@ namespace MH.ActorControllers
             Assert.IsNotNull(result, $"{partType}という部位は存在しません");
 
             return result.DamageRate;
+        }
+
+        public void SyncHitPoint(NetworkVariable<int> networkHitPoint)
+        {
+            this.hitPoint.Value = networkHitPoint.Value;
         }
     }
 }

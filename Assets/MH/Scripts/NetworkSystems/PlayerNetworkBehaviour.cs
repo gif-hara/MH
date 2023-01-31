@@ -8,14 +8,8 @@ namespace MH.NetworkSystems
     /// <summary>
     /// プレイヤーのネットワークを制御するクラス
     /// </summary>
-    public sealed class PlayerNetworkBehaviour : NetworkBehaviour
+    public sealed class PlayerNetworkBehaviour : ActorNetworkBehaviour
     {
-        [SerializeField]
-        private ActorSpawnDataScriptableObject actorSpawnData;
-
-        [SerializeField]
-        private Actor actorPrefab;
-
         [SerializeField]
         private CameraController cameraControllerPrefab;
 
@@ -23,17 +17,13 @@ namespace MH.NetworkSystems
 
         private readonly NetworkVariable<float> networkRotationY = new();
 
-        private Actor actor;
-
         public Vector3 NetworkPosition => this.networkPosition.Value;
 
         public float NetworkRotation => this.networkRotationY.Value;
 
         public override void OnNetworkSpawn()
         {
-            this.actor = this.actorPrefab.Spawn(this.actorSpawnData.data, Vector3.zero, Quaternion.identity);
-            this.actor.transform.SetParent(this.transform);
-            this.actor.NetworkController.NetworkBehaviour = this;
+            base.OnNetworkSpawn();
 
             if (this.IsOwner)
             {

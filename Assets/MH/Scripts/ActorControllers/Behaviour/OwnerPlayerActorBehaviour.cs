@@ -132,8 +132,16 @@ namespace MH.ActorControllers
                     this.playerNetworkBehaviour.SubmitBeginDodge(x.Data);
                 })
                 .AddTo(ct);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.GaveDamage>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.playerNetworkBehaviour.SubmitGaveDamage(x.Data.receiveActor.NetworkController.NetworkObjectId, x.Data.damage);
+                })
+                .AddTo(ct);
         }
-                private void PerformedDodge(InputAction.CallbackContext context)
+
+        private void PerformedDodge(InputAction.CallbackContext context)
         {
             this.RegisterAdvancedEntry(() =>
             {
