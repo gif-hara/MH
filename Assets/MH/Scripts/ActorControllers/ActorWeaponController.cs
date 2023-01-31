@@ -79,6 +79,9 @@ namespace MH.ActorControllers
             var damageRate = targetActor.PartController.GetDamageRate(other.gameObject);
             var damage = Calculator.GetDamage(this.weaponPower, this.motionPower, damageRate);
             targetActor.StatusController.ReceiveDamage(damage, partName, this.actor.transform.position);
+
+            MessageBroker.GetPublisher<Actor, ActorEvents.GaveDamage>()
+                .Publish( this.actor, ActorEvents.GaveDamage.Get(damage));
         }
 
         void IActorController.Setup(
