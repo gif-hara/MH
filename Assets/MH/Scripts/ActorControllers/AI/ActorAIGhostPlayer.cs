@@ -44,13 +44,13 @@ namespace MH.ActorControllers
                         else
                         {
                             var sqrMagnitude = difference.sqrMagnitude;
-                            threshold = playerActorCommonData.MoveSpeed * playerActorCommonData.MoveSpeed;
-                            if (sqrMagnitude >= threshold)
+                            threshold = playerActorCommonData.MoveSpeed;
+                            if (sqrMagnitude >= threshold * threshold)
                             {
                                 var direction = difference.normalized;
                                 this.actor.PostureController.Move(direction * playerActorCommonData.MoveSpeed * this.actor.TimeController.Time.deltaTime);
                             }
-                            else if (sqrMagnitude < threshold && sqrMagnitude > 0.01f)
+                            else if (sqrMagnitude < threshold * threshold && sqrMagnitude > 0.01f)
                             {
                                 this.actor.PostureController.Move(difference * playerActorCommonData.MoveSpeed * this.actor.TimeController.Time.deltaTime);
                             }
