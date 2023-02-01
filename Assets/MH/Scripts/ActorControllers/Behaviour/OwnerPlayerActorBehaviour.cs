@@ -122,7 +122,7 @@ namespace MH.ActorControllers
             MessageBroker.GetSubscriber<Actor, ActorEvents.BeginAttack>()
                 .Subscribe(this.actor, x =>
                 {
-                    this.playerNetworkBehaviour.SubmitAttackMotionName(x.MotionName);
+                    this.playerNetworkBehaviour.SubmitRequestUniqueMotion(x.MotionName);
                 })
                 .AddTo(ct);
 
