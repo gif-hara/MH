@@ -21,13 +21,20 @@ namespace MH.NetworkSystems
 
         private readonly NetworkVariable<int> networkHitPoint = new();
 
-        private readonly NetworkList<PartDataNetworkVariable> networkPartDataList = new();
+        private NetworkList<PartDataNetworkVariable> networkPartDataList;
 
         protected Actor actor;
 
         public Vector3 NetworkPosition => this.networkPosition.Value;
 
         public float NetworkRotation => this.networkRotationY.Value;
+
+        void Awake()
+        {
+            // なぜかこのタイミングでnewしないとコンパイルエラーになる
+            // https://github.com/Unity-Technologies/com.unity.netcode.gameobjects/issues/1367
+            this.networkPartDataList = new NetworkList<PartDataNetworkVariable>();
+        }
 
         public override void OnNetworkSpawn()
         {
