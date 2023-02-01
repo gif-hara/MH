@@ -105,6 +105,7 @@ namespace MH.BehaviourDesignerControllers
                 })
                 .AddTo(ct);
 
+#if MH_DEBUG
             this.owner.GetAsyncLateUpdateTrigger()
                 .Subscribe(_ =>
                 {
@@ -116,6 +117,7 @@ namespace MH.BehaviourDesignerControllers
                         .Publish(DebugPanelEvents.AppendLine.Get(builder.ToString()));
                 })
                 .AddTo(ct);
+#endif
         }
 
         private void OnDrawGizmos()
