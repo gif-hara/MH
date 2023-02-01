@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using BehaviorDesigner.Runtime;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -30,7 +28,7 @@ namespace MH.BehaviourDesignerControllers
 
         private Random.State thinkState;
 
-        private List<BehaviorTree> trees;
+        private BehaviorTree[] trees;
 
         /// <summary>
         /// ターゲットとの距離を返す
@@ -66,7 +64,7 @@ namespace MH.BehaviourDesignerControllers
             this.navMeshAgent.updatePosition = false;
             this.navMeshAgent.updateRotation = false;
 
-            this.trees = this.GetComponentsInChildren<BehaviorTree>().ToList();
+            this.trees = this.GetComponentsInChildren<BehaviorTree>();
             this.DisableAllBehaviourTrees();
 
             if (this.IsHost)
