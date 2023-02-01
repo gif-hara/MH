@@ -7,7 +7,6 @@ using UnityEngine.Assertions;
 namespace MH.ActorControllers
 {
     /// <summary>
-    ///
     /// </summary>
     public sealed class ActorStateController : IActorController
     {
@@ -55,8 +54,8 @@ namespace MH.ActorControllers
             this.stateController.Set(State.Run, this.OnEnterRun, null);
             this.stateController.Set(State.Dodge, this.OnEnterDodge, null);
             this.stateController.Set(State.Attack, this.OnEnterAttack, this.OnExitAttack);
-            this.stateController.Set(State.UniqueMotion, this.OnEnterUniqueMotion, null);
-            this.stateController.Set(State.Flinch, this.OnEnterFlinch, null);
+            this.stateController.Set(State.UniqueMotion, this.OnEnterUniqueMotion, null, 1);
+            this.stateController.Set(State.Flinch, this.OnEnterFlinch, null, 2);
 
             var ct = this.actor.GetCancellationTokenOnDestroy();
 

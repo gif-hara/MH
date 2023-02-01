@@ -11,12 +11,13 @@ namespace MH
     /// </summary>
     public sealed class StateController<T> : IDisposable where T : Enum
     {
-
         private readonly T invalidState;
 
         private readonly DisposableBagBuilder scope = DisposableBag.CreateBuilder();
 
-        private readonly Dictionary<Enum, StateInfo> states = new();
+        private readonly Dictionary<T, StateInfo> states = new();
+
+        private readonly Dictionary<T, int> priorities = new();
 
         /// <summary>
         /// ステート切り替え中であるか
@@ -30,6 +31,7 @@ namespace MH
             this.invalidState = invalidState;
             this.CurrentState = invalidState;
             this.nextState = invalidState;
+            this.priorities.Add(invalidState, -1);
         }
 
         public T CurrentState { get; private set; }
@@ -41,7 +43,7 @@ namespace MH
 
         public event Action<T, T> onChanged;
 
-        public void Set(T value, Action<T, DisposableBagBuilder> onEnter, Action<T> onExit)
+        public void Set(T value, Action<T, DisposableBagBuilder> onEnter, Action<T> onExit, int priority = 0)
         {
             Assert.IsFalse(this.states.ContainsKey(value), $"{value}は既に登録済みです");
 
@@ -50,17 +52,20 @@ namespace MH
                 onEnter = onEnter,
                 onExit = onExit
             });
+            this.priorities.Add(value, priority);
         }
 
         public async void ChangeRequest(T value)
         {
+            var nextStatePriority = this.priorities.ContainsKey(this.nextState) ? this.priorities[this.nextState] : 0;
+            var valuePriority = this.priorities.ContainsKey(value) ? this.priorities[value] : 0;
+            this.nextState = nextStatePriority > valuePriority ? this.nextState : value;
+
             if (this.isChanging)
             {
                 return;
             }
-
             this.isChanging = true;
-            this.nextState = value;
             await UniTask.NextFrame(PlayerLoopTiming.Update);
             this.isChanging = false;
             this.Change();
