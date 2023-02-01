@@ -8,7 +8,6 @@ using Action = BehaviorDesigner.Runtime.Tasks.Action;
 namespace MH
 {
     /// <summary>
-    ///
     /// </summary>
     [TaskCategory("MH")]
     [TaskDescription("Actor経由でアニメーションを再生します")]
@@ -22,6 +21,12 @@ namespace MH
 
         private TaskStatus taskStatus;
 
+        public override void OnAwake()
+        {
+            base.OnAwake();
+            this.taskStatus = TaskStatus.Inactive;
+        }
+
         public override TaskStatus OnUpdate()
         {
             var a = this.actor.Value;
@@ -29,17 +34,17 @@ namespace MH
             if (this.taskStatus == TaskStatus.Inactive)
             {
                 this.taskStatus = TaskStatus.Failure;
-                MessageBroker.GetPublisher<Actor, ActorEvents.RequestUniqueMotion>()
-                    .Publish(a, ActorEvents.RequestUniqueMotion.Get(this.animationName));
                 this.scope = MessageBroker.GetSubscriber<Actor, ActorEvents.ChangedState>()
                     .Subscribe(a, x =>
                     {
-                        if (x.PreviousState == ActorStateController.State.UniqueMotion)
+                        if (a.StateController.CurrentState != ActorStateController.State.UniqueMotion)
                         {
                             this.scope?.Dispose();
                             this.taskStatus = TaskStatus.Success;
                         }
                     });
+                MessageBroker.GetPublisher<Actor, ActorEvents.RequestUniqueMotion>()
+                    .Publish(a, ActorEvents.RequestUniqueMotion.Get(this.animationName));
             }
 
             if (this.taskStatus == TaskStatus.Success)
