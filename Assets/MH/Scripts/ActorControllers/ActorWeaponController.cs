@@ -70,7 +70,7 @@ namespace MH.ActorControllers
                 this.actor.TimeController.BeginHitStop(this.hitStopTimeScale, this.hitStopDurationSeconds).Forget();
             }
 
-            if (this.actor.NetworkController.IsOwner)
+            if (this.actor.NetworkController.IsOwner || this.actor.StatusController.BaseStatus.actorType == Define.ActorType.Enemy)
             {
                 var partType = targetActor.PartController.GetPart(other.gameObject).PartType;
                 var damageRate = targetActor.PartController.GetDamageRate(other.gameObject);
