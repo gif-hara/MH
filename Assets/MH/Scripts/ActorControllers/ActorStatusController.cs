@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using MH.NetworkSystems;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -25,11 +26,15 @@ namespace MH.ActorControllers
 
         private readonly Dictionary<Define.PartType, int> currentEndurances = new();
 
+        private readonly Dictionary<Define.PartType, int> flinchCounts = new();
+
         public IAsyncReactiveProperty<int> HitPointMax => this.hitPointMax;
 
         public IAsyncReactiveProperty<int> HitPoint => this.hitPoint;
 
         public IReadOnlyDictionary<Define.PartType, ActorStatus.PartData> BasePartDataList => this.basePartDataList;
+
+        public IReadOnlyDictionary<Define.PartType, int> CurrentEndurances => this.currentEndurances;
 
         public bool IsDead => this.hitPoint.Value <= 0;
 
@@ -47,6 +52,7 @@ namespace MH.ActorControllers
             {
                 this.basePartDataList.Add(partData.PartType, partData);
                 this.currentEndurances.Add(partData.PartType, 0);
+                this.flinchCounts.Add(partData.PartType, 0);
             }
         }
 
@@ -69,11 +75,17 @@ namespace MH.ActorControllers
             else
             {
                 this.currentEndurances[partType] += damageData.damage;
-                if (this.currentEndurances[partType] >= this.basePartDataList[partType].Endurance)
-                {
-                    this.currentEndurances[partType] = 0;
-                    this.actor.StateController.ForceFlinch(opposePosition);
-                }
+                this.TryFlinch(partType, opposePosition);
+            }
+        }
+
+        private void TryFlinch(Define.PartType partType, Vector3 opposePosition)
+        {
+            if (this.currentEndurances[partType] >= this.basePartDataList[partType].Endurance * (this.flinchCounts[partType] + 1))
+            {
+                this.flinchCounts[partType]++;
+                this.actor.StateController.ForceFlinch(opposePosition);
+                Debug.Log("Flinch");
             }
         }
 
@@ -88,6 +100,15 @@ namespace MH.ActorControllers
         public void SyncHitPoint(NetworkVariable<int> networkHitPoint)
         {
             this.hitPoint.Value = networkHitPoint.Value;
+        }
+
+        public void SyncPartDataList(NetworkList<PartDataNetworkVariable> networkPartDataList)
+        {
+            foreach (var partData in networkPartDataList)
+            {
+                this.currentEndurances[partData.partType] = partData.endurance;
+                this.TryFlinch(partData.partType, partData.opposePosition);
+            }
         }
     }
 }

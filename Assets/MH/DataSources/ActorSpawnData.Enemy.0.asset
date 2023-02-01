@@ -17,8 +17,8 @@ MonoBehaviour:
       actorType: 1
       hitPoint: 1200
       partDataList:
-      - partName: Body
-        endurance: 200
+      - partType: 0
+        endurance: 50
         damageRate: 1
     attackData:
       baseStrength: 0

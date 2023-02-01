@@ -136,7 +136,11 @@ namespace MH.ActorControllers
             MessageBroker.GetSubscriber<Actor, ActorEvents.GaveDamage>()
                 .Subscribe(this.actor, x =>
                 {
-                    this.playerNetworkBehaviour.SubmitGaveDamage(x.Data.receiveActor.NetworkController.NetworkObjectId, x.Data.damage);
+                    this.playerNetworkBehaviour.SubmitGaveDamage(
+                        x.Data.receiveActor.NetworkController.NetworkObjectId,
+                        x.Data.damage,
+                        x.Data.partType
+                        );
                 })
                 .AddTo(ct);
         }

@@ -21,6 +21,8 @@ namespace MH.NetworkSystems
 
         private readonly NetworkVariable<int> networkHitPoint = new();
 
+        private readonly NetworkList<PartDataNetworkVariable> networkPartDataList = new();
+
         protected Actor actor;
 
         public Vector3 NetworkPosition => this.networkPosition.Value;
@@ -35,6 +37,15 @@ namespace MH.NetworkSystems
             if (this.IsHost)
             {
                 this.networkHitPoint.Value = this.actor.StatusController.HitPoint.Value;
+                this.networkPartDataList.Clear();
+                foreach (var (key, value) in this.actor.StatusController.CurrentEndurances)
+                {
+                    this.networkPartDataList.Add(new PartDataNetworkVariable
+                    {
+                        partType = key,
+                        endurance = value
+                    });
+                }
             }
             else
             {
@@ -43,6 +54,12 @@ namespace MH.NetworkSystems
             }
 
             this.networkHitPoint.OnValueChanged += OnChangedHitPoint;
+            this.networkPartDataList.OnListChanged += OnChangedPartDataList;
+        }
+
+        private void OnChangedPartDataList(NetworkListEvent<PartDataNetworkVariable> changeEvent)
+        {
+            this.actor.StatusController.SyncPartDataList(this.networkPartDataList);
         }
 
         private void OnChangedHitPoint(int previousValue, int newValue)
@@ -51,9 +68,9 @@ namespace MH.NetworkSystems
             Debug.Log($"{actor.name} HitPoint = {newValue}");
         }
 
-        public void SubmitGaveDamage(ulong networkObjectId, int damage)
+        public void SubmitGaveDamage(ulong networkObjectId, int damage, Define.PartType partType)
         {
-            this.SubmitGaveDamageServerRpc(networkObjectId, damage);
+            this.SubmitGaveDamageServerRpc(networkObjectId, damage, partType);
         }
 
         public void SubmitPosition(Vector3 newPosition)
@@ -72,10 +89,22 @@ namespace MH.NetworkSystems
         }
 
         [ServerRpc]
-        private void SubmitGaveDamageServerRpc(ulong networkObjectId, int damage, ServerRpcParams rpcParams = default)
+        private void SubmitGaveDamageServerRpc(ulong networkObjectId, int damage, Define.PartType partType, ServerRpcParams rpcParams = default)
         {
             var target = ActorManager.GetActorFromNetworkObjectId(networkObjectId);
-            target.NetworkController.NetworkBehaviour.networkHitPoint.Value -= damage;
+            var n = target.NetworkController.NetworkBehaviour;
+            n.networkHitPoint.Value -= damage;
+            for (var i = 0; i < n.networkPartDataList.Count; i++)
+            {
+                if (n.networkPartDataList[i].partType == partType)
+                {
+                    var p = n.networkPartDataList[i];
+                    p.endurance += damage;
+                    p.opposePosition = target.transform.position - this.actor.transform.position;
+                    n.networkPartDataList[i] = p;
+                    break;
+                }
+            }
         }
 
         [ServerRpc]

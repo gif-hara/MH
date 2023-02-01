@@ -70,18 +70,22 @@ namespace MH.ActorControllers
                 this.actor.TimeController.BeginHitStop(this.hitStopTimeScale, this.hitStopDurationSeconds).Forget();
             }
 
-            var partName = targetActor.PartController.GetPart(other.gameObject).PartType;
-            var damageRate = targetActor.PartController.GetDamageRate(other.gameObject);
-            var damage = Calculator.GetDamageData(this.weaponPower, this.motionPower, damageRate);
-            var damageData = new DamageData
+            if (this.actor.NetworkController.IsOwner)
             {
-                damage = damage,
-                receiveActor = targetActor
-            };
-            targetActor.StatusController.ReceiveDamage(damageData, partName, this.actor.transform.position);
+                var partType = targetActor.PartController.GetPart(other.gameObject).PartType;
+                var damageRate = targetActor.PartController.GetDamageRate(other.gameObject);
+                var damage = Calculator.GetDamageData(this.weaponPower, this.motionPower, damageRate);
+                var damageData = new DamageData
+                {
+                    damage = damage,
+                    receiveActor = targetActor,
+                    partType = partType
+                };
+                targetActor.StatusController.ReceiveDamage(damageData, partType, this.actor.transform.position);
 
-            MessageBroker.GetPublisher<Actor, ActorEvents.GaveDamage>()
-                .Publish(this.actor, ActorEvents.GaveDamage.Get(damageData));
+                MessageBroker.GetPublisher<Actor, ActorEvents.GaveDamage>()
+                    .Publish(this.actor, ActorEvents.GaveDamage.Get(damageData));
+            }
         }
 
         void IActorController.Setup(
