@@ -14,6 +14,8 @@ namespace MH.NetworkSystems
         [SerializeField]
         private NetworkObject networkObject;
 
+        private readonly NetworkVariable<ThinkDataNetworkVariable> networkThinkData = new();
+
         void Start()
         {
             if (NetworkManager.Singleton.IsHost)
@@ -30,19 +32,31 @@ namespace MH.NetworkSystems
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestSubmitNewThinkData>()
                 .Subscribe(this.actor, x =>
                 {
-                    this.SubmitPostureServerRpc(x.Position, x.RotationY, x.Seed);
+                    this.SubmitPostureServerRpc(new ThinkDataNetworkVariable
+                    {
+                        position = x.Position,
+                        rotationY = x.RotationY,
+                        thinkSeed = x.Seed
+                    });
                 })
                 .AddTo(ct);
+            if (!NetworkManager.Singleton.IsHost)
+            {
+                var t = this.networkThinkData.Value;
+                MessageBroker.GetPublisher<Actor, ActorEvents.ReceivedNewThinkData>()
+                    .Publish(this.actor, ActorEvents.ReceivedNewThinkData.Get(t.position, t.rotationY, t.thinkSeed));
+            }
         }
 
         [ServerRpc]
-        private void SubmitPostureServerRpc(Vector3 newPosition, float newRotationY, int thinkSeed, ServerRpcParams rpcParams = default)
+        private void SubmitPostureServerRpc(ThinkDataNetworkVariable thinkData, ServerRpcParams rpcParams = default)
         {
-            this.SubmitPostureClientRpc(newPosition, newRotationY, thinkSeed);
+            this.networkThinkData.Value = thinkData;
+            this.SubmitPostureClientRpc(thinkData);
         }
 
         [ClientRpc]
-        private void SubmitPostureClientRpc(Vector3 newPosition, float newRotationY, int thinkSeed, ClientRpcParams rpcParams = default)
+        private void SubmitPostureClientRpc(ThinkDataNetworkVariable thinkData, ClientRpcParams rpcParams = default)
         {
             if (this.IsOwner)
             {
@@ -50,7 +64,7 @@ namespace MH.NetworkSystems
             }
 
             MessageBroker.GetPublisher<Actor, ActorEvents.ReceivedNewThinkData>()
-                .Publish(this.actor, ActorEvents.ReceivedNewThinkData.Get(newPosition, newRotationY, thinkSeed));
+                .Publish(this.actor, ActorEvents.ReceivedNewThinkData.Get(thinkData.position, thinkData.rotationY, thinkData.thinkSeed));
         }
     }
 }
