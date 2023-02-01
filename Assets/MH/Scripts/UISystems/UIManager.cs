@@ -26,7 +26,9 @@ namespace MH.UISystems
             Instance = Instantiate(prefab).GetComponent<UIManager>();
             DontDestroyOnLoad(Instance);
 
+#if MH_DEBUG
             Instance.debugPanelUIPresenter = new DebugPanelUIPresenter(Instance.debugPanelUIView, Instance.gameObject);
+#endif
         }
 
         public static T Open<T>(T uiViewPrefab) where T : UIView
