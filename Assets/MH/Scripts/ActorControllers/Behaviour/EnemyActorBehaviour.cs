@@ -1,6 +1,9 @@
 using System;
+using System.Text;
 using BehaviorDesigner.Runtime;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
+using Cysharp.Threading.Tasks.Triggers;
 using MessagePipe;
 using MH.ActorControllers;
 using Unity.Netcode;
@@ -99,6 +102,18 @@ namespace MH.BehaviourDesignerControllers
                     {
                         this.entryPointTree.EnableBehavior();
                     }
+                })
+                .AddTo(ct);
+
+            this.owner.GetAsyncLateUpdateTrigger()
+                .Subscribe(_ =>
+                {
+                    var builder = new StringBuilder();
+                    builder.AppendLine($"{this.owner.name}");
+                    builder.AppendLine($"    HP    = {this.owner.StatusController.HitPoint.Value} / {this.owner.StatusController.HitPointMax.Value}");
+                    builder.AppendLine($"    State = {this.owner.StateController.CurrentState}");
+                    MessageBroker.GetPublisher<DebugPanelEvents.AppendLine>()
+                        .Publish(DebugPanelEvents.AppendLine.Get(builder.ToString()));
                 })
                 .AddTo(ct);
         }

@@ -38,6 +38,7 @@ namespace MH
                 ActorEvents.RegisterEvents(builder);
                 TimeEvents.RegisterEvents(builder);
                 PoolablePrefabEvents.RegisterEvents(builder);
+                DebugPanelEvents.RegisterEvents(builder);
             });
             return UniTask.CompletedTask;
         }
