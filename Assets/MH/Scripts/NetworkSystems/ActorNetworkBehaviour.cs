@@ -65,7 +65,6 @@ namespace MH.NetworkSystems
         private void OnChangedHitPoint(int previousValue, int newValue)
         {
             this.actor.StatusController.SyncHitPoint(this.networkHitPoint);
-            Debug.Log($"{actor.name} HitPoint = {newValue}");
         }
 
         public void SubmitGaveDamage(ulong networkObjectId, int damage, Define.PartType partType)

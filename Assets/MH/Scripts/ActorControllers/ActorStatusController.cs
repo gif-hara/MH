@@ -85,7 +85,6 @@ namespace MH.ActorControllers
             {
                 this.flinchCounts[partType]++;
                 this.actor.StateController.ForceFlinch(opposePosition);
-                Debug.Log("Flinch");
             }
         }
 
