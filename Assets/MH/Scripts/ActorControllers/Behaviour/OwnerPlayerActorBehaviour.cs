@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Cinemachine;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
@@ -61,6 +62,8 @@ namespace MH.ActorControllers
             inputActions.Player.Dodge.performed += PerformedDodge;
             inputActions.Player.AttackWeak.performed += PerformedAttackWeak;
             inputActions.Player.AttackStrong.performed += PerformedAttackStrong;
+            inputActions.Player.Guard.performed += this.PerformedGuard;
+            inputActions.Player.Guard.canceled += CanceledGuard;
             inputActions.Enable();
 
             var ct = this.actor.GetCancellationTokenOnDestroy();
@@ -143,6 +146,19 @@ namespace MH.ActorControllers
                         );
                 })
                 .AddTo(ct);
+
+#if MH_DEBUG
+            this.actor.GetAsyncUpdateTrigger()
+                .Subscribe(_ =>
+                {
+                    var builder = new StringBuilder();
+                    builder.AppendLine(this.actor.name);
+                    builder.AppendLine($"  Guarding = {this.actor.GuardController.Guarding}");
+                    MessageBroker.GetPublisher<DebugPanelEvents.AppendLine>()
+                        .Publish(DebugPanelEvents.AppendLine.Get(builder.ToString()));
+                })
+                .AddTo(ct);
+#endif
         }
 
         private void PerformedDodge(InputAction.CallbackContext context)
@@ -178,7 +194,7 @@ namespace MH.ActorControllers
             this.RegisterAdvancedEntry(() =>
             {
                 MessageBroker.GetPublisher<Actor, ActorEvents.RequestAttack>()
-                    .Publish(actor, ActorEvents.RequestAttack.Get(Define.RequestAttackType.Weak));
+                    .Publish(this.actor, ActorEvents.RequestAttack.Get(Define.RequestAttackType.Weak));
             });
         }
 
@@ -187,7 +203,25 @@ namespace MH.ActorControllers
             this.RegisterAdvancedEntry(() =>
             {
                 MessageBroker.GetPublisher<Actor, ActorEvents.RequestAttack>()
-                    .Publish(actor, ActorEvents.RequestAttack.Get(Define.RequestAttackType.Strong));
+                    .Publish(this.actor, ActorEvents.RequestAttack.Get(Define.RequestAttackType.Strong));
+            });
+        }
+
+        private void PerformedGuard(InputAction.CallbackContext obj)
+        {
+            this.RegisterAdvancedEntry(() =>
+            {
+                MessageBroker.GetPublisher<Actor, ActorEvents.RequestBeginGuard>()
+                    .Publish(this.actor, ActorEvents.RequestBeginGuard.Get());
+            });
+        }
+
+        private void CanceledGuard(InputAction.CallbackContext obj)
+        {
+            this.RegisterAdvancedEntry(() =>
+            {
+                MessageBroker.GetPublisher<Actor, ActorEvents.RequestEndGuard>()
+                    .Publish(this.actor, ActorEvents.RequestEndGuard.Get());
             });
         }
 

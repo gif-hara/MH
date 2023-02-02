@@ -1,8 +1,6 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace MH.ActorControllers
 {
@@ -11,6 +9,8 @@ namespace MH.ActorControllers
     /// </summary>
     public sealed class ActorGuardController : IActorController
     {
+        private Actor actor;
+
         /// <summary>
         /// ガード中であるか
         /// </summary>
@@ -19,7 +19,7 @@ namespace MH.ActorControllers
         /// <summary>
         /// ガードが可能か
         /// </summary>
-        public bool CanGuard { set; get; }
+        public bool CanGuard { private set; get; }
 
         private CancellationTokenSource beginTokenSource;
 
@@ -27,10 +27,14 @@ namespace MH.ActorControllers
             Actor actor,
             IActorDependencyInjector actorDependencyInjector,
             ActorSpawnData spawnData
-            )
+        )
         {
+            this.actor = actor;
         }
 
+        /// <summary>
+        /// ガードを開始する
+        /// </summary>
         public async UniTaskVoid Begin()
         {
             if (this.beginTokenSource != null)
@@ -47,7 +51,7 @@ namespace MH.ActorControllers
                 try
                 {
                     this.beginTokenSource = new CancellationTokenSource();
-                    await UniTask.WaitUntil(() => !this.CanGuard, cancellationToken:this.beginTokenSource.Token);
+                    await UniTask.WaitUntil(() => !this.CanGuard, cancellationToken: this.beginTokenSource.Token);
                     this.BeginInternal();
                 }
                 catch (OperationCanceledException)
@@ -61,17 +65,57 @@ namespace MH.ActorControllers
             }
         }
 
+        /// <summary>
+        /// ガードを終了する
+        /// </summary>
         public void End()
         {
+            if (!this.Guarding)
+            {
+                return;
+            }
+
             this.Guarding = false;
-            this.beginTokenSource?.Cancel();
-            this.beginTokenSource?.Dispose();
-            this.beginTokenSource = null;
+            this.DisposeToken();
+            MessageBroker.GetPublisher<Actor, ActorEvents.EndGuard>()
+                .Publish(this.actor, ActorEvents.EndGuard.Get());
+        }
+
+        /// <summary>
+        /// ガードが出来る状態に設定する
+        /// </summary>
+        public void Validate()
+        {
+            this.CanGuard = true;
+        }
+
+        /// <summary>
+        /// ガードが出来ない状態に設定する
+        /// </summary>
+        public void Invalidate()
+        {
+            this.End();
+            this.CanGuard = false;
+            this.DisposeToken();
         }
 
         private void BeginInternal()
         {
             this.Guarding = true;
+            MessageBroker.GetPublisher<Actor, ActorEvents.BeginGuard>()
+                .Publish(this.actor, ActorEvents.BeginGuard.Get());
+        }
+
+        private void DisposeToken()
+        {
+            if (this.beginTokenSource == null)
+            {
+                return;
+            }
+
+            this.beginTokenSource.Cancel();
+            this.beginTokenSource.Dispose();
+            this.beginTokenSource = null;
         }
     }
 }

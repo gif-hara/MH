@@ -39,6 +39,10 @@ namespace MH
             builder.AddMessageBroker<Actor, ReceivedNewThinkData>();
             builder.AddMessageBroker<Actor, BeginFlinch>();
             builder.AddMessageBroker<Actor, EndFlinch>();
+            builder.AddMessageBroker<Actor, RequestBeginGuard>();
+            builder.AddMessageBroker<Actor, RequestEndGuard>();
+            builder.AddMessageBroker<Actor, BeginGuard>();
+            builder.AddMessageBroker<Actor, EndGuard>();
         }
 
         /// <summary>
@@ -315,9 +319,30 @@ namespace MH
         }
 
         /// <summary>
-        /// ガードをリクエストするメッセージ
+        /// ガード開始をリクエストするメッセージ
         /// </summary>
-        public sealed class RequestGuard : Message<RequestGuard>
+        public sealed class RequestBeginGuard : Message<RequestBeginGuard>
+        {
+        }
+
+        /// <summary>
+        /// ガード終了をリクエストするメッセージ
+        /// </summary>
+        public sealed class RequestEndGuard : Message<RequestEndGuard>
+        {
+        }
+
+        /// <summary>
+        /// ガードを開始した際のメッセージ
+        /// </summary>
+        public sealed class BeginGuard : Message<BeginGuard>
+        {
+        }
+
+        /// <summary>
+        /// ガードを終了した際のメッセージ
+        /// </summary>
+        public sealed class EndGuard : Message<EndGuard>
         {
         }
     }

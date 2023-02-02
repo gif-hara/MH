@@ -81,10 +81,17 @@ namespace MH.ActorControllers
                 .AddTo(ct);
 
             // ガードは常に受け付ける
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestGuard>()
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestBeginGuard>()
                 .Subscribe(this.actor, _ =>
                 {
                     this.actor.GuardController.Begin().Forget();
+                })
+                .AddTo(ct);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestEndGuard>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.actor.GuardController.End();
                 })
                 .AddTo(ct);
 
@@ -152,12 +159,31 @@ namespace MH.ActorControllers
                 })
                 .AddTo(scope);
 
-            this.actor.AnimationController.Play("Idle");
+            MessageBroker.GetSubscriber<Actor, ActorEvents.BeginGuard>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.actor.AnimationController.Play(GetAnimationName());
+                })
+                .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.EndGuard>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.actor.AnimationController.Play(GetAnimationName());
+                })
+                .AddTo(scope);
+
+            this.actor.AnimationController.Play(GetAnimationName());
             this.actor.PostureController.CanMove = true;
             this.actor.PostureController.CanRotation = true;
             if (this.actor.PostureController.IsMoving)
             {
                 this.stateController.ChangeRequest(State.Run);
+            }
+
+            string GetAnimationName()
+            {
+                return this.actor.GuardController.Guarding ? "GuardIdle" : "Idle";
             }
         }
 
@@ -186,12 +212,31 @@ namespace MH.ActorControllers
                 })
                 .AddTo(scope);
 
-            this.actor.AnimationController.Play("Run");
+            MessageBroker.GetSubscriber<Actor, ActorEvents.BeginGuard>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.actor.AnimationController.Play(GetAnimationName());
+                })
+                .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.EndGuard>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.actor.AnimationController.Play(GetAnimationName());
+                })
+                .AddTo(scope);
+
+            this.actor.AnimationController.Play(GetAnimationName());
             this.actor.PostureController.CanMove = true;
             this.actor.PostureController.CanRotation = true;
             if (!this.actor.PostureController.IsMoving)
             {
                 this.stateController.ChangeRequest(State.Idle);
+            }
+
+            string GetAnimationName()
+            {
+                return this.actor.GuardController.Guarding ? "GuardRun" : "Run";
             }
         }
 

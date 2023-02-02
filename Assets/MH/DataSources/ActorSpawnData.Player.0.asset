@@ -17,7 +17,7 @@ MonoBehaviour:
       actorType: 0
       hitPoint: 100
       partDataList:
-      - partName: Body
+      - partType: 0
         endurance: 0
         damageRate: 1
     attackData:
@@ -76,6 +76,14 @@ MonoBehaviour:
       - name: Flinch.0
         blendData:
           animationClip: {fileID: 7400000, guid: 27646fc1536832f40a6adc9a1e8e31c4, type: 2}
+          blendSeconds: 0.05
+      - name: GuardIdle
+        blendData:
+          animationClip: {fileID: 7400000, guid: d41a3b4b8ff544890afdef0d524ce860, type: 2}
+          blendSeconds: 0.05
+      - name: GuardRun
+        blendData:
+          animationClip: {fileID: 7400000, guid: 641f4f2afe1d5bd4bb33718f7ea904bd, type: 2}
           blendSeconds: 0.05
     leaveDistance: 0.05
     onFlinchRotationOppose: 1

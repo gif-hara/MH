@@ -73,6 +73,15 @@ namespace MH
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Guard"",
+                    ""type"": ""Button"",
+                    ""id"": ""04b88a91-38c7-4830-8059-b878aa7030da"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -337,6 +346,28 @@ namespace MH
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""AttackStrong"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""65bc6e4d-c9db-4920-ac02-8712e77024af"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Guard"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9dee0af1-901d-4179-843d-35235c2df590"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Guard"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -929,6 +960,7 @@ namespace MH
             m_Player_AttackWeak = m_Player.FindAction("AttackWeak", throwIfNotFound: true);
             m_Player_AttackStrong = m_Player.FindAction("AttackStrong", throwIfNotFound: true);
             m_Player_Dodge = m_Player.FindAction("Dodge", throwIfNotFound: true);
+            m_Player_Guard = m_Player.FindAction("Guard", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1005,6 +1037,7 @@ namespace MH
         private readonly InputAction m_Player_AttackWeak;
         private readonly InputAction m_Player_AttackStrong;
         private readonly InputAction m_Player_Dodge;
+        private readonly InputAction m_Player_Guard;
         public struct PlayerActions
         {
             private @MHInputActions m_Wrapper;
@@ -1014,6 +1047,7 @@ namespace MH
             public InputAction @AttackWeak => m_Wrapper.m_Player_AttackWeak;
             public InputAction @AttackStrong => m_Wrapper.m_Player_AttackStrong;
             public InputAction @Dodge => m_Wrapper.m_Player_Dodge;
+            public InputAction @Guard => m_Wrapper.m_Player_Guard;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1038,6 +1072,9 @@ namespace MH
                     @Dodge.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDodge;
                     @Dodge.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDodge;
                     @Dodge.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDodge;
+                    @Guard.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGuard;
+                    @Guard.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGuard;
+                    @Guard.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGuard;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1057,6 +1094,9 @@ namespace MH
                     @Dodge.started += instance.OnDodge;
                     @Dodge.performed += instance.OnDodge;
                     @Dodge.canceled += instance.OnDodge;
+                    @Guard.started += instance.OnGuard;
+                    @Guard.performed += instance.OnGuard;
+                    @Guard.canceled += instance.OnGuard;
                 }
             }
         }
@@ -1218,6 +1258,7 @@ namespace MH
             void OnAttackWeak(InputAction.CallbackContext context);
             void OnAttackStrong(InputAction.CallbackContext context);
             void OnDodge(InputAction.CallbackContext context);
+            void OnGuard(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {
