@@ -17,6 +17,9 @@ namespace MH.ActorControllers
         [SerializeField]
         private int weaponPower;
 
+        [SerializeField, Range(0, 100)]
+        private int criticalRate;
+
         [SerializeField]
         private List<GameObject> colliders;
 
@@ -74,7 +77,7 @@ namespace MH.ActorControllers
             {
                 var partType = targetActor.PartController.GetPart(other.gameObject).PartType;
                 var damageRate = targetActor.PartController.GetDamageRate(other.gameObject);
-                var damage = Calculator.GetDamageData(this.weaponPower, this.motionPower, damageRate);
+                var damage = Calculator.GetDamageData(this.weaponPower, this.motionPower, damageRate, this.criticalRate);
                 var damageData = new DamageData
                 {
                     damage = damage,
