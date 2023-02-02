@@ -246,6 +246,7 @@ namespace MH.ActorControllers
                 .Subscribe(this.actor, _ =>
                 {
                     this.canNextState = true;
+                    this.actor.GuardController.Validate();
                 })
                 .AddTo(scope);
 
@@ -280,8 +281,16 @@ namespace MH.ActorControllers
                 })
                 .AddTo(scope);
 
+            MessageBroker.GetSubscriber<Actor, ActorEvents.BeginGuard>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.ToIdle();
+                })
+                .AddTo(scope);
+
             this.actor.DodgeController.Invoke();
             this.canNextState = false;
+            this.actor.GuardController.Invalidate();
         }
 
         private void OnEnterAttack(State previousState, DisposableBagBuilder scope)
@@ -290,6 +299,7 @@ namespace MH.ActorControllers
                 .Subscribe(this.actor, _ =>
                 {
                     this.canNextState = true;
+                    this.actor.GuardController.Validate();
                 })
                 .AddTo(scope);
 
@@ -324,6 +334,13 @@ namespace MH.ActorControllers
                 })
                 .AddTo(scope);
 
+            MessageBroker.GetSubscriber<Actor, ActorEvents.BeginGuard>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.ToIdle();
+                })
+                .AddTo(scope);
+
             var attackType = ActorAttackController.AttackType.WeakAttack;
             if (this.nextAttackType == Define.RequestAttackType.Weak)
             {
@@ -347,6 +364,7 @@ namespace MH.ActorControllers
 
             this.actor.AttackController.Invoke(attackType);
             this.canNextState = false;
+            this.actor.GuardController.Invalidate();
         }
 
         private void OnExitAttack(State nextState)
@@ -399,17 +417,6 @@ namespace MH.ActorControllers
                 Console.WriteLine(e);
                 throw;
             }
-        }
-
-        private void OnEnterGuard(State previousState, DisposableBagBuilder scope)
-        {
-            this.actor.GuardController.Begin();
-            this.actor.AnimationController.Play("Guard");
-        }
-
-        private void OnExitGuard(State nextState)
-        {
-            this.actor.GuardController.End();
         }
     }
 }

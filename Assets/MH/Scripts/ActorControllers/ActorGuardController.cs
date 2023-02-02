@@ -51,7 +51,7 @@ namespace MH.ActorControllers
                 try
                 {
                     this.beginTokenSource = new CancellationTokenSource();
-                    await UniTask.WaitUntil(() => !this.CanGuard, cancellationToken: this.beginTokenSource.Token);
+                    await UniTask.WaitUntil(() => this.CanGuard, cancellationToken: this.beginTokenSource.Token);
                     this.BeginInternal();
                 }
                 catch (OperationCanceledException)
