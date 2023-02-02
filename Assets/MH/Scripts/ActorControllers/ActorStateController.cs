@@ -84,7 +84,7 @@ namespace MH.ActorControllers
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestBeginGuard>()
                 .Subscribe(this.actor, _ =>
                 {
-                    this.actor.GuardController.Begin().Forget();
+                    this.actor.GuardController.Begin();
                 })
                 .AddTo(ct);
 
@@ -247,7 +247,6 @@ namespace MH.ActorControllers
                 .Subscribe(this.actor, _ =>
                 {
                     this.canNextState = true;
-                    this.actor.GuardController.Validate();
                 })
                 .AddTo(scope);
 
@@ -282,13 +281,6 @@ namespace MH.ActorControllers
                 })
                 .AddTo(scope);
 
-            MessageBroker.GetSubscriber<Actor, ActorEvents.BeginGuard>()
-                .Subscribe(this.actor, _ =>
-                {
-                    this.ToIdle();
-                })
-                .AddTo(scope);
-
             this.actor.DodgeController.Invoke();
             this.canNextState = false;
             this.actor.GuardController.Invalidate();
@@ -300,7 +292,6 @@ namespace MH.ActorControllers
                 .Subscribe(this.actor, _ =>
                 {
                     this.canNextState = true;
-                    this.actor.GuardController.Validate();
                 })
                 .AddTo(scope);
 
@@ -329,13 +320,6 @@ namespace MH.ActorControllers
                 .AddTo(scope);
 
             MessageBroker.GetSubscriber<Actor, ActorEvents.EndAttack>()
-                .Subscribe(this.actor, _ =>
-                {
-                    this.ToIdle();
-                })
-                .AddTo(scope);
-
-            MessageBroker.GetSubscriber<Actor, ActorEvents.BeginGuard>()
                 .Subscribe(this.actor, _ =>
                 {
                     this.ToIdle();

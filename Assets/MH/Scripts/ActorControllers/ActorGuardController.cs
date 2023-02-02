@@ -1,7 +1,3 @@
-using System;
-using System.Threading;
-using Cysharp.Threading.Tasks;
-
 namespace MH.ActorControllers
 {
     /// <summary>
@@ -21,8 +17,6 @@ namespace MH.ActorControllers
         /// </summary>
         public bool CanGuard { private set; get; }
 
-        private CancellationTokenSource beginTokenSource;
-
         public void Setup(
             Actor actor,
             IActorDependencyInjector actorDependencyInjector,
@@ -35,33 +29,20 @@ namespace MH.ActorControllers
         /// <summary>
         /// ガードを開始する
         /// </summary>
-        public async UniTaskVoid Begin()
+        public void Begin()
         {
-            if (this.beginTokenSource != null)
+            if (!this.CanGuard)
             {
                 return;
             }
 
-            if (this.CanGuard)
+            var oldGuarding = this.Guarding;
+            this.Guarding = true;
+
+            if (oldGuarding != this.Guarding)
             {
-                this.BeginInternal();
-            }
-            else
-            {
-                try
-                {
-                    this.beginTokenSource = new CancellationTokenSource();
-                    await UniTask.WaitUntil(() => this.CanGuard, cancellationToken: this.beginTokenSource.Token);
-                    this.BeginInternal();
-                }
-                catch (OperationCanceledException)
-                {
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
+                MessageBroker.GetPublisher<Actor, ActorEvents.BeginGuard>()
+                    .Publish(this.actor, ActorEvents.BeginGuard.Get());
             }
         }
 
@@ -76,7 +57,6 @@ namespace MH.ActorControllers
             }
 
             this.Guarding = false;
-            this.DisposeToken();
             MessageBroker.GetPublisher<Actor, ActorEvents.EndGuard>()
                 .Publish(this.actor, ActorEvents.EndGuard.Get());
         }
@@ -96,26 +76,6 @@ namespace MH.ActorControllers
         {
             this.End();
             this.CanGuard = false;
-            this.DisposeToken();
-        }
-
-        private void BeginInternal()
-        {
-            this.Guarding = true;
-            MessageBroker.GetPublisher<Actor, ActorEvents.BeginGuard>()
-                .Publish(this.actor, ActorEvents.BeginGuard.Get());
-        }
-
-        private void DisposeToken()
-        {
-            if (this.beginTokenSource == null)
-            {
-                return;
-            }
-
-            this.beginTokenSource.Cancel();
-            this.beginTokenSource.Dispose();
-            this.beginTokenSource = null;
         }
     }
 }

@@ -62,8 +62,6 @@ namespace MH.ActorControllers
             inputActions.Player.Dodge.performed += PerformedDodge;
             inputActions.Player.AttackWeak.performed += PerformedAttackWeak;
             inputActions.Player.AttackStrong.performed += PerformedAttackStrong;
-            inputActions.Player.Guard.performed += this.PerformedGuard;
-            inputActions.Player.Guard.canceled += CanceledGuard;
             inputActions.Enable();
 
             var ct = this.actor.GetCancellationTokenOnDestroy();
@@ -111,6 +109,17 @@ namespace MH.ActorControllers
                         playerActorCommonData.FollowYMax
                         );
                     orbitalTransposer.m_FollowOffset.y = offsetY;
+
+                    // ガード処理
+                    var isGuard = inputActions.Player.Guard.ReadValue<float>() > 0.5f;
+                    if (isGuard)
+                    {
+                        this.actor.GuardController.Begin();
+                    }
+                    else
+                    {
+                        this.actor.GuardController.End();
+                    }
                 })
                 .AddTo(ct);
 
@@ -204,24 +213,6 @@ namespace MH.ActorControllers
             {
                 MessageBroker.GetPublisher<Actor, ActorEvents.RequestAttack>()
                     .Publish(this.actor, ActorEvents.RequestAttack.Get(Define.RequestAttackType.Strong));
-            });
-        }
-
-        private void PerformedGuard(InputAction.CallbackContext obj)
-        {
-            this.RegisterAdvancedEntry(() =>
-            {
-                MessageBroker.GetPublisher<Actor, ActorEvents.RequestBeginGuard>()
-                    .Publish(this.actor, ActorEvents.RequestBeginGuard.Get());
-            });
-        }
-
-        private void CanceledGuard(InputAction.CallbackContext obj)
-        {
-            this.RegisterAdvancedEntry(() =>
-            {
-                MessageBroker.GetPublisher<Actor, ActorEvents.RequestEndGuard>()
-                    .Publish(this.actor, ActorEvents.RequestEndGuard.Get());
             });
         }
 
