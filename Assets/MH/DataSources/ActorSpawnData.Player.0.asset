@@ -89,3 +89,4 @@ MonoBehaviour:
     onFlinchRotationOppose: 1
     extensionPrefabs:
     - {fileID: 5450664224324214380, guid: a4249328f81d12b44ab72ea7e1fb3b98, type: 3}
+    - {fileID: 8792924599425471339, guid: 8b8b464681c223c4292b5b0d34fc7cc6, type: 3}

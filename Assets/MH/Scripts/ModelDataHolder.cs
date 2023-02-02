@@ -17,6 +17,12 @@ namespace MH
         {
             /// <summary>右手</summary>
             RightHand,
+
+            /// <summary>左手</summary>
+            LeftHand,
+
+            /// <summary>左肘</summary>
+            LeftElbow,
         }
 
         [SerializeField]
