@@ -176,6 +176,7 @@ namespace MH.ActorControllers
             this.actor.AnimationController.Play(GetAnimationName());
             this.actor.PostureController.CanMove = true;
             this.actor.PostureController.CanRotation = true;
+            this.actor.GuardController.Validate();
             if (this.actor.PostureController.IsMoving)
             {
                 this.stateController.ChangeRequest(State.Run);
