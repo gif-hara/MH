@@ -36,6 +36,8 @@ namespace MH.ActorControllers
 
         public ActorPartController PartController { private set; get; }
 
+        public ActorGuardController GuardController { private set; get; }
+
         private void OnDestroy()
         {
             ActorManager.RemoveActor(this);
@@ -71,6 +73,7 @@ namespace MH.ActorControllers
             this.StatusController = this.CreateActorController<ActorStatusController>(spawnData);
             this.NetworkController = this.CreateActorController<ActorNetworkController>(spawnData);
             this.PartController = this.CreateActorController<ActorPartController>(spawnData);
+            this.GuardController = this.CreateActorController<ActorGuardController>(spawnData);
 
             this.NetworkController.NetworkBehaviour = networkBehaviour;
 

@@ -313,5 +313,12 @@ namespace MH
         public sealed class EndFlinch : Message<EndFlinch>
         {
         }
+
+        /// <summary>
+        /// ガードをリクエストするメッセージ
+        /// </summary>
+        public sealed class RequestGuard : Message<RequestGuard>
+        {
+        }
     }
 }
