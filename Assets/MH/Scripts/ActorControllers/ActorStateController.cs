@@ -19,7 +19,6 @@ namespace MH.ActorControllers
             Attack,
             UniqueMotion,
             Flinch,
-            Guard,
         }
 
         private Actor actor;
@@ -57,7 +56,6 @@ namespace MH.ActorControllers
             this.stateController.Set(State.Attack, this.OnEnterAttack, this.OnExitAttack);
             this.stateController.Set(State.UniqueMotion, this.OnEnterUniqueMotion, null, 1);
             this.stateController.Set(State.Flinch, this.OnEnterFlinch, null, 2);
-            this.stateController.Set(State.Guard, this.OnEnterGuard, this.OnExitGuard);
 
             var ct = this.actor.GetCancellationTokenOnDestroy();
 
@@ -79,6 +77,14 @@ namespace MH.ActorControllers
                     }
                     this.actor.DodgeController.Ready(x.Data);
                     this.stateController.ChangeRequest(State.Dodge);
+                })
+                .AddTo(ct);
+
+            // ガードは常に受け付ける
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestGuard>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.actor.GuardController.Begin().Forget();
                 })
                 .AddTo(ct);
 
@@ -117,14 +123,7 @@ namespace MH.ActorControllers
             }
             else
             {
-                if (this.actor.GuardController.Guarding)
-                {
-                    this.ForceChange(State.Guard);
-                }
-                else
-                {
-                    this.ForceChange(State.Idle);
-                }
+                this.ForceChange(State.Idle);
             }
         }
 
@@ -150,13 +149,6 @@ namespace MH.ActorControllers
                 {
                     this.nextAttackType = x.AttackType;
                     this.stateController.ChangeRequest(State.Attack);
-                })
-                .AddTo(scope);
-
-            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestGuard>()
-                .Subscribe(this.actor, _ =>
-                {
-                    this.stateController.ChangeRequest(State.Guard);
                 })
                 .AddTo(scope);
 
