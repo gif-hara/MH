@@ -79,7 +79,7 @@ namespace MH.ActorControllers
                     var velocity = (rightVelocity + forwardVelocity).normalized;
                     if (velocity.sqrMagnitude >= 0.01f)
                     {
-                        this.actor.PostureController.Move(velocity * playerActorCommonData.MoveSpeed * deltaTime);
+                        this.actor.PostureController.Move(velocity * playerActorCommonData.NormalMoveSpeed * deltaTime);
                         lastRotation = velocity;
                     }
                     if (lastRotation.sqrMagnitude >= 0.01f)
@@ -153,6 +153,20 @@ namespace MH.ActorControllers
                         x.Data.damage,
                         x.Data.partType
                         );
+                })
+                .AddTo(ct);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.BeginGuard>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.playerNetworkBehaviour.SubmitSetGuarding(true);
+                })
+                .AddTo(ct);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.EndGuard>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.playerNetworkBehaviour.SubmitSetGuarding(false);
                 })
                 .AddTo(ct);
 

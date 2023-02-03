@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89dec8b99994eb644a7e3bed3065fde3, type: 3}
   m_Name: PlayerActorCommonData
   m_EditorClassIdentifier: 
-  moveSpeed: 10
+  normalMoveSpeed: 10
+  guardMoveSpeed: 10
   rotationSpeed: 10
   dodgeSpeed: 30
   dodgeDuration: 0.5

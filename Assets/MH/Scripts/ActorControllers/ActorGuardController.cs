@@ -1,3 +1,5 @@
+using Unity.Netcode;
+
 namespace MH.ActorControllers
 {
     /// <summary>
@@ -76,6 +78,21 @@ namespace MH.ActorControllers
         {
             this.End();
             this.CanGuard = false;
+        }
+
+        /// <summary>
+        /// ネットワーク上のガードフラグと同期を取る
+        /// </summary>
+        public void SyncGuarding(NetworkVariable<bool> networkGuarding)
+        {
+            if (networkGuarding.Value)
+            {
+                this.Begin();
+            }
+            else
+            {
+                this.End();
+            }
         }
     }
 }

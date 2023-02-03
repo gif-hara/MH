@@ -21,6 +21,8 @@ namespace MH.NetworkSystems
 
         private readonly NetworkVariable<int> networkHitPoint = new();
 
+        private readonly NetworkVariable<bool> networkGuarding = new();
+
         private NetworkList<PartDataNetworkVariable> networkPartDataList;
 
         protected Actor actor;
@@ -60,8 +62,9 @@ namespace MH.NetworkSystems
                 Debug.Log($"OnNetworkSpawn {this.actor} hitPoint = {this.networkHitPoint.Value}");
             }
 
-            this.networkHitPoint.OnValueChanged += OnChangedHitPoint;
-            this.networkPartDataList.OnListChanged += OnChangedPartDataList;
+            this.networkHitPoint.OnValueChanged += this.OnChangedHitPoint;
+            this.networkPartDataList.OnListChanged += this.OnChangedPartDataList;
+            this.networkGuarding.OnValueChanged += this.OnChangedGuarding;
         }
 
         private void OnChangedPartDataList(NetworkListEvent<PartDataNetworkVariable> changeEvent)
@@ -72,6 +75,11 @@ namespace MH.NetworkSystems
         private void OnChangedHitPoint(int previousValue, int newValue)
         {
             this.actor.StatusController.SyncHitPoint(this.networkHitPoint);
+        }
+
+        private void OnChangedGuarding(bool previousValue, bool newValue)
+        {
+            this.actor.GuardController.SyncGuarding(this.networkGuarding);
         }
 
         public void SubmitGaveDamage(ulong networkObjectId, int damage, Define.PartType partType)
@@ -92,6 +100,11 @@ namespace MH.NetworkSystems
         public void SubmitRequestUniqueMotion(string motionName)
         {
             this.SubmitRequestUniqueMotionServerRpc(new FixedString32Bytes(motionName));
+        }
+
+        public void SubmitSetGuarding(bool newGuarding)
+        {
+            this.SubmitSetGuardingServerRpc(newGuarding);
         }
 
         [ServerRpc]
@@ -140,6 +153,12 @@ namespace MH.NetworkSystems
             }
             MessageBroker.GetPublisher<Actor, ActorEvents.NetworkRequestUniqueMotion>()
                 .Publish(this.actor, ActorEvents.NetworkRequestUniqueMotion.Get(motionName.Value));
+        }
+
+        [ServerRpc]
+        private void SubmitSetGuardingServerRpc(bool newGuarding, ServerRpcParams rpcParams = default)
+        {
+            this.networkGuarding.Value = newGuarding;
         }
     }
 }

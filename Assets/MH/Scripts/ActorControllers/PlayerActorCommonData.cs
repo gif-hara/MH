@@ -11,7 +11,10 @@ namespace MH.ActorControllers
     public sealed class PlayerActorCommonData : ScriptableObject
     {
         [SerializeField]
-        private float moveSpeed;
+        private float normalMoveSpeed;
+
+        [SerializeField]
+        private float guardMoveSpeed;
 
         [SerializeField]
         private float rotationSpeed;
@@ -76,7 +79,9 @@ namespace MH.ActorControllers
         [SerializeField]
         private float warpPositionThreshold;
 
-        public float MoveSpeed => this.moveSpeed;
+        public float NormalMoveSpeed => this.normalMoveSpeed;
+
+        public float GuardMoveSpeed => this.guardMoveSpeed;
 
         public float RotationSpeed => this.rotationSpeed;
 
