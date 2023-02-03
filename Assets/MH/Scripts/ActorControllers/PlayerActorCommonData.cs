@@ -79,9 +79,7 @@ namespace MH.ActorControllers
         [SerializeField]
         private float warpPositionThreshold;
 
-        public float NormalMoveSpeed => this.normalMoveSpeed;
-
-        public float GuardMoveSpeed => this.guardMoveSpeed;
+        public float GetMoveSpeed(bool guarding) => guarding ? this.guardMoveSpeed : this.normalMoveSpeed;
 
         public float RotationSpeed => this.rotationSpeed;
 

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlayerActorCommonData
   m_EditorClassIdentifier: 
   normalMoveSpeed: 10
-  guardMoveSpeed: 10
+  guardMoveSpeed: 5
   rotationSpeed: 10
   dodgeSpeed: 30
   dodgeDuration: 0.5

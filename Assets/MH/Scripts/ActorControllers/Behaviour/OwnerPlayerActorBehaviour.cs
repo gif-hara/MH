@@ -79,7 +79,7 @@ namespace MH.ActorControllers
                     var velocity = (rightVelocity + forwardVelocity).normalized;
                     if (velocity.sqrMagnitude >= 0.01f)
                     {
-                        this.actor.PostureController.Move(velocity * playerActorCommonData.NormalMoveSpeed * deltaTime);
+                        this.actor.PostureController.Move(velocity * playerActorCommonData.GetMoveSpeed(this.actor.GuardController.Guarding) * deltaTime);
                         lastRotation = velocity;
                     }
                     if (lastRotation.sqrMagnitude >= 0.01f)

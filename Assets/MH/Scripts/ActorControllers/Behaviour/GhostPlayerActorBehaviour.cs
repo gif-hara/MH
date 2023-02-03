@@ -47,16 +47,17 @@ namespace MH.ActorControllers
                         }
                         else
                         {
+                            var moveSpeed = playerActorCommonData.GetMoveSpeed(this.actor.GuardController.Guarding);
                             var sqrMagnitude = difference.sqrMagnitude;
-                            threshold = playerActorCommonData.NormalMoveSpeed;
+                            threshold = moveSpeed;
                             if (sqrMagnitude >= threshold * threshold)
                             {
                                 var direction = difference.normalized;
-                                this.actor.PostureController.Move(direction * playerActorCommonData.NormalMoveSpeed * this.actor.TimeController.Time.deltaTime);
+                                this.actor.PostureController.Move(direction * moveSpeed * this.actor.TimeController.Time.deltaTime);
                             }
                             else if (sqrMagnitude < threshold * threshold && sqrMagnitude > 0.01f)
                             {
-                                this.actor.PostureController.Move(difference * playerActorCommonData.NormalMoveSpeed * this.actor.TimeController.Time.deltaTime);
+                                this.actor.PostureController.Move(difference * moveSpeed * this.actor.TimeController.Time.deltaTime);
                             }
                         }
                     }
