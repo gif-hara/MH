@@ -21,5 +21,15 @@ namespace MH
         /// ダメージを受けた部位
         /// </summary>
         public Define.PartType partType;
+
+        /// <summary>
+        /// ガードに成功したか
+        /// </summary>
+        public bool isGuardSuccess;
+
+        /// <summary>
+        /// クリティカルか
+        /// </summary>
+        public bool isCritical;
     }
 }

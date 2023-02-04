@@ -77,13 +77,15 @@ namespace MH.ActorControllers
             {
                 var partType = targetActor.PartController.GetPart(other.gameObject).PartType;
                 var damageRate = targetActor.PartController.GetDamageRate(other.gameObject);
-                var damage = Calculator.GetDamageData(this.weaponPower, this.motionPower, damageRate, this.criticalRate);
-                var damageData = new DamageData
-                {
-                    damage = damage,
-                    receiveActor = targetActor,
-                    partType = partType
-                };
+                var damageData = Calculator.GetDamageData(
+                    this.weaponPower,
+                    this.motionPower,
+                    damageRate,
+                    this.criticalRate,
+                    targetActor,
+                    this.actor.transform.position,
+                    partType
+                    );
                 targetActor.StatusController.ReceiveDamage(damageData, partType, this.actor.transform.position);
 
                 MessageBroker.GetPublisher<Actor, ActorEvents.GaveDamage>()

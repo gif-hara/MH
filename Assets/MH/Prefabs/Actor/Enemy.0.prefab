@@ -572,6 +572,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actor: {fileID: 6321397659681280986}
   weaponPower: 1
+  criticalRate: 0
   colliders:
   - {fileID: 1458512085786309471}
 --- !u!54 &5976084892223030821

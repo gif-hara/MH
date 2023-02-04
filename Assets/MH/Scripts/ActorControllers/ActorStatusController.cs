@@ -74,8 +74,16 @@ namespace MH.ActorControllers
             }
             else
             {
-                this.currentEndurances[partType] += damageData.damage;
-                this.TryFlinch(partType, opposePosition);
+                if (damageData.isGuardSuccess)
+                {
+                    MessageBroker.GetPublisher<Actor, ActorEvents.RequestUniqueMotion>()
+                        .Publish(this.actor, ActorEvents.RequestUniqueMotion.Get("GuardSuccess"));
+                }
+                else
+                {
+                    this.currentEndurances[partType] += damageData.damage;
+                    this.TryFlinch(partType, opposePosition);
+                }
             }
         }
 

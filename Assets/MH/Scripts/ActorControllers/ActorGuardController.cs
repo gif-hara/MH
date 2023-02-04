@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using UnityEngine;
 
 namespace MH.ActorControllers
 {
@@ -19,6 +20,8 @@ namespace MH.ActorControllers
         /// </summary>
         public bool CanGuard { private set; get; }
 
+        private float guardSuccessAngle;
+
         public void Setup(
             Actor actor,
             IActorDependencyInjector actorDependencyInjector,
@@ -26,6 +29,7 @@ namespace MH.ActorControllers
         )
         {
             this.actor = actor;
+            this.guardSuccessAngle = spawnData.guardSuccessAngle;
         }
 
         /// <summary>
@@ -93,6 +97,21 @@ namespace MH.ActorControllers
             {
                 this.End();
             }
+        }
+
+        /// <summary>
+        /// 攻撃に対してガードが成功したか返す
+        /// </summary>
+        public bool IsSuccess(Vector3 attackPosition)
+        {
+            if (!this.Guarding)
+            {
+                return false;
+            }
+            var t = this.actor.transform;
+            var diff = attackPosition - t.position;
+            var result = Vector3.Dot(diff.normalized, t.forward);
+            return result > this.guardSuccessAngle;
         }
     }
 }

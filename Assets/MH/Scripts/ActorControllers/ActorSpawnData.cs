@@ -27,6 +27,11 @@ namespace MH.ActorControllers
         public bool onFlinchRotationOppose;
 
         /// <summary>
+        /// ガード成功とみなす角度
+        /// </summary>
+        public float guardSuccessAngle;
+
+        /// <summary>
         /// <see cref="Actor"/>にアタッチするプレハブリスト
         /// </summary>
         /// <remarks>

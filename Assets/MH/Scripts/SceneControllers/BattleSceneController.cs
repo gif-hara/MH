@@ -4,6 +4,7 @@ using MessagePipe;
 using MH.ActorControllers;
 using MH.NetworkSystems;
 using MH.UISystems;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace MH.SceneControllers
@@ -70,10 +71,10 @@ namespace MH.SceneControllers
                 })
                 .AddTo(ct);
 
-            // if (NetworkManager.Singleton.IsHost)
-            // {
-            //     Instantiate(this.enemyPrefab, this.enemySpawnPoint.position, this.enemySpawnPoint.rotation);
-            // }
+            if (NetworkManager.Singleton.IsHost)
+            {
+                Instantiate(this.enemyPrefab, this.enemySpawnPoint.position, this.enemySpawnPoint.rotation);
+            }
         }
     }
 }
