@@ -2,7 +2,6 @@ using System;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace MH.ActorControllers
 {
@@ -326,28 +325,7 @@ namespace MH.ActorControllers
                 })
                 .AddTo(scope);
 
-            var attackType = ActorAttackController.AttackType.WeakAttack;
-            if (this.nextAttackType == Define.RequestAttackType.Weak)
-            {
-                if (previousState == State.Dodge)
-                {
-                    attackType = ActorAttackController.AttackType.DodgeAttack;
-                }
-                else
-                {
-                    attackType = ActorAttackController.AttackType.WeakAttack;
-                }
-            }
-            else if (this.nextAttackType == Define.RequestAttackType.Strong)
-            {
-                attackType = ActorAttackController.AttackType.StrongAttack;
-            }
-            else
-            {
-                Assert.IsTrue(false, this.nextAttackType.ToString());
-            }
-
-            this.actor.AttackController.Invoke(attackType);
+            this.actor.AttackController.Invoke(this.nextAttackType, previousState);
             this.canNextState = false;
             this.actor.GuardController.Invalidate();
         }

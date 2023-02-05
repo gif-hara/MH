@@ -34,7 +34,7 @@ namespace MH.ActorControllers
             Actor actor,
             IActorDependencyInjector actorDependencyInjector,
             ActorSpawnData spawnData
-            )
+        )
         {
             this.actor = actor;
             this.data = spawnData.attackData;
@@ -44,8 +44,29 @@ namespace MH.ActorControllers
         /// <summary>
         /// 攻撃を実行する
         /// </summary>
-        public void Invoke(AttackType attackType)
+        public void Invoke(Define.RequestAttackType requestAttackType, ActorStateController.State previousState)
         {
+            AttackType attackType = AttackType.WeakAttack;
+            if (requestAttackType == Define.RequestAttackType.Weak)
+            {
+                if (previousState == ActorStateController.State.Dodge)
+                {
+                    attackType = AttackType.DodgeAttack;
+                }
+                else
+                {
+                    attackType = AttackType.WeakAttack;
+                }
+            }
+            else if (requestAttackType == Define.RequestAttackType.Strong)
+            {
+                attackType = AttackType.StrongAttack;
+            }
+            else
+            {
+                Assert.IsTrue(false, requestAttackType.ToString());
+            }
+
             string motionName;
 
             if (this.currentAttackType == AttackType.None || this.currentAttackType != attackType)
@@ -110,19 +131,19 @@ namespace MH.ActorControllers
         {
             switch (attackType)
             {
-                case AttackType.WeakAttack:
-                    return "WeakAttack.0";
-                case AttackType.DodgeAttack:
-                    return "DodgeAttack";
-                case AttackType.StrongAttack:
-                    return "StrongAttack.0";
-                case AttackType.None:
-                default:
-                    Assert.IsTrue(
-                        false,
-                        $"{attackType} is not supported."
-                        );
-                    return "";
+            case AttackType.WeakAttack:
+                return "WeakAttack.0";
+            case AttackType.DodgeAttack:
+                return "DodgeAttack";
+            case AttackType.StrongAttack:
+                return "StrongAttack.0";
+            case AttackType.None:
+            default:
+                Assert.IsTrue(
+                    false,
+                    $"{attackType} is not supported."
+                    );
+                return "";
             }
         }
     }
