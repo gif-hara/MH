@@ -269,8 +269,14 @@ namespace MH.ActorControllers
 
         public void EndRecovery()
         {
-            this.recoveryTokenSource?.Cancel();
-            this.recoveryTokenSource?.Dispose();
+            if (this.recoveryTokenSource != null)
+            {
+                this.recoveryTokenSource.Cancel();
+                this.recoveryTokenSource.Dispose();
+                MessageBroker.GetPublisher<Actor, ActorEvents.EndRecovery>()
+                    .Publish(this.actor, ActorEvents.EndRecovery.Get());
+            }
+
             this.recoveryTokenSource = null;
         }
 

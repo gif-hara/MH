@@ -172,6 +172,20 @@ namespace MH.ActorControllers
                 })
                 .AddTo(ct);
 
+            MessageBroker.GetSubscriber<Actor, ActorEvents.BeginRecovery>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.playerNetworkBehaviour.SubmitRequestUniqueMotion("Recovery.Begin");
+                })
+                .AddTo(ct);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.EndRecovery>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.playerNetworkBehaviour.SubmitRequestUniqueMotion("Recovery.End");
+                })
+                .AddTo(ct);
+
 #if MH_DEBUG
             this.actor.GetAsyncUpdateTrigger()
                 .Subscribe(_ =>

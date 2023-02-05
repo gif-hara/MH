@@ -57,7 +57,7 @@ namespace MH.ActorControllers
             this.stateController.Set(State.Attack, this.OnEnterAttack, this.OnExitAttack);
             this.stateController.Set(State.UniqueMotion, this.OnEnterUniqueMotion, null, 1);
             this.stateController.Set(State.Flinch, this.OnEnterFlinch, null, 2);
-            this.stateController.Set(State.RecoveryBegin, this.OnEnterRecoveryBegin, null);
+            this.stateController.Set(State.RecoveryBegin, this.OnEnterRecoveryBegin, this.OnExitRecoveryBegin);
             this.stateController.Set(State.RecoveryEnd, this.OnEnterRecoveryEnd, null);
 
             var ct = this.actor.GetCancellationTokenOnDestroy();
@@ -452,6 +452,8 @@ namespace MH.ActorControllers
                 this.actor.AnimationController.Play("Recovery.Begin");
                 this.actor.PostureController.CanMove = false;
                 this.actor.PostureController.CanRotation = false;
+                MessageBroker.GetPublisher<Actor, ActorEvents.BeginRecovery>()
+                    .Publish(this.actor, ActorEvents.BeginRecovery.Get());
 
                 await UniTask.WaitWhile(() =>
                 {
@@ -472,6 +474,11 @@ namespace MH.ActorControllers
                 Debug.LogException(e);
                 throw;
             }
+        }
+
+        private void OnExitRecoveryBegin(State nextState)
+        {
+            this.actor.StatusController.EndRecovery();
         }
 
         private async void OnEnterRecoveryEnd(State previousState, DisposableBagBuilder scope)

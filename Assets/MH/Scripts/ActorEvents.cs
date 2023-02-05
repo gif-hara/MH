@@ -45,6 +45,8 @@ namespace MH
             builder.AddMessageBroker<Actor, EndGuard>();
             builder.AddMessageBroker<Actor, RequestBeginRecovery>();
             builder.AddMessageBroker<Actor, RequestEndRecovery>();
+            builder.AddMessageBroker<Actor, BeginRecovery>();
+            builder.AddMessageBroker<Actor, EndRecovery>();
         }
 
         /// <summary>
@@ -359,6 +361,20 @@ namespace MH
         /// 回復終了をリクエストするメッセージ
         /// </summary>
         public sealed class RequestEndRecovery : Message<RequestEndRecovery>
+        {
+        }
+
+        /// <summary>
+        /// 回復を開始するメッセージ
+        /// </summary>
+        public sealed class BeginRecovery : Message<BeginRecovery>
+        {
+        }
+
+        /// <summary>
+        /// 回復を終了するメッセージ
+        /// </summary>
+        public sealed class EndRecovery : Message<EndRecovery>
         {
         }
     }
