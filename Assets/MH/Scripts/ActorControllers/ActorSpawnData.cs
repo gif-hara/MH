@@ -27,6 +27,16 @@ namespace MH.ActorControllers
         public float guardSuccessAngle;
 
         /// <summary>
+        /// スタミナ回復量（秒間）
+        /// </summary>
+        public float recoveryStamina;
+
+        /// <summary>
+        /// 回避に必要なスタミナの量
+        /// </summary>
+        public float dodgeStaminaAmount;
+
+        /// <summary>
         /// <see cref="Actor"/>にアタッチするプレハブリスト
         /// </summary>
         /// <remarks>

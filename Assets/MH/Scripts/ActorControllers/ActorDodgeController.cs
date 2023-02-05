@@ -5,13 +5,14 @@ using UnityEngine;
 namespace MH.ActorControllers
 {
     /// <summary>
-    ///
     /// </summary>
     public sealed class ActorDodgeController : IActorController
     {
         private Actor actor;
 
         private InvokeData invokeData;
+
+        private float dodgeStaminaAmount;
 
         void IActorController.Setup(
             Actor actor,
@@ -20,6 +21,7 @@ namespace MH.ActorControllers
         )
         {
             this.actor = actor;
+            this.dodgeStaminaAmount = spawnData.dodgeStaminaAmount;
         }
 
         public void Ready(InvokeData invokeData)
@@ -29,6 +31,7 @@ namespace MH.ActorControllers
 
         public async void Invoke()
         {
+            this.actor.StatusController.UseStamina(this.dodgeStaminaAmount);
             var rotation = Quaternion.LookRotation(this.invokeData.direction);
             this.actor.PostureController.Rotate(rotation, true);
             this.actor.PostureController.CanRotation = false;

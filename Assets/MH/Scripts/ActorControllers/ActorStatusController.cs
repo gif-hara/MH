@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
+using Cysharp.Threading.Tasks.Triggers;
 using MH.NetworkSystems;
 using Unity.Netcode;
 using UnityEngine;
@@ -20,6 +22,10 @@ namespace MH.ActorControllers
         private readonly AsyncReactiveProperty<int> hitPointMax = new(0);
 
         private readonly AsyncReactiveProperty<int> hitPoint = new(0);
+
+        private readonly AsyncReactiveProperty<float> staminaMax = new(0);
+
+        private readonly AsyncReactiveProperty<float> stamina = new(0);
 
         /// <summary>
         /// 基礎となる部位データ
@@ -41,6 +47,10 @@ namespace MH.ActorControllers
 
         public IAsyncReactiveProperty<int> HitPoint => this.hitPoint;
 
+        public IAsyncReactiveProperty<float> StaminaMax => this.staminaMax;
+
+        public IAsyncReactiveProperty<float> Stamina => this.stamina;
+
         public IReadOnlyDictionary<Define.PartType, ActorStatus.PartData> BasePartDataList => this.basePartDataList;
 
         public IReadOnlyDictionary<Define.PartType, int> CurrentEndurances => this.currentEndurances;
@@ -57,12 +67,25 @@ namespace MH.ActorControllers
             this.BaseStatus = new ActorStatus(spawnData.actorStatus);
             this.hitPointMax.Value = this.BaseStatus.hitPoint;
             this.hitPoint.Value = this.BaseStatus.hitPoint;
+            this.staminaMax.Value = this.BaseStatus.stamina;
+            this.stamina.Value = this.BaseStatus.stamina;
             foreach (var partData in this.BaseStatus.partDataList)
             {
                 this.basePartDataList.Add(partData.PartType, partData);
                 this.currentEndurances.Add(partData.PartType, 0);
                 this.flinchCounts.Add(partData.PartType, 0);
             }
+
+            var ct = this.actor.GetCancellationTokenOnDestroy();
+            this.actor.GetAsyncUpdateTrigger()
+                .Subscribe(_ =>
+                {
+                    var s = this.stamina.Value;
+                    s += spawnData.recoveryStamina * TimeManager.Game.deltaTime;
+                    s = Mathf.Min(s, this.staminaMax.Value);
+                    this.stamina.Value = s;
+                })
+                .AddTo(ct);
         }
 
         public void ReceiveDamage(DamageData damageData, Define.PartType partType, Vector3 opposePosition)
@@ -131,6 +154,22 @@ namespace MH.ActorControllers
             this.IsInvincible = false;
             this.invincibleTokenSource.Dispose();
             this.invincibleTokenSource = null;
+        }
+
+        /// <summary>
+        /// スタミナが足りるか返す
+        /// </summary>
+        public bool IsEnoughStamina()
+        {
+            return this.stamina.Value > 0;
+        }
+
+        /// <summary>
+        /// スタミナを使用する
+        /// </summary>
+        public void UseStamina(float stamina)
+        {
+            this.stamina.Value -= stamina;
         }
 
         private void TryFlinch(Define.PartType partType, Vector3 opposePosition)

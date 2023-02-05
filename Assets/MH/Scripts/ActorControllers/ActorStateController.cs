@@ -38,6 +38,8 @@ namespace MH.ActorControllers
         /// </summary>
         private bool onFlinchRotationOppose;
 
+        private float dodgeStaminaAmount;
+
         public State CurrentState => this.stateController.CurrentState;
 
         void IActorController.Setup(
@@ -48,6 +50,7 @@ namespace MH.ActorControllers
         {
             this.actor = actor;
             this.onFlinchRotationOppose = spawnData.onFlinchRotationOppose;
+            this.dodgeStaminaAmount = spawnData.dodgeStaminaAmount;
             this.stateController = new StateController<State>(State.Invalid);
             this.stateController.Set(State.Idle, this.OnEnterIdle, null);
             this.stateController.Set(State.Run, this.OnEnterRun, null);
@@ -145,6 +148,10 @@ namespace MH.ActorControllers
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
                 .Subscribe(this.actor, x =>
                 {
+                    if (!this.actor.StatusController.IsEnoughStamina())
+                    {
+                        return;
+                    }
                     this.actor.DodgeController.Ready(x.Data);
                     this.stateController.ChangeRequest(State.Dodge);
                 })
@@ -199,6 +206,11 @@ namespace MH.ActorControllers
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
                 .Subscribe(this.actor, x =>
                 {
+                    if (!this.actor.StatusController.IsEnoughStamina())
+                    {
+                        return;
+                    }
+
                     this.actor.DodgeController.Ready(x.Data);
                     this.stateController.ChangeRequest(State.Dodge);
                 })
@@ -264,7 +276,7 @@ namespace MH.ActorControllers
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
                 .Subscribe(this.actor, x =>
                 {
-                    if (!this.canNextState)
+                    if (!this.canNextState || !this.actor.StatusController.IsEnoughStamina())
                     {
                         return;
                     }
@@ -309,7 +321,7 @@ namespace MH.ActorControllers
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestDodge>()
                 .Subscribe(this.actor, x =>
                 {
-                    if (!this.canNextState)
+                    if (!this.canNextState || !this.actor.StatusController.IsEnoughStamina())
                     {
                         return;
                     }

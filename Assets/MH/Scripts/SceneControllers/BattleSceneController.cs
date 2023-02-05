@@ -58,16 +58,30 @@ namespace MH.SceneControllers
             var uiView = UIManager.Open(this.battleUIView);
             var ownerActor = ActorManager.OwnerActor;
             var s = ownerActor.StatusController;
-            ownerActor.StatusController.HitPoint
+            s.HitPoint
                 .Subscribe(x =>
                 {
                     uiView.HitPointSlider.value = (float)s.HitPoint.Value / s.HitPointMax.Value;
                 })
                 .AddTo(ct);
-            ownerActor.StatusController.HitPointMax
+            s.HitPointMax
                 .Subscribe(x =>
                 {
                     uiView.HitPointSlider.value = (float)s.HitPoint.Value / s.HitPointMax.Value;
+                })
+                .AddTo(ct);
+
+            s.Stamina
+                .Subscribe(x =>
+                {
+                    uiView.StaminaSlider.value = s.Stamina.Value / s.StaminaMax.Value;
+                })
+                .AddTo(ct);
+
+            s.StaminaMax
+                .Subscribe(x =>
+                {
+                    uiView.StaminaSlider.value = s.Stamina.Value / s.StaminaMax.Value;
                 })
                 .AddTo(ct);
 

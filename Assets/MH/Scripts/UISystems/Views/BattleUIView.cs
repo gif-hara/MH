@@ -11,6 +11,11 @@ namespace MH.UISystems
         [SerializeField]
         private Slider hitPointSlider;
 
+        [SerializeField]
+        private Slider staminaSlider;
+
         public Slider HitPointSlider => this.hitPointSlider;
+
+        public Slider StaminaSlider => this.staminaSlider;
     }
 }

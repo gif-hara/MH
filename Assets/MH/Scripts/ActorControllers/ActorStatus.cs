@@ -5,7 +5,6 @@ using UnityEngine;
 namespace MH.ActorControllers
 {
     /// <summary>
-    ///
     /// </summary>
     [Serializable]
     public sealed class ActorStatus
@@ -14,12 +13,15 @@ namespace MH.ActorControllers
 
         public int hitPoint;
 
+        public int stamina;
+
         public List<PartData> partDataList;
 
         public ActorStatus(ActorStatus other)
         {
             this.actorType = other.actorType;
             this.hitPoint = other.hitPoint;
+            this.stamina = other.stamina;
             this.partDataList = new List<PartData>(other.partDataList);
         }
 
@@ -44,7 +46,7 @@ namespace MH.ActorControllers
             /// <remarks>
             /// いわゆる肉質
             /// </remarks>
-            [SerializeField][Range(0.0f, 1.0f)]
+            [SerializeField] [Range(0.0f, 1.0f)]
             private float damageRate;
 
             public Define.PartType PartType => this.partType;
