@@ -102,5 +102,22 @@ namespace MH.ActorControllers
             MessageBroker.GetPublisher<Actor, ActorEvents.RequestSetForce>()
                 .Publish(this.actor, ActorEvents.RequestSetForce.Get(scriptableVector3.vector3));
         }
+
+        /// <summary>
+        /// 無敵を開始する
+        /// </summary>
+        /// <remarks>
+        /// この関数はアニメーションイベントで実行されます
+        /// </remarks>
+        public void BeginInvincible(float durationSeconds)
+        {
+            if (this.actor == null)
+            {
+                Debug.LogWarning("actor is null.");
+                return;
+            }
+
+            this.actor.StatusController.BeginInvincibleAsync(durationSeconds).Forget();
+        }
     }
 }

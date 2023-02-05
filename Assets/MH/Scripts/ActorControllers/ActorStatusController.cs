@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using MH.NetworkSystems;
 using Unity.Netcode;
@@ -27,6 +29,13 @@ namespace MH.ActorControllers
         private readonly Dictionary<Define.PartType, int> currentEndurances = new();
 
         private readonly Dictionary<Define.PartType, int> flinchCounts = new();
+
+        /// <summary>
+        /// 無敵時のキャンセルトークンソース
+        /// </summary>
+        private CancellationTokenSource invincibleTokenSource;
+
+        public bool IsInvincible { private set; get; }
 
         public IAsyncReactiveProperty<int> HitPointMax => this.hitPointMax;
 
@@ -63,6 +72,11 @@ namespace MH.ActorControllers
                 return;
             }
 
+            if (this.IsInvincible)
+            {
+                return;
+            }
+
             this.hitPoint.Value -= damageData.damage;
             MessageBroker.GetPublisher<Actor, ActorEvents.ReceivedDamage>()
                 .Publish(this.actor, ActorEvents.ReceivedDamage.Get(damageData));
@@ -85,6 +99,38 @@ namespace MH.ActorControllers
                     this.TryFlinch(partType, opposePosition);
                 }
             }
+        }
+
+        /// <summary>
+        /// 無敵を開始する
+        /// </summary>
+        public async UniTaskVoid BeginInvincibleAsync(float durationSeconds)
+        {
+            if (this.invincibleTokenSource != null)
+            {
+                this.invincibleTokenSource.Cancel();
+                this.invincibleTokenSource.Dispose();
+            }
+
+            this.IsInvincible = true;
+            this.invincibleTokenSource = new CancellationTokenSource();
+
+            try
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(durationSeconds), cancellationToken: this.invincibleTokenSource.Token);
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                throw;
+            }
+
+            this.IsInvincible = false;
+            this.invincibleTokenSource.Dispose();
+            this.invincibleTokenSource = null;
         }
 
         private void TryFlinch(Define.PartType partType, Vector3 opposePosition)

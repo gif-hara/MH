@@ -577,6 +577,7 @@ AnimationClip:
       customType: 0
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 1393476043
       attribute: 4
@@ -585,6 +586,7 @@ AnimationClip:
       customType: 4
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 2322471057
       attribute: 4
@@ -593,6 +595,7 @@ AnimationClip:
       customType: 4
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 3508277820
       attribute: 4
@@ -601,6 +604,7 @@ AnimationClip:
       customType: 4
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 3928554378
       attribute: 4
@@ -609,6 +613,7 @@ AnimationClip:
       customType: 4
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 2311602916
       attribute: 4
@@ -617,6 +622,7 @@ AnimationClip:
       customType: 4
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 2076861342
       attribute: 4
@@ -625,6 +631,7 @@ AnimationClip:
       customType: 4
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 3736085889
       attribute: 4
@@ -633,6 +640,7 @@ AnimationClip:
       customType: 4
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 1393476043
       attribute: 1
@@ -641,6 +649,7 @@ AnimationClip:
       customType: 0
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 510043502
       attribute: 1
@@ -649,6 +658,7 @@ AnimationClip:
       customType: 0
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 961750407
       attribute: 1
@@ -657,6 +667,7 @@ AnimationClip:
       customType: 0
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 899766960
       attribute: 1
@@ -665,6 +676,7 @@ AnimationClip:
       customType: 0
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 2322471057
       attribute: 1
@@ -673,6 +685,7 @@ AnimationClip:
       customType: 0
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 3508277820
       attribute: 1
@@ -681,6 +694,7 @@ AnimationClip:
       customType: 0
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 3077364544
       attribute: 1
@@ -689,6 +703,7 @@ AnimationClip:
       customType: 0
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 3928554378
       attribute: 1
@@ -697,6 +712,7 @@ AnimationClip:
       customType: 0
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 2613640413
       attribute: 1
@@ -705,6 +721,7 @@ AnimationClip:
       customType: 0
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 2311602916
       attribute: 1
@@ -713,6 +730,7 @@ AnimationClip:
       customType: 0
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 2076861342
       attribute: 1
@@ -721,6 +739,7 @@ AnimationClip:
       customType: 0
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 3736085889
       attribute: 1
@@ -729,6 +748,7 @@ AnimationClip:
       customType: 0
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 510043502
       attribute: 4
@@ -737,6 +757,7 @@ AnimationClip:
       customType: 4
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 961750407
       attribute: 4
@@ -745,6 +766,7 @@ AnimationClip:
       customType: 4
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 899766960
       attribute: 4
@@ -753,6 +775,7 @@ AnimationClip:
       customType: 4
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 3077364544
       attribute: 4
@@ -761,6 +784,7 @@ AnimationClip:
       customType: 4
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 2613640413
       attribute: 4
@@ -769,6 +793,7 @@ AnimationClip:
       customType: 4
       isPPtrCurve: 0
       isIntCurve: 0
+      isSerializeReferenceCurve: 0
     pptrCurveMapping: []
   m_AnimationClipSettings:
     serializedVersion: 2
@@ -791,7 +816,8 @@ AnimationClip:
     m_HeightFromFeet: 0
     m_Mirror: 0
   m_EditorCurves:
-  - curve:
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -810,7 +836,9 @@ AnimationClip:
     path: Spine
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -829,7 +857,9 @@ AnimationClip:
     path: Spine
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -848,7 +878,9 @@ AnimationClip:
     path: Spine
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -894,7 +926,9 @@ AnimationClip:
     path: Spine
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -940,7 +974,9 @@ AnimationClip:
     path: Spine
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -986,7 +1022,9 @@ AnimationClip:
     path: Spine
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1005,7 +1043,9 @@ AnimationClip:
     path: Spine/Hip
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1024,7 +1064,9 @@ AnimationClip:
     path: Spine/Hip
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1043,7 +1085,9 @@ AnimationClip:
     path: Spine/Hip
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1062,7 +1106,9 @@ AnimationClip:
     path: Spine/Hip
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1081,7 +1127,9 @@ AnimationClip:
     path: Spine/Hip
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1100,7 +1148,9 @@ AnimationClip:
     path: Spine/Hip
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1119,7 +1169,9 @@ AnimationClip:
     path: Spine/Hip/Chest
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1138,7 +1190,9 @@ AnimationClip:
     path: Spine/Hip/Chest
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1157,7 +1211,9 @@ AnimationClip:
     path: Spine/Hip/Chest
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1176,7 +1232,9 @@ AnimationClip:
     path: Spine/Hip/Chest
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1195,7 +1253,9 @@ AnimationClip:
     path: Spine/Hip/Chest
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1214,7 +1274,9 @@ AnimationClip:
     path: Spine/Hip/Chest
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1233,7 +1295,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1252,7 +1316,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1271,7 +1337,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1290,7 +1358,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1309,7 +1379,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1328,7 +1400,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1347,7 +1421,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1366,7 +1442,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1385,7 +1463,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1431,7 +1511,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1477,7 +1559,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1523,7 +1607,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1542,7 +1628,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder/Upper Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1561,7 +1649,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder/Upper Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1580,7 +1670,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder/Upper Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1608,7 +1700,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder/Upper Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1636,7 +1730,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder/Upper Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1664,7 +1760,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder/Upper Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1683,7 +1781,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder/Upper Arm/Lower Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1702,7 +1802,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder/Upper Arm/Lower Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1721,7 +1823,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder/Upper Arm/Lower Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1740,7 +1844,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder/Upper Arm/Lower Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1759,7 +1865,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder/Upper Arm/Lower Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1778,7 +1886,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder/Upper Arm/Lower Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1797,7 +1907,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Neck
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1816,7 +1928,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Neck
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1835,7 +1949,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Neck
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1872,7 +1988,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Neck
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1909,7 +2027,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Neck
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1946,7 +2066,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Neck
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1965,7 +2087,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Neck/Head
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1984,7 +2108,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Neck/Head
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2003,7 +2129,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Neck/Head
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2022,7 +2150,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Neck/Head
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2041,7 +2171,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Neck/Head
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2060,7 +2192,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Neck/Head
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2079,7 +2213,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2098,7 +2234,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2117,7 +2255,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2163,7 +2303,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2209,7 +2351,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2255,7 +2399,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2274,7 +2420,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder/Upper Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2293,7 +2441,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder/Upper Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2312,7 +2462,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder/Upper Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2349,7 +2501,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder/Upper Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2386,7 +2540,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder/Upper Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2423,7 +2579,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder/Upper Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2442,7 +2600,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder/Upper Arm/Lower Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2461,7 +2621,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder/Upper Arm/Lower Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2480,7 +2642,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder/Upper Arm/Lower Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2508,7 +2672,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder/Upper Arm/Lower Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2536,7 +2702,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder/Upper Arm/Lower Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2564,7 +2732,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder/Upper Arm/Lower Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2592,7 +2762,9 @@ AnimationClip:
     path: 
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2620,7 +2792,9 @@ AnimationClip:
     path: 
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -2648,8 +2822,10 @@ AnimationClip:
     path: 
     classID: 4
     script: {fileID: 0}
+    flags: 16
   m_EulerEditorCurves:
-  - curve:
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2659,7 +2835,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder/Upper Arm/Lower Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2669,7 +2847,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder/Upper Arm/Lower Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2679,7 +2859,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder/Upper Arm/Lower Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2689,7 +2871,9 @@ AnimationClip:
     path: Spine/Hip
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2699,7 +2883,9 @@ AnimationClip:
     path: Spine/Hip
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2709,7 +2895,9 @@ AnimationClip:
     path: Spine/Hip
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2719,7 +2907,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Neck
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2729,7 +2919,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Neck
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2739,7 +2931,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Neck
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2749,7 +2943,9 @@ AnimationClip:
     path: Spine/Hip/Chest
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2759,7 +2955,9 @@ AnimationClip:
     path: Spine/Hip/Chest
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2769,7 +2967,9 @@ AnimationClip:
     path: Spine/Hip/Chest
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2779,7 +2979,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2789,7 +2991,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2799,7 +3003,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2809,7 +3015,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder/Upper Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2819,7 +3027,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder/Upper Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2829,7 +3039,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder/Upper Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2839,7 +3051,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder/Upper Arm/Lower Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2849,7 +3063,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder/Upper Arm/Lower Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2859,7 +3075,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder/Upper Arm/Lower Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2869,7 +3087,9 @@ AnimationClip:
     path: Spine
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2879,7 +3099,9 @@ AnimationClip:
     path: Spine
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2889,7 +3111,9 @@ AnimationClip:
     path: Spine
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2899,7 +3123,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Neck/Head
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2909,7 +3135,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Neck/Head
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2919,7 +3147,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Neck/Head
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2929,7 +3159,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder/Upper Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2939,7 +3171,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder/Upper Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2949,7 +3183,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder/Upper Arm
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2959,7 +3195,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2969,7 +3207,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2979,7 +3219,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Left Shoulder
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2989,7 +3231,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -2999,7 +3243,9 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
@@ -3009,6 +3255,7 @@ AnimationClip:
     path: Spine/Hip/Chest/Upper Chest/Right Shoulder
     classID: 4
     script: {fileID: 0}
+    flags: 16
   m_HasGenericRootTransform: 1
   m_HasMotionFloatCurves: 0
   m_Events:
