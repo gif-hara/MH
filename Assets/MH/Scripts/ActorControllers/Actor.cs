@@ -49,16 +49,11 @@ namespace MH.ActorControllers
 
         OpenCharacterController IActorDependencyInjector.OpenCharacterController => this.openCharacterController;
 
-        public Actor Spawn(ActorSpawnData data, ActorNetworkBehaviour networkBehaviour, Vector3 position, Quaternion rotation)
+        public Actor Spawn(ActorSpawnData data, ActorNetworkBehaviour networkBehaviour)
         {
-            var instance = Instantiate(this, position, rotation);
+            var instance = Instantiate(this, networkBehaviour.transform);
             instance.Initialize(data, networkBehaviour);
             return instance;
-        }
-
-        public Actor Spawn(ActorSpawnData data, ActorNetworkBehaviour networkBehaviour, Transform spawnPoint)
-        {
-            return Spawn(data, networkBehaviour, spawnPoint.position, spawnPoint.rotation);
         }
 
         private void Initialize(ActorSpawnData spawnData, ActorNetworkBehaviour networkBehaviour)

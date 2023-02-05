@@ -41,8 +41,7 @@ namespace MH.NetworkSystems
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            this.actor = this.actorPrefab.Spawn(this.actorSpawnData.data, this, this.transform);
-            this.actor.transform.SetParent(this.transform, false);
+            this.actor = this.actorPrefab.Spawn(this.actorSpawnData.data, this);
             if (this.IsHost)
             {
                 this.networkHitPoint.Value = this.actor.StatusController.HitPoint.Value;
