@@ -15,7 +15,8 @@ MonoBehaviour:
   data:
     actorStatus:
       actorType: 1
-      hitPoint: 1200
+      hitPoint: 100
+      stamina: 0
       partDataList:
       - partType: 0
         endurance: 50
@@ -45,6 +46,15 @@ MonoBehaviour:
         blendData:
           animationClip: {fileID: 7400000, guid: a500e80744398ce40a858e08d607dd63, type: 2}
           blendSeconds: 0.05
-    leaveDistance: 0
+      - name: Dead
+        blendData:
+          animationClip: {fileID: 7400000, guid: 9d713fbfd785f414ab0a3dd1e8d790cb, type: 2}
+          blendSeconds: 0.05
     onFlinchRotationOppose: 0
+    guardSuccessAngle: 0
+    recoveryStamina: 0
+    dodgeStaminaAmount: 0
+    recoveryHitPoint: 0
+    recoveryHitPointConsumePower: 0
+    recoveryHitPointMin: 0
     extensionPrefabs: []

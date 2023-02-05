@@ -20,6 +20,7 @@ namespace MH.ActorControllers
             Flinch,
             RecoveryBegin,
             RecoveryEnd,
+            Dead,
         }
 
         private Actor actor;
@@ -59,6 +60,7 @@ namespace MH.ActorControllers
             this.stateController.Set(State.Flinch, this.OnEnterFlinch, null, 2);
             this.stateController.Set(State.RecoveryBegin, this.OnEnterRecoveryBegin, this.OnExitRecoveryBegin);
             this.stateController.Set(State.RecoveryEnd, this.OnEnterRecoveryEnd, null);
+            this.stateController.Set(State.Dead, this.OnEnterDead, null, 3);
 
             var ct = this.actor.GetCancellationTokenOnDestroy();
 
@@ -95,6 +97,13 @@ namespace MH.ActorControllers
                 .Subscribe(this.actor, _ =>
                 {
                     this.actor.GuardController.End();
+                })
+                .AddTo(ct);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.Died>()
+                .Subscribe(this.actor, _ =>
+                {
+                    this.ForceChange(State.Dead);
                 })
                 .AddTo(ct);
 
@@ -497,6 +506,11 @@ namespace MH.ActorControllers
                 Debug.LogException(e);
                 throw;
             }
+        }
+
+        private void OnEnterDead(State previousState, DisposableBagBuilder scope)
+        {
+            this.actor.AnimationController.Play("Dead");
         }
     }
 }

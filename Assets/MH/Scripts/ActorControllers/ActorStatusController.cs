@@ -304,6 +304,11 @@ namespace MH.ActorControllers
 
         private void TryFlinch(Define.PartType partType, Vector3 opposePosition)
         {
+            if (this.IsDead)
+            {
+                return;
+            }
+
             if (this.currentEndurances[partType] >= this.basePartDataList[partType].Endurance * (this.flinchCounts[partType] + 1))
             {
                 this.flinchCounts[partType]++;
