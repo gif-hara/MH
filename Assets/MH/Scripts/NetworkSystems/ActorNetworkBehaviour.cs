@@ -19,7 +19,7 @@ namespace MH.NetworkSystems
 
         private readonly NetworkVariable<float> networkRotationY = new();
 
-        private readonly NetworkVariable<int> networkHitPoint = new();
+        private readonly NetworkVariable<float> networkHitPoint = new();
 
         private readonly NetworkVariable<bool> networkGuarding = new();
 
@@ -71,7 +71,7 @@ namespace MH.NetworkSystems
             this.actor.StatusController.SyncPartDataList(this.networkPartDataList);
         }
 
-        private void OnChangedHitPoint(int previousValue, int newValue)
+        private void OnChangedHitPoint(float previousValue, float newValue)
         {
             this.actor.StatusController.SyncHitPoint(this.networkHitPoint);
         }

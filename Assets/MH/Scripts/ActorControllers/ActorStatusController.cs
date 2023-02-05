@@ -19,9 +19,9 @@ namespace MH.ActorControllers
 
         public ActorStatus BaseStatus { private set; get; }
 
-        private readonly AsyncReactiveProperty<int> hitPointMax = new(0);
+        private readonly AsyncReactiveProperty<float> hitPointMax = new(0);
 
-        private readonly AsyncReactiveProperty<int> hitPoint = new(0);
+        private readonly AsyncReactiveProperty<float> hitPoint = new(0);
 
         private readonly AsyncReactiveProperty<float> staminaMax = new(0);
 
@@ -43,9 +43,9 @@ namespace MH.ActorControllers
 
         public bool IsInvincible { private set; get; }
 
-        public IAsyncReactiveProperty<int> HitPointMax => this.hitPointMax;
+        public IAsyncReactiveProperty<float> HitPointMax => this.hitPointMax;
 
-        public IAsyncReactiveProperty<int> HitPoint => this.hitPoint;
+        public IAsyncReactiveProperty<float> HitPoint => this.hitPoint;
 
         public IAsyncReactiveProperty<float> StaminaMax => this.staminaMax;
 
@@ -189,7 +189,7 @@ namespace MH.ActorControllers
             return result.DamageRate;
         }
 
-        public void SyncHitPoint(NetworkVariable<int> networkHitPoint)
+        public void SyncHitPoint(NetworkVariable<float> networkHitPoint)
         {
             this.hitPoint.Value = networkHitPoint.Value;
         }
