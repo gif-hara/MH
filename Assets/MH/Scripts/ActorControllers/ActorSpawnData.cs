@@ -17,11 +17,6 @@ namespace MH.ActorControllers
         public ActorAnimationData animationData;
 
         /// <summary>
-        /// 敵と接触した際に離れる距離
-        /// </summary>
-        public float leaveDistance;
-
-        /// <summary>
         /// ひるんだ時に相手の方向へ向き直すか
         /// </summary>
         public bool onFlinchRotationOppose;
