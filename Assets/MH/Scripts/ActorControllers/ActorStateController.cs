@@ -160,6 +160,10 @@ namespace MH.ActorControllers
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
                 .Subscribe(this.actor, x =>
                 {
+                    if (x.AttackType == Define.RequestAttackType.Strong && !this.actor.StatusController.CanSpecialAttack())
+                    {
+                        return;
+                    }
                     this.nextAttackType = x.AttackType;
                     this.stateController.ChangeRequest(State.Attack);
                 })
@@ -219,6 +223,10 @@ namespace MH.ActorControllers
             MessageBroker.GetSubscriber<Actor, ActorEvents.RequestAttack>()
                 .Subscribe(this.actor, x =>
                 {
+                    if (x.AttackType == Define.RequestAttackType.Strong && !this.actor.StatusController.CanSpecialAttack())
+                    {
+                        return;
+                    }
                     this.nextAttackType = x.AttackType;
                     this.stateController.ChangeRequest(State.Attack);
                 })
@@ -268,6 +276,11 @@ namespace MH.ActorControllers
                     {
                         return;
                     }
+                    if (x.AttackType == Define.RequestAttackType.Strong && !this.actor.StatusController.CanSpecialAttack())
+                    {
+                        return;
+                    }
+
                     this.nextAttackType = x.AttackType;
                     this.stateController.ChangeRequest(State.Attack);
                 })
@@ -313,6 +326,11 @@ namespace MH.ActorControllers
                     {
                         return;
                     }
+                    if (x.AttackType == Define.RequestAttackType.Strong && !this.actor.StatusController.CanSpecialAttack())
+                    {
+                        return;
+                    }
+
                     this.nextAttackType = x.AttackType;
                     this.stateController.ChangeRequest(State.Attack);
                 })

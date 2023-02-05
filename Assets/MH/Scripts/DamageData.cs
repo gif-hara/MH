@@ -31,5 +31,10 @@ namespace MH
         /// クリティカルか
         /// </summary>
         public bool isCritical;
+
+        /// <summary>
+        /// スペシャルチャージを回復するか
+        /// </summary>
+        public bool canRecoverySpecialCharge;
     }
 }

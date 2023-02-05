@@ -15,7 +15,8 @@ namespace MH
             int criticalRate,
             Actor receiveActor,
             Vector3 attackPosition,
-            Define.PartType partType
+            Define.PartType partType,
+            bool canRecoverySpecialCharge
         )
         {
             var damage = (weaponStrength * motionPower) * partRate;
@@ -36,7 +37,8 @@ namespace MH
                 receiveActor = receiveActor,
                 partType = partType,
                 isCritical = isCritical,
-                isGuardSuccess = isGuardSuccess
+                isGuardSuccess = isGuardSuccess,
+                canRecoverySpecialCharge = canRecoverySpecialCharge
             };
         }
     }

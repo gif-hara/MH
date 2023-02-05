@@ -17,3 +17,4 @@ MonoBehaviour:
   hitStopTimeScale: 0
   hitStopDurationSeconds: 0.1
   power: 12
+  canRecoverySpecialCharge: 1

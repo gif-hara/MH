@@ -61,13 +61,13 @@ namespace MH.SceneControllers
             s.HitPoint
                 .Subscribe(x =>
                 {
-                    uiView.HitPointSlider.value = (float)s.HitPoint.Value / s.HitPointMax.Value;
+                    uiView.HitPointSlider.value = s.HitPoint.Value / s.HitPointMax.Value;
                 })
                 .AddTo(ct);
             s.HitPointMax
                 .Subscribe(x =>
                 {
-                    uiView.HitPointSlider.value = (float)s.HitPoint.Value / s.HitPointMax.Value;
+                    uiView.HitPointSlider.value = s.HitPoint.Value / s.HitPointMax.Value;
                 })
                 .AddTo(ct);
 
@@ -82,6 +82,24 @@ namespace MH.SceneControllers
                 .Subscribe(x =>
                 {
                     uiView.StaminaSlider.value = s.Stamina.Value / s.StaminaMax.Value;
+                })
+                .AddTo(ct);
+
+            s.SpecialGauge
+                .Subscribe(x =>
+                {
+                    uiView.SpecialChargeSlider.value = (float)x / Define.SpecialGaugeMax;
+                })
+                .AddTo(ct);
+
+            uiView.CreateSpecialTankElements(Define.SpecialTankMax);
+            s.SpecialTank
+                .Subscribe(x =>
+                {
+                    for (var i = 0; i < uiView.SpecialTankElements.Count; i++)
+                    {
+                        uiView.SpecialTankElements[i].SetActiveIcon(x >= i + 1);
+                    }
                 })
                 .AddTo(ct);
 

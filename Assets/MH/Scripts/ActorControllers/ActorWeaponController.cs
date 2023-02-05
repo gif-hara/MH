@@ -31,6 +31,8 @@ namespace MH.ActorControllers
 
         private int motionPower;
 
+        private bool canRecoverySpecialCharge;
+
         private readonly HashSet<Actor> collidedActors = new();
 
         private Dictionary<string, GameObject> colliderDictionary;
@@ -84,7 +86,8 @@ namespace MH.ActorControllers
                     this.criticalRate,
                     targetActor,
                     this.actor.transform.position,
-                    partType
+                    partType,
+                    this.canRecoverySpecialCharge
                     );
                 targetActor.StatusController.ReceiveDamage(damageData, partType, this.actor.transform.position);
 
@@ -111,6 +114,7 @@ namespace MH.ActorControllers
                     this.hitStopTimeScale = x.Data.HitStopTimeScale;
                     this.hitStopDurationSeconds = x.Data.HitStopDurationSeconds;
                     this.motionPower = x.Data.Power;
+                    this.canRecoverySpecialCharge = x.Data.CanRecoverySpecialCharge;
                 })
                 .AddTo(ct);
 

@@ -1,7 +1,6 @@
 namespace MH
 {
     /// <summary>
-    ///
     /// </summary>
     public static class Define
     {
@@ -39,5 +38,9 @@ namespace MH
         {
             Body,
         }
+
+        public const int SpecialGaugeMax = 100;
+
+        public const int SpecialTankMax = 3;
     }
 }

@@ -91,6 +91,11 @@ namespace MH.ActorControllers
                 return;
             }
 
+            if (this.currentAttackType == AttackType.StrongAttack)
+            {
+                this.actor.StatusController.UseSpecialAttack();
+            }
+
             Invoke(motionName);
         }
 

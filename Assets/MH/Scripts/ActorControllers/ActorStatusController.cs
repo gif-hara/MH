@@ -4,6 +4,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 using Cysharp.Threading.Tasks.Triggers;
+using MessagePipe;
 using MH.NetworkSystems;
 using Unity.Netcode;
 using UnityEngine;
@@ -26,6 +27,10 @@ namespace MH.ActorControllers
         private readonly AsyncReactiveProperty<float> staminaMax = new(0);
 
         private readonly AsyncReactiveProperty<float> stamina = new(0);
+
+        private readonly AsyncReactiveProperty<int> specialGauge = new(0);
+
+        private readonly AsyncReactiveProperty<int> specialTank = new(0);
 
         /// <summary>
         /// 基礎となる部位データ
@@ -50,6 +55,10 @@ namespace MH.ActorControllers
         public IAsyncReactiveProperty<float> StaminaMax => this.staminaMax;
 
         public IAsyncReactiveProperty<float> Stamina => this.stamina;
+
+        public IAsyncReactiveProperty<int> SpecialGauge => this.specialGauge;
+
+        public IAsyncReactiveProperty<int> SpecialTank => this.specialTank;
 
         public IReadOnlyDictionary<Define.PartType, ActorStatus.PartData> BasePartDataList => this.basePartDataList;
 
@@ -84,6 +93,16 @@ namespace MH.ActorControllers
                     s += spawnData.recoveryStamina * TimeManager.Game.deltaTime;
                     s = Mathf.Min(s, this.staminaMax.Value);
                     this.stamina.Value = s;
+                })
+                .AddTo(ct);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.GaveDamage>()
+                .Subscribe(this.actor, x =>
+                {
+                    if (x.Data.canRecoverySpecialCharge)
+                    {
+                        this.AddSpecialGauge(x.Data.damage);
+                    }
                 })
                 .AddTo(ct);
         }
@@ -170,6 +189,39 @@ namespace MH.ActorControllers
         public void UseStamina(float stamina)
         {
             this.stamina.Value -= stamina;
+        }
+
+        private void AddSpecialGauge(int value)
+        {
+            var g = this.specialGauge.Value;
+            var t = this.specialTank.Value;
+            g += value;
+            while (g >= Define.SpecialGaugeMax && t < Define.SpecialTankMax)
+            {
+                t++;
+                g -= Define.SpecialGaugeMax;
+            }
+            t = Mathf.Min(t, Define.SpecialTankMax);
+            g = Mathf.Min(g, Define.SpecialGaugeMax);
+            this.specialGauge.Value = g;
+            this.specialTank.Value = t;
+        }
+
+        public bool CanSpecialAttack()
+        {
+            return this.specialTank.Value > 0;
+        }
+
+        public void UseSpecialAttack()
+        {
+            if (this.specialTank.Value >= Define.SpecialTankMax && this.specialGauge.Value >= Define.SpecialGaugeMax)
+            {
+                this.specialGauge.Value = 0;
+            }
+            else
+            {
+                this.specialTank.Value--;
+            }
         }
 
         private void TryFlinch(Define.PartType partType, Vector3 opposePosition)
