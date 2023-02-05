@@ -37,6 +37,21 @@ namespace MH.ActorControllers
         public float dodgeStaminaAmount;
 
         /// <summary>
+        /// ヒットポイント回復量（秒間）
+        /// </summary>
+        public float recoveryHitPoint;
+
+        /// <summary>
+        /// ヒットポイント回復量の消耗量（秒間）
+        /// </summary>
+        public float recoveryHitPointConsumePower;
+
+        /// <summary>
+        /// ヒットポイント回復量の最小値
+        /// </summary>
+        public float recoveryHitPointMin;
+
+        /// <summary>
         /// <see cref="Actor"/>にアタッチするプレハブリスト
         /// </summary>
         /// <remarks>

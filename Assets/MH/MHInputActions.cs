@@ -82,6 +82,15 @@ namespace MH
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Recovery"",
+                    ""type"": ""Button"",
+                    ""id"": ""6aea0025-2024-49fe-9a37-a09ce710c494"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -368,6 +377,28 @@ namespace MH
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Guard"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ead57bff-49b1-42ee-b3e0-d8f37b8cda75"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Recovery"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""84c0e55b-cf0c-4164-9772-ffa665e186d2"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Recovery"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -961,6 +992,7 @@ namespace MH
             m_Player_AttackStrong = m_Player.FindAction("AttackStrong", throwIfNotFound: true);
             m_Player_Dodge = m_Player.FindAction("Dodge", throwIfNotFound: true);
             m_Player_Guard = m_Player.FindAction("Guard", throwIfNotFound: true);
+            m_Player_Recovery = m_Player.FindAction("Recovery", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1038,6 +1070,7 @@ namespace MH
         private readonly InputAction m_Player_AttackStrong;
         private readonly InputAction m_Player_Dodge;
         private readonly InputAction m_Player_Guard;
+        private readonly InputAction m_Player_Recovery;
         public struct PlayerActions
         {
             private @MHInputActions m_Wrapper;
@@ -1048,6 +1081,7 @@ namespace MH
             public InputAction @AttackStrong => m_Wrapper.m_Player_AttackStrong;
             public InputAction @Dodge => m_Wrapper.m_Player_Dodge;
             public InputAction @Guard => m_Wrapper.m_Player_Guard;
+            public InputAction @Recovery => m_Wrapper.m_Player_Recovery;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1075,6 +1109,9 @@ namespace MH
                     @Guard.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGuard;
                     @Guard.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGuard;
                     @Guard.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGuard;
+                    @Recovery.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRecovery;
+                    @Recovery.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRecovery;
+                    @Recovery.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRecovery;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1097,6 +1134,9 @@ namespace MH
                     @Guard.started += instance.OnGuard;
                     @Guard.performed += instance.OnGuard;
                     @Guard.canceled += instance.OnGuard;
+                    @Recovery.started += instance.OnRecovery;
+                    @Recovery.performed += instance.OnRecovery;
+                    @Recovery.canceled += instance.OnRecovery;
                 }
             }
         }
@@ -1259,6 +1299,7 @@ namespace MH
             void OnAttackStrong(InputAction.CallbackContext context);
             void OnDodge(InputAction.CallbackContext context);
             void OnGuard(InputAction.CallbackContext context);
+            void OnRecovery(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {

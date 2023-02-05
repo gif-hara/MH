@@ -18,6 +18,8 @@ namespace MH.ActorControllers
             Attack,
             UniqueMotion,
             Flinch,
+            RecoveryBegin,
+            RecoveryEnd,
         }
 
         private Actor actor;
@@ -38,8 +40,6 @@ namespace MH.ActorControllers
         /// </summary>
         private bool onFlinchRotationOppose;
 
-        private float dodgeStaminaAmount;
-
         public State CurrentState => this.stateController.CurrentState;
 
         void IActorController.Setup(
@@ -50,7 +50,6 @@ namespace MH.ActorControllers
         {
             this.actor = actor;
             this.onFlinchRotationOppose = spawnData.onFlinchRotationOppose;
-            this.dodgeStaminaAmount = spawnData.dodgeStaminaAmount;
             this.stateController = new StateController<State>(State.Invalid);
             this.stateController.Set(State.Idle, this.OnEnterIdle, null);
             this.stateController.Set(State.Run, this.OnEnterRun, null);
@@ -58,6 +57,8 @@ namespace MH.ActorControllers
             this.stateController.Set(State.Attack, this.OnEnterAttack, this.OnExitAttack);
             this.stateController.Set(State.UniqueMotion, this.OnEnterUniqueMotion, null, 1);
             this.stateController.Set(State.Flinch, this.OnEnterFlinch, null, 2);
+            this.stateController.Set(State.RecoveryBegin, this.OnEnterRecoveryBegin, null);
+            this.stateController.Set(State.RecoveryEnd, this.OnEnterRecoveryEnd, null);
 
             var ct = this.actor.GetCancellationTokenOnDestroy();
 
@@ -183,6 +184,17 @@ namespace MH.ActorControllers
                 })
                 .AddTo(scope);
 
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestBeginRecovery>()
+                .Subscribe(this.actor, _ =>
+                {
+                    if (this.actor.StatusController.IsHitPointMax)
+                    {
+                        return;
+                    }
+                    this.ForceChange(State.RecoveryBegin);
+                })
+                .AddTo(scope);
+
             this.actor.AnimationController.Play(GetAnimationName());
             this.actor.PostureController.CanMove = true;
             this.actor.PostureController.CanRotation = true;
@@ -243,6 +255,17 @@ namespace MH.ActorControllers
                 .Subscribe(this.actor, _ =>
                 {
                     this.actor.AnimationController.Play(GetAnimationName());
+                })
+                .AddTo(scope);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.RequestBeginRecovery>()
+                .Subscribe(this.actor, _ =>
+                {
+                    if (this.actor.StatusController.IsHitPointMax)
+                    {
+                        return;
+                    }
+                    this.ForceChange(State.RecoveryBegin);
                 })
                 .AddTo(scope);
 
@@ -408,6 +431,63 @@ namespace MH.ActorControllers
             catch (Exception e)
             {
                 Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        private async void OnEnterRecoveryBegin(State previousState, DisposableBagBuilder scope)
+        {
+            try
+            {
+                var isRequestEnd = false;
+                MessageBroker.GetSubscriber<Actor, ActorEvents.RequestEndRecovery>()
+                    .Subscribe(this.actor, _ =>
+                    {
+                        if (this.actor.StatusController.IsRecovering)
+                        {
+                            isRequestEnd = true;
+                        }
+                    })
+                    .AddTo(scope);
+                this.actor.AnimationController.Play("Recovery.Begin");
+                this.actor.PostureController.CanMove = false;
+                this.actor.PostureController.CanRotation = false;
+
+                await UniTask.WaitWhile(() =>
+                {
+                    if (this.actor.StatusController.IsHitPointMax)
+                    {
+                        return false;
+                    }
+                    return !this.actor.StatusController.IsRecovering
+                           || !isRequestEnd;
+                });
+                this.ForceChange(State.RecoveryEnd);
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                throw;
+            }
+        }
+
+        private async void OnEnterRecoveryEnd(State previousState, DisposableBagBuilder scope)
+        {
+            try
+            {
+                this.actor.StatusController.EndRecovery();
+                await this.actor.AnimationController.PlayAsync("Recovery.End");
+                this.ToIdle();
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
                 throw;
             }
         }

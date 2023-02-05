@@ -59,9 +59,11 @@ namespace MH.ActorControllers
 
             var playerActorCommonData = PlayerActorCommonData.Instance;
             var inputActions = InputController.InputActions;
-            inputActions.Player.Dodge.performed += PerformedDodge;
-            inputActions.Player.AttackWeak.performed += PerformedAttackWeak;
-            inputActions.Player.AttackStrong.performed += PerformedAttackStrong;
+            inputActions.Player.Dodge.performed += this.PerformedDodge;
+            inputActions.Player.AttackWeak.performed += this.PerformedAttackWeak;
+            inputActions.Player.AttackStrong.performed += this.PerformedAttackStrong;
+            inputActions.Player.Recovery.performed += this.PerformedRecovery;
+            inputActions.Player.Recovery.canceled += this.CanceledRecovery;
             inputActions.Enable();
 
             var ct = this.actor.GetCancellationTokenOnDestroy();
@@ -228,6 +230,18 @@ namespace MH.ActorControllers
                 MessageBroker.GetPublisher<Actor, ActorEvents.RequestAttack>()
                     .Publish(this.actor, ActorEvents.RequestAttack.Get(Define.RequestAttackType.Strong));
             });
+        }
+
+        private void PerformedRecovery(InputAction.CallbackContext obj)
+        {
+            MessageBroker.GetPublisher<Actor, ActorEvents.RequestBeginRecovery>()
+                .Publish(this.actor, ActorEvents.RequestBeginRecovery.Get());
+        }
+
+        private void CanceledRecovery(InputAction.CallbackContext obj)
+        {
+            MessageBroker.GetPublisher<Actor, ActorEvents.RequestEndRecovery>()
+                .Publish(this.actor, ActorEvents.RequestEndRecovery.Get());
         }
 
         private void RegisterAdvancedEntry(Action entryAction)

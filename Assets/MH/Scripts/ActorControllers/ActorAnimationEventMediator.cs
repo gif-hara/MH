@@ -119,5 +119,39 @@ namespace MH.ActorControllers
 
             this.actor.StatusController.BeginInvincibleAsync(durationSeconds).Forget();
         }
+
+        /// <summary>
+        /// アニメーションを再生する
+        /// </summary>
+        /// <remarks>
+        /// この関数はアニメーションイベントで実行されます
+        /// </remarks>
+        public void PlayAnimation(string motionName)
+        {
+            if (this.actor == null)
+            {
+                Debug.LogWarning("actor is null.");
+                return;
+            }
+
+            this.actor.AnimationController.Play(motionName);
+        }
+
+        /// <summary>
+        /// 回復を開始する
+        /// </summary>
+        /// <remarks>
+        /// この関数はアニメーションイベントで実行されます
+        /// </remarks>
+        public void BeginRecovery()
+        {
+            if (this.actor == null)
+            {
+                Debug.LogWarning("actor is null.");
+                return;
+            }
+
+            this.actor.StatusController.BeginRecovery();
+        }
     }
 }

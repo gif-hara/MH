@@ -43,6 +43,8 @@ namespace MH
             builder.AddMessageBroker<Actor, RequestEndGuard>();
             builder.AddMessageBroker<Actor, BeginGuard>();
             builder.AddMessageBroker<Actor, EndGuard>();
+            builder.AddMessageBroker<Actor, RequestBeginRecovery>();
+            builder.AddMessageBroker<Actor, RequestEndRecovery>();
         }
 
         /// <summary>
@@ -343,6 +345,20 @@ namespace MH
         /// ガードを終了した際のメッセージ
         /// </summary>
         public sealed class EndGuard : Message<EndGuard>
+        {
+        }
+
+        /// <summary>
+        /// 回復開始をリクエストするメッセージ
+        /// </summary>
+        public sealed class RequestBeginRecovery : Message<RequestBeginRecovery>
+        {
+        }
+
+        /// <summary>
+        /// 回復終了をリクエストするメッセージ
+        /// </summary>
+        public sealed class RequestEndRecovery : Message<RequestEndRecovery>
         {
         }
     }

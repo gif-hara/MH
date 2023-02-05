@@ -32,6 +32,12 @@ namespace MH.ActorControllers
 
         private readonly AsyncReactiveProperty<int> specialTank = new(0);
 
+        private float recoveryHitPoint;
+
+        private float recoveryHitPointConsumePower;
+
+        private float recoveryHitPointMin;
+
         /// <summary>
         /// 基礎となる部位データ
         /// </summary>
@@ -47,6 +53,16 @@ namespace MH.ActorControllers
         private CancellationTokenSource invincibleTokenSource;
 
         public bool IsInvincible { private set; get; }
+
+        /// <summary>
+        /// 回復中のキャンセルトークンソース
+        /// </summary>
+        private CancellationTokenSource recoveryTokenSource;
+
+        /// <summary>
+        /// 回復中であるか
+        /// </summary>
+        public bool IsRecovering => this.recoveryTokenSource != null;
 
         public IAsyncReactiveProperty<float> HitPointMax => this.hitPointMax;
 
@@ -66,6 +82,8 @@ namespace MH.ActorControllers
 
         public bool IsDead => this.hitPoint.Value <= 0;
 
+        public bool IsHitPointMax => this.hitPoint.Value >= this.hitPointMax.Value;
+
         public void Setup(
             Actor actor,
             IActorDependencyInjector actorDependencyInjector,
@@ -78,6 +96,9 @@ namespace MH.ActorControllers
             this.hitPoint.Value = this.BaseStatus.hitPoint;
             this.staminaMax.Value = this.BaseStatus.stamina;
             this.stamina.Value = this.BaseStatus.stamina;
+            this.recoveryHitPoint = spawnData.recoveryHitPoint;
+            this.recoveryHitPointConsumePower = spawnData.recoveryHitPointConsumePower;
+            this.recoveryHitPointMin = spawnData.recoveryHitPointMin;
             foreach (var partData in this.BaseStatus.partDataList)
             {
                 this.basePartDataList.Add(partData.PartType, partData);
@@ -96,8 +117,7 @@ namespace MH.ActorControllers
                 })
                 .AddTo(ct);
 
-            MessageBroker.GetSubscriber<Actor, ActorEvents.GaveDamage>()
-                .Subscribe(this.actor, x =>
+            MessageBroker.GetSubscriber<Actor, ActorEvents.GaveDamage>().Subscribe(this.actor, x =>
                 {
                     if (x.Data.canRecoverySpecialCharge)
                     {
@@ -224,21 +244,42 @@ namespace MH.ActorControllers
             }
         }
 
-        private void TryFlinch(Define.PartType partType, Vector3 opposePosition)
-        {
-            if (this.currentEndurances[partType] >= this.basePartDataList[partType].Endurance * (this.flinchCounts[partType] + 1))
-            {
-                this.flinchCounts[partType]++;
-                this.actor.StateController.ForceFlinch(opposePosition);
-            }
-        }
-
         public float GetPartDamageRate(Define.PartType partType)
         {
             var result = this.basePartDataList[partType];
             Assert.IsNotNull(result, $"{partType}という部位は存在しません");
 
             return result.DamageRate;
+        }
+
+        public void BeginRecovery()
+        {
+            this.EndRecovery();
+            this.recoveryTokenSource = new CancellationTokenSource();
+
+            this.actor.GetAsyncUpdateTrigger()
+                .Subscribe(_ =>
+                {
+                    this.AddHitPoint(this.recoveryHitPoint * TimeManager.Game.deltaTime);
+                    this.recoveryHitPoint -= this.recoveryHitPointConsumePower * TimeManager.Game.deltaTime;
+                    this.recoveryHitPoint = Mathf.Max(this.recoveryHitPoint, this.recoveryHitPointMin);
+                })
+                .AddTo(this.recoveryTokenSource.Token);
+        }
+
+        public void EndRecovery()
+        {
+            this.recoveryTokenSource?.Cancel();
+            this.recoveryTokenSource?.Dispose();
+            this.recoveryTokenSource = null;
+        }
+
+        public void AddHitPoint(float value)
+        {
+            var h = this.hitPoint.Value;
+            h += value;
+            h = Mathf.Min(h, this.hitPointMax.Value);
+            this.hitPoint.Value = h;
         }
 
         public void SyncHitPoint(NetworkVariable<float> networkHitPoint)
@@ -252,6 +293,15 @@ namespace MH.ActorControllers
             {
                 this.currentEndurances[partData.partType] = partData.endurance;
                 this.TryFlinch(partData.partType, partData.opposePosition);
+            }
+        }
+
+        private void TryFlinch(Define.PartType partType, Vector3 opposePosition)
+        {
+            if (this.currentEndurances[partType] >= this.basePartDataList[partType].Endurance * (this.flinchCounts[partType] + 1))
+            {
+                this.flinchCounts[partType]++;
+                this.actor.StateController.ForceFlinch(opposePosition);
             }
         }
     }
