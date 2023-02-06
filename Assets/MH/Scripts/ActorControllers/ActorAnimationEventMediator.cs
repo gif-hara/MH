@@ -1,3 +1,4 @@
+using MH.ProjectileSystems;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -152,6 +153,21 @@ namespace MH.ActorControllers
             }
 
             this.actor.StatusController.BeginRecovery();
+        }
+
+        /// <summary>
+        /// <see cref="Projectile"/>を生成する
+        /// </summary>
+        /// <remarks>
+        /// この関数はアニメーションイベントで実行されます
+        /// </remarks>
+        public void SpawnProjectile(Object obj)
+        {
+            var data = (SpawnProjectileData)obj;
+            var t = this.actor.transform;
+            var position = t.TransformPoint(data.PositionOffset);
+            var rotation = t.rotation * Quaternion.Euler(data.RotationOffset);
+            data.ProjectilePrefab.Spawn(data.Data, this.actor, position, rotation);
         }
     }
 }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
+using MH.ProjectileSystems;
 using UnityEngine;
 
 namespace MH.ActorControllers
@@ -9,7 +10,7 @@ namespace MH.ActorControllers
     /// <summary>
     /// <see cref="Actor"/>の武器を制御するクラス
     /// </summary>
-    public sealed class ActorWeaponController : MonoBehaviour, IActorController
+    public sealed class ActorWeaponController : MonoBehaviour, IActorController, IProjectileController
     {
         [SerializeField]
         private Actor actor;
@@ -124,6 +125,19 @@ namespace MH.ActorControllers
                     this.colliderDictionary[x.ColliderName].SetActive(false);
                 })
                 .AddTo(ct);
+        }
+
+        public void Setup(Projectile projectile, ProjectileData data, Actor actor)
+        {
+            this.actor = actor;
+            this.hitStopDurationSeconds = 0.0f;
+            foreach (var o in this.colliders)
+            {
+                o.SetActive(true);
+            }
+            this.collidedActors.Clear();
+            this.motionPower = data.motionPower;
+            this.hitEffectPrefab = data.hitEffectPrefab;
         }
     }
 }
