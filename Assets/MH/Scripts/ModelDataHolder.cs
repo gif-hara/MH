@@ -28,6 +28,9 @@ namespace MH
         [SerializeField]
         private List<PartData> dataList;
 
+        [SerializeField]
+        private List<Transform> locators;
+
         private List<MeshRenderer> meshRenderers;
 
         public IReadOnlyList<MeshRenderer> MeshRenderers
@@ -45,6 +48,11 @@ namespace MH
             Assert.IsNotNull(result, $"{type}に紐づくデータがありません");
 
             return result.Part;
+        }
+
+        public Transform GetLocator(string transformName)
+        {
+            return this.locators.Find(x => x.name == transformName);
         }
 
         [Serializable]

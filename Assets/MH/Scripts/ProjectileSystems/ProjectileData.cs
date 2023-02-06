@@ -1,4 +1,6 @@
 using System;
+using MH.ProjectileSystems.Decorators;
+using UnityEngine;
 
 namespace MH.ProjectileSystems
 {
@@ -11,5 +13,10 @@ namespace MH.ProjectileSystems
         public int motionPower;
 
         public PoolablePrefab hitEffectPrefab;
+
+        public float durationSeconds;
+
+        [SerializeReference, SubclassSelector(typeof(IProjectileDecorator))]
+        public IProjectileDecorator[] decorators;
     }
 }

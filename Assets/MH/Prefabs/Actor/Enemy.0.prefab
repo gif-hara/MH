@@ -1016,6 +1016,10 @@ PrefabInstance:
       propertyPath: boneHolder
       value: 
       objectReference: {fileID: 8932788302997315871}
+    - target: {fileID: 1689262406764164045, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
+      propertyPath: modelDataHolder
+      value: 
+      objectReference: {fileID: 8932788302997315871}
     - target: {fileID: 1689262406764164046, guid: 07e5e1b8ecbf5384fb6b1e7b7fd3b461, type: 3}
       propertyPath: m_RootOrder
       value: 2

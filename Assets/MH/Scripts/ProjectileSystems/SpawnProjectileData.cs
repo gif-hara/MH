@@ -15,17 +15,12 @@ namespace MH.ProjectileSystems
         private ProjectileData data;
 
         [SerializeField]
-        private Vector3 positionOffset;
-
-        [SerializeField]
-        private Vector3 rotationOffset;
+        private string spawnLocatorName;
 
         public Projectile ProjectilePrefab => this.projectilePrefab;
 
         public ProjectileData Data => this.data;
 
-        public Vector3 PositionOffset => this.positionOffset;
-
-        public Vector3 RotationOffset => this.rotationOffset;
+        public string SpawnLocatorName => this.spawnLocatorName;
     }
 }

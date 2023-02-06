@@ -164,10 +164,8 @@ namespace MH.ActorControllers
         public void SpawnProjectile(Object obj)
         {
             var data = (SpawnProjectileData)obj;
-            var t = this.actor.transform;
-            var position = t.TransformPoint(data.PositionOffset);
-            var rotation = t.rotation * Quaternion.Euler(data.RotationOffset);
-            data.ProjectilePrefab.Spawn(data.Data, this.actor, position, rotation);
+            var t = this.actor.ModelController.ModelDataHolder.GetLocator(data.SpawnLocatorName);
+            data.ProjectilePrefab.Spawn(data.Data, this.actor, t.position, t.rotation).Forget();
         }
     }
 }

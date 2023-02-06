@@ -16,5 +16,14 @@ MonoBehaviour:
   data:
     motionPower: 80
     hitEffectPrefab: {fileID: 2832563910145863357, guid: 79ca9ec421fbbc447b5ccda5d2045bf2, type: 3}
-  positionOffset: {x: 0, y: 1.89, z: 4.45}
-  rotationOffset: {x: 0, y: 0, z: 0}
+    durationSeconds: 5
+    decorators:
+    - rid: 5688966769387241472
+  spawnLocatorName: ProjectileFirePoint.0
+  references:
+    version: 2
+    RefIds:
+    - rid: 5688966769387241472
+      type: {class: MoveToForward, ns: MH.ProjectileSystems.Decorators, asm: Assembly-CSharp}
+      data:
+        speed: 30

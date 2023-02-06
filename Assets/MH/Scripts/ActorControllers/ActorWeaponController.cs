@@ -57,6 +57,13 @@ namespace MH.ActorControllers
 
             var targetActor = other.GetComponentInParent<Actor>();
 
+            if (targetActor == null)
+            {
+                // ステージなどに当たった想定でエフェクトのみ生成する
+                this.CreateEffect(other);
+                return;
+            }
+
             // 連続ヒットを避けるため、既に処理済みのActorは無視する
             if (this.collidedActors.Contains(targetActor))
             {
@@ -65,11 +72,7 @@ namespace MH.ActorControllers
 
             this.collidedActors.Add(targetActor);
 
-            var t = this.transform;
-            var hitPosition = other.ClosestPoint(t.position);
-            var hitRotation = t.rotation;
-            MessageBroker.GetPublisher<PoolablePrefabEvents.RequestCreate>()
-                .Publish(PoolablePrefabEvents.RequestCreate.Get(this.hitEffectPrefab, hitPosition, hitRotation));
+            this.CreateEffect(other);
 
             if (this.hitStopDurationSeconds > 0.0f)
             {
@@ -95,6 +98,15 @@ namespace MH.ActorControllers
                 MessageBroker.GetPublisher<Actor, ActorEvents.GaveDamage>()
                     .Publish(this.actor, ActorEvents.GaveDamage.Get(damageData));
             }
+        }
+
+        private void CreateEffect(Collider other)
+        {
+            var t = this.transform;
+            var hitPosition = other.ClosestPoint(t.position);
+            var hitRotation = t.rotation;
+            MessageBroker.GetPublisher<PoolablePrefabEvents.RequestCreate>()
+                .Publish(PoolablePrefabEvents.RequestCreate.Get(this.hitEffectPrefab, hitPosition, hitRotation));
         }
 
         void IActorController.Setup(
