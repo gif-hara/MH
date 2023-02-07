@@ -15,7 +15,7 @@ namespace MH.BehaviourDesignerControllers
 
         public override int CurrentChildIndex()
         {
-            return this.enemy.Value.GetRandom(() => Random.Range(0, this.children.Count));
+            return this.enemy.Value.GetRandomSelector(() => Random.Range(0, this.children.Count));
         }
 
         public override bool CanExecute()

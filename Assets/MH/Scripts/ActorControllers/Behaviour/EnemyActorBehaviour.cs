@@ -50,6 +50,7 @@ namespace MH.BehaviourDesignerControllers
                 }
 
                 var result = Vector3.Distance(this.owner.transform.position, this.targetActor.transform.position);
+                Debug.Log(result);
                 return result;
             }
         }
@@ -137,7 +138,7 @@ namespace MH.BehaviourDesignerControllers
             Random.state = prevState;
         }
 
-        public T GetRandom<T>(Func<T> randomSelector)
+        public T GetRandomSelector<T>(Func<T> randomSelector)
         {
             var prevState = Random.state;
             Random.state = this.thinkState;
