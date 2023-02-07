@@ -121,20 +121,26 @@ namespace MH.ActorControllers
             MessageBroker.GetSubscriber<Actor, ActorEvents.ValidationAttackCollider>()
                 .Subscribe(this.actor, x =>
                 {
-                    this.collidedActors.Clear();
-                    this.colliderDictionary[x.Data.ColliderName].SetActive(true);
-                    this.hitEffectPrefab = x.Data.HitEffectPrefab;
-                    this.hitStopTimeScale = x.Data.HitStopTimeScale;
-                    this.hitStopDurationSeconds = x.Data.HitStopDurationSeconds;
-                    this.motionPower = x.Data.Power;
-                    this.canRecoverySpecialCharge = x.Data.CanRecoverySpecialCharge;
+                    if (this.colliderDictionary.ContainsKey(x.Data.ColliderName))
+                    {
+                        this.collidedActors.Clear();
+                        this.colliderDictionary[x.Data.ColliderName].SetActive(true);
+                        this.hitEffectPrefab = x.Data.HitEffectPrefab;
+                        this.hitStopTimeScale = x.Data.HitStopTimeScale;
+                        this.hitStopDurationSeconds = x.Data.HitStopDurationSeconds;
+                        this.motionPower = x.Data.Power;
+                        this.canRecoverySpecialCharge = x.Data.CanRecoverySpecialCharge;
+                    }
                 })
                 .AddTo(ct);
 
             MessageBroker.GetSubscriber<Actor, ActorEvents.InvalidationAttackCollider>()
                 .Subscribe(this.actor, x =>
                 {
-                    this.colliderDictionary[x.ColliderName].SetActive(false);
+                    if (this.colliderDictionary.ContainsKey(x.ColliderName))
+                    {
+                        this.colliderDictionary[x.ColliderName].SetActive(false);
+                    }
                 })
                 .AddTo(ct);
         }

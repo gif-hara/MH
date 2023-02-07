@@ -9,6 +9,7 @@ using MH.ActorControllers;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
 
 namespace MH.BehaviourDesignerControllers
@@ -34,6 +35,17 @@ namespace MH.BehaviourDesignerControllers
         private BehaviorTree[] trees;
 
         /// <summary>
+        /// ターゲットがいる向きのタイプ
+        /// </summary>
+        public enum TargetDirectionType
+        {
+            Front,
+            Back,
+            Left,
+            Right
+        }
+
+        /// <summary>
         /// ターゲットとの距離を返す
         /// </summary>
         /// <remarks>
@@ -50,8 +62,41 @@ namespace MH.BehaviourDesignerControllers
                 }
 
                 var result = Vector3.Distance(this.owner.transform.position, this.targetActor.transform.position);
-                Debug.Log(result);
                 return result;
+            }
+        }
+
+        /// <summary>
+        /// ターゲットがどこにいるか返す
+        /// </summary>
+        public TargetDirectionType TargetDirection
+        {
+            get
+            {
+                var t = this.owner.transform;
+                var lhs = (this.targetActor.transform.position - t.position).normalized;
+                var f = Vector3.Dot(lhs, t.forward);
+                if (f > 0.5f && f <= 1.0f)
+                {
+                    return TargetDirectionType.Front;
+                }
+                if (f < -0.5f && f >= -1.0f)
+                {
+                    return TargetDirectionType.Back;
+                }
+
+                var r = Vector3.Dot(lhs, t.right);
+                if (r > 0.5f && r <= 1.0f)
+                {
+                    return TargetDirectionType.Right;
+                }
+                if (r < -0.5f && r >= -1.0f)
+                {
+                    return TargetDirectionType.Left;
+                }
+
+                Assert.IsTrue(false, $"未定義の動作です f = {f}, r = {r}");
+                return TargetDirectionType.Front;
             }
         }
 
