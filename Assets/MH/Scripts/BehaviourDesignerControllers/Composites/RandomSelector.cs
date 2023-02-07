@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 
@@ -13,9 +14,31 @@ namespace MH.BehaviourDesignerControllers
         // The task status of the last child ran.
         private TaskStatus executionStatus = TaskStatus.Inactive;
 
+        private readonly Queue<int> invokeOrder = new();
+
+        private readonly List<int> childIndexList = new();
+
+        public override void OnAwake()
+        {
+            this.childIndexList.Clear();
+            for (var i = 0; i < this.children.Count; i++)
+            {
+                this.childIndexList.Add(i);
+            }
+            this.invokeOrder.Clear();
+            for (var i = 0; i < this.children.Count; i++)
+            {
+                var index = this.enemy.Value.GetRandomSelector(() => Random.Range(0, this.childIndexList.Count));
+                this.invokeOrder.Enqueue(this.childIndexList[index]);
+                this.childIndexList.RemoveAt(index);
+            }
+        }
+
         public override int CurrentChildIndex()
         {
-            return this.enemy.Value.GetRandomSelector(() => Random.Range(0, this.children.Count));
+            var result = this.invokeOrder.Dequeue();
+            Debug.Log(result);
+            return result;
         }
 
         public override bool CanExecute()
