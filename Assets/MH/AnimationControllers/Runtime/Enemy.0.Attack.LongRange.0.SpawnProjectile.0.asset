@@ -26,4 +26,4 @@ MonoBehaviour:
     - rid: 5688966769387241472
       type: {class: MoveToForward, ns: MH.ProjectileSystems.Decorators, asm: Assembly-CSharp}
       data:
-        speed: 30
+        speed: 40

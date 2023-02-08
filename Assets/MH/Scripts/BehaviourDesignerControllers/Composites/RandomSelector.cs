@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace MH.BehaviourDesignerControllers
 {
@@ -25,6 +26,7 @@ namespace MH.BehaviourDesignerControllers
 
         public override void OnAwake()
         {
+            Assert.AreEqual(this.weights.Count, this.children.Count, $"[{this.gameObject.name}] {nameof(this.weights)}と子タスクの数が一致していません");
             this.childIndexList.Clear();
             for (var i = 0; i < this.children.Count; i++)
             {

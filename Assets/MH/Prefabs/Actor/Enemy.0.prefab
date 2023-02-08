@@ -1165,7 +1165,7 @@ MonoBehaviour:
       startIndex: 
       variableStartIndex: 
       JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(968.766,444.823425)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"MH.BehaviourDesignerControllers.RandomSelector","NodeData":{"Offset":"(4.7058754,136.470642)"},"ID":1,"Name":"Random
-        Selector","Instant":true,"SharedEnemyActorBehaviourenemy":{"Type":"MH.BehaviourDesignerControllers.SharedEnemyActorBehaviour","Name":null,"EnemyActorBehaviourmValue":0},"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.StartBehaviorTree","NodeData":{"Offset":"(0,240)","WatchedFields":["behaviorGameObject"]},"ID":2,"Name":"Start
+        Selector","Instant":true,"SharedEnemyActorBehaviourenemy":{"Type":"MH.BehaviourDesignerControllers.SharedEnemyActorBehaviour","Name":null,"EnemyActorBehaviourmValue":0},"List`1weights":[{"Type":"MH.WeightData","Value":{"Int32weight":100}}],"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.StartBehaviorTree","NodeData":{"Offset":"(0,240)","WatchedFields":["behaviorGameObject"]},"ID":2,"Name":"Start
         Behavior Tree","Instant":true,"SharedGameObjectbehaviorGameObject":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":null,"GameObjectmValue":1},"SharedIntgroup":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolwaitForCompletion":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedBoolsynchronizeVariables":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false}}]}}'
       fieldSerializationData:
         typeName: []
