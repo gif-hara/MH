@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 1059977252114389209, guid: c438f3950750dd749860e12f6c7287ae, type: 3}
   data:
-    motionPower: 80
+    motionPower: 40
     hitEffectPrefab: {fileID: 2832563910145863357, guid: 79ca9ec421fbbc447b5ccda5d2045bf2, type: 3}
     durationSeconds: 5
     decorators:
