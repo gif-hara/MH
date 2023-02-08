@@ -66,6 +66,10 @@ MonoBehaviour:
         blendData:
           animationClip: {fileID: 7400000, guid: 345b064308fe755438627855dbf84bd0, type: 2}
           blendSeconds: 0.05
+      - name: Attack.5
+        blendData:
+          animationClip: {fileID: 7400000, guid: 8ebe7155fa32bc0479f63b94487bd378, type: 2}
+          blendSeconds: 0.05
     onFlinchRotationOppose: 0
     guardSuccessAngle: 0
     recoveryStamina: 0
