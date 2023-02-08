@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff825b3eae7bb65419c64c46743f2dfe, type: 3}
-  m_Name: Enemy.0.Attack.5.SpawnProjectile.0
+  m_Name: Enemy.0.Attack.LongRange.0.SpawnProjectile.0
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 1059977252114389209, guid: c438f3950750dd749860e12f6c7287ae, type: 3}
   data:
-    motionPower: 30
+    motionPower: 80
     hitEffectPrefab: {fileID: 2832563910145863357, guid: 79ca9ec421fbbc447b5ccda5d2045bf2, type: 3}
     durationSeconds: 5
     decorators:
@@ -26,4 +26,4 @@ MonoBehaviour:
     - rid: 5688966769387241472
       type: {class: MoveToForward, ns: MH.ProjectileSystems.Decorators, asm: Assembly-CSharp}
       data:
-        speed: 20
+        speed: 30
