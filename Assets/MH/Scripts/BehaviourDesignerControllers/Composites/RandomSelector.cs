@@ -11,12 +11,17 @@ namespace MH.BehaviourDesignerControllers
     {
         public SharedEnemyActorBehaviour enemy;
 
+        [SerializeField]
+        private List<WeightData> weights;
+
         // The task status of the last child ran.
         private TaskStatus executionStatus = TaskStatus.Inactive;
 
         private readonly Queue<int> invokeOrder = new();
 
         private readonly List<int> childIndexList = new();
+
+        private readonly List<WeightData> cachedWeights = new();
 
         public override void OnAwake()
         {
@@ -26,18 +31,20 @@ namespace MH.BehaviourDesignerControllers
                 this.childIndexList.Add(i);
             }
             this.invokeOrder.Clear();
+            this.cachedWeights.Clear();
+            this.cachedWeights.AddRange(this.weights);
             for (var i = 0; i < this.children.Count; i++)
             {
-                var index = this.enemy.Value.GetRandomSelector(() => Random.Range(0, this.childIndexList.Count));
+                var index = this.cachedWeights.LotteryIndex(max => this.enemy.Value.GetRandomSelector(() => Random.Range(0, max)));
                 this.invokeOrder.Enqueue(this.childIndexList[index]);
                 this.childIndexList.RemoveAt(index);
+                this.cachedWeights.RemoveAt(index);
             }
         }
 
         public override int CurrentChildIndex()
         {
             var result = this.invokeOrder.Dequeue();
-            Debug.Log(result);
             return result;
         }
 
