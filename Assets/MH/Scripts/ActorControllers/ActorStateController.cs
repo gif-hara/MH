@@ -21,6 +21,7 @@ namespace MH.ActorControllers
             RecoveryBegin,
             RecoveryEnd,
             Dead,
+            WinEmotion,
         }
 
         private Actor actor;
@@ -61,6 +62,7 @@ namespace MH.ActorControllers
             this.stateController.Set(State.RecoveryBegin, this.OnEnterRecoveryBegin, this.OnExitRecoveryBegin);
             this.stateController.Set(State.RecoveryEnd, this.OnEnterRecoveryEnd, null);
             this.stateController.Set(State.Dead, this.OnEnterDead, null, 3);
+            this.stateController.Set(State.WinEmotion, this.OnEnterWinEmotion, null, 3);
 
             var ct = this.actor.GetCancellationTokenOnDestroy();
 
@@ -104,6 +106,16 @@ namespace MH.ActorControllers
                 .Subscribe(this.actor, _ =>
                 {
                     this.Change(State.Dead);
+                })
+                .AddTo(ct);
+
+            MessageBroker.GetSubscriber<BattleEvents.JudgedResult>()
+                .Subscribe(x =>
+                {
+                    if (x.Result == Define.BattleResult.PlayerWin)
+                    {
+                        this.Change(State.WinEmotion);
+                    }
                 })
                 .AddTo(ct);
 
@@ -512,6 +524,13 @@ namespace MH.ActorControllers
         {
             this.stateController.IsAccept = false;
             this.actor.AnimationController.Play("Dead");
+        }
+
+        private void OnEnterWinEmotion(State previousState, DisposableBagBuilder scope)
+        {
+            this.actor.PostureController.CanMove = false;
+            this.actor.PostureController.CanRotation = false;
+            this.actor.AnimationController.Play("WaveHand");
         }
     }
 }

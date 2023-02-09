@@ -2753,6 +2753,7 @@ MonoBehaviour:
   playerSpawnPoint: {fileID: 915631917}
   enemySpawnPoint: {fileID: 952618026}
   battleUIView: {fileID: 6754158763274743742, guid: 1f86597a079cab64f962571e2d99fc5a, type: 3}
+  battlePlayerWinUIView: {fileID: 7795172860752667497, guid: 214e8c09b9cac5546a55da2ccabe1a61, type: 3}
 --- !u!43 &1343748566
 Mesh:
   m_ObjectHideFlags: 0

@@ -29,6 +29,9 @@ namespace MH.SceneControllers
         [SerializeField]
         private BattleUIView battleUIView;
 
+        [SerializeField]
+        private BattlePlayerWinUIView battlePlayerWinUIView;
+
         private async void Start()
         {
             await BootSystem.IsReady;
@@ -107,6 +110,17 @@ namespace MH.SceneControllers
                     for (var i = 0; i < uiView.SpecialTankElements.Count; i++)
                     {
                         uiView.SpecialTankElements[i].SetActiveIcon(x >= i + 1);
+                    }
+                })
+                .AddTo(ct);
+
+            var playerWinUIView = UIManager.Open(this.battlePlayerWinUIView);
+            MessageBroker.GetSubscriber<BattleEvents.JudgedResult>()
+                .Subscribe(x =>
+                {
+                    if (x.Result == Define.BattleResult.PlayerWin)
+                    {
+                        playerWinUIView.PlayInAnimation();
                     }
                 })
                 .AddTo(ct);

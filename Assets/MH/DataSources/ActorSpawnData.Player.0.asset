@@ -106,6 +106,10 @@ MonoBehaviour:
         blendData:
           animationClip: {fileID: 7400000, guid: 6a30a3f535d37c84697d75f367ecaed4, type: 2}
           blendSeconds: 0.05
+      - name: WaveHand
+        blendData:
+          animationClip: {fileID: 7400000, guid: b83d2c18ac2bb144cb3b9cf0d544b35a, type: 2}
+          blendSeconds: 0.05
     onFlinchRotationOppose: 1
     guardSuccessAngle: 0
     recoveryStamina: 30
