@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 using MessagePipe;
@@ -6,6 +7,7 @@ using MH.NetworkSystems;
 using MH.UISystems;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace MH.SceneControllers
 {
@@ -116,12 +118,19 @@ namespace MH.SceneControllers
 
             var playerWinUIView = UIManager.Open(this.battlePlayerWinUIView);
             MessageBroker.GetSubscriber<BattleEvents.JudgedResult>()
-                .Subscribe(x =>
+                .Subscribe(async x =>
                 {
                     if (x.Result == Define.BattleResult.PlayerWin)
                     {
                         playerWinUIView.PlayInAnimation();
                     }
+
+                    await UniTask.Delay(TimeSpan.FromSeconds(8.0f), cancellationToken: ct);
+
+                    UIManager.Close(uiView);
+                    UIManager.Close(playerWinUIView);
+
+                    SceneManager.LoadScene("Lobby");
                 })
                 .AddTo(ct);
 

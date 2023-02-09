@@ -37,6 +37,9 @@ namespace MH.SceneControllers
         {
             await BootSystem.IsReady;
 
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
             lobbyUIView = UIManager.Open(lobbyUIViewPrefab);
 
             stateController = new StateController<State>(State.Invalid);
