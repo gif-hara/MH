@@ -39,6 +39,7 @@ namespace MH
                 TimeEvents.RegisterEvents(builder);
                 PoolablePrefabEvents.RegisterEvents(builder);
                 DebugPanelEvents.RegisterEvents(builder);
+                BattleEvents.RegisterEvents(builder);
             });
             return UniTask.CompletedTask;
         }

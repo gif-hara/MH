@@ -39,6 +39,15 @@ namespace MH
             Body,
         }
 
+        /// <summary>
+        /// バトル勝敗結果
+        /// </summary>
+        public enum BattleResult
+        {
+            PlayerWin,
+            PlayerLose,
+        }
+
         public const int SpecialGaugeMax = 100;
 
         public const int SpecialTankMax = 3;

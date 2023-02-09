@@ -35,6 +35,14 @@ namespace MH.SceneControllers
 
             var ct = this.GetCancellationTokenOnDestroy();
 
+            MessageBroker.GetSubscriber<BattleEvents.RequestJudgeResult>()
+                .Subscribe(x =>
+                {
+                    MessageBroker.GetPublisher<BattleEvents.JudgedResult>()
+                        .Publish(BattleEvents.JudgedResult.Get(x.Result));
+                })
+                .AddTo(ct);
+
             MessageBroker.GetSubscriber<ActorEvents.AddedActor>()
                 .Subscribe(x =>
                 {
