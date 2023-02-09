@@ -59,6 +59,8 @@ namespace MH.ActorControllers
         /// </summary>
         private CancellationTokenSource recoveryTokenSource;
 
+        private bool isPublishedDied;
+
         /// <summary>
         /// 回復中であるか
         /// </summary>
@@ -145,8 +147,7 @@ namespace MH.ActorControllers
 
             if (this.IsDead)
             {
-                MessageBroker.GetPublisher<Actor, ActorEvents.Died>()
-                    .Publish(this.actor, ActorEvents.Died.Get());
+                this.TryPublishDied();
             }
             else
             {
@@ -291,6 +292,10 @@ namespace MH.ActorControllers
         public void SyncHitPoint(NetworkVariable<float> networkHitPoint)
         {
             this.hitPoint.Value = networkHitPoint.Value;
+            if (this.IsDead)
+            {
+                this.TryPublishDied();
+            }
         }
 
         public void SyncPartDataList(NetworkList<PartDataNetworkVariable> networkPartDataList)
@@ -314,6 +319,18 @@ namespace MH.ActorControllers
                 this.flinchCounts[partType]++;
                 this.actor.StateController.ForceFlinch(opposePosition);
             }
+        }
+
+        private void TryPublishDied()
+        {
+            if (this.isPublishedDied)
+            {
+                return;
+            }
+
+            this.isPublishedDied = true;
+            MessageBroker.GetPublisher<Actor, ActorEvents.Died>()
+                .Publish(this.actor, ActorEvents.Died.Get());
         }
     }
 }
