@@ -68,7 +68,7 @@ namespace MH.ActorControllers
                 .Subscribe(this.actor, x =>
                 {
                     this.uniqueMotionName = x.MotionName;
-                    this.stateController.ChangeRequest(State.UniqueMotion);
+                    this.Change(State.UniqueMotion);
                 })
                 .AddTo(ct);
 
@@ -81,7 +81,7 @@ namespace MH.ActorControllers
                         return;
                     }
                     this.actor.DodgeController.Ready(x.Data);
-                    this.stateController.ChangeRequest(State.Dodge);
+                    this.Change(State.Dodge);
                 })
                 .AddTo(ct);
 
@@ -103,11 +103,11 @@ namespace MH.ActorControllers
             MessageBroker.GetSubscriber<Actor, ActorEvents.Died>()
                 .Subscribe(this.actor, _ =>
                 {
-                    this.ForceChange(State.Dead);
+                    this.Change(State.Dead);
                 })
                 .AddTo(ct);
 
-            this.stateController.ChangeRequest(State.Idle);
+            this.Change(State.Idle);
             this.stateController.onChanged += (previousState, currentState) =>
             {
                 MessageBroker.GetPublisher<Actor, ActorEvents.ChangedState>()
@@ -115,9 +115,9 @@ namespace MH.ActorControllers
             };
         }
 
-        public void ForceChange(State state)
+        public void Change(State state)
         {
-            this.stateController.ChangeRequest(state);
+            this.stateController.ChangeRequest(state).Forget();
         }
 
         public void ForceFlinch(Vector3 opposePosition)
@@ -131,18 +131,18 @@ namespace MH.ActorControllers
                 this.actor.PostureController.Rotate(Quaternion.LookRotation(direction), true);
             }
 
-            this.stateController.ChangeRequest(State.Flinch);
+            this.Change(State.Flinch);
         }
 
         private void ToIdle()
         {
             if (this.actor.PostureController.IsMoving)
             {
-                this.ForceChange(State.Run);
+                this.Change(State.Run);
             }
             else
             {
-                this.ForceChange(State.Idle);
+                this.Change(State.Idle);
             }
         }
 
@@ -151,7 +151,7 @@ namespace MH.ActorControllers
             MessageBroker.GetSubscriber<Actor, ActorEvents.BeginMove>()
                 .Subscribe(this.actor, _ =>
                 {
-                    this.stateController.ChangeRequest(State.Run);
+                    this.Change(State.Run);
                 })
                 .AddTo(scope);
 
@@ -163,7 +163,7 @@ namespace MH.ActorControllers
                         return;
                     }
                     this.actor.DodgeController.Ready(x.Data);
-                    this.stateController.ChangeRequest(State.Dodge);
+                    this.Change(State.Dodge);
                 })
                 .AddTo(scope);
 
@@ -175,7 +175,7 @@ namespace MH.ActorControllers
                         return;
                     }
                     this.nextAttackType = x.AttackType;
-                    this.stateController.ChangeRequest(State.Attack);
+                    this.Change(State.Attack);
                 })
                 .AddTo(scope);
 
@@ -200,7 +200,7 @@ namespace MH.ActorControllers
                     {
                         return;
                     }
-                    this.ForceChange(State.RecoveryBegin);
+                    this.Change(State.RecoveryBegin);
                 })
                 .AddTo(scope);
 
@@ -210,7 +210,7 @@ namespace MH.ActorControllers
             this.actor.GuardController.Validate();
             if (this.actor.PostureController.IsMoving)
             {
-                this.stateController.ChangeRequest(State.Run);
+                this.Change(State.Run);
             }
 
             string GetAnimationName()
@@ -224,7 +224,7 @@ namespace MH.ActorControllers
             MessageBroker.GetSubscriber<Actor, ActorEvents.EndMove>()
                 .Subscribe(this.actor, _ =>
                 {
-                    this.stateController.ChangeRequest(State.Idle);
+                    this.Change(State.Idle);
                 })
                 .AddTo(scope);
 
@@ -237,7 +237,7 @@ namespace MH.ActorControllers
                     }
 
                     this.actor.DodgeController.Ready(x.Data);
-                    this.stateController.ChangeRequest(State.Dodge);
+                    this.Change(State.Dodge);
                 })
                 .AddTo(scope);
 
@@ -249,7 +249,7 @@ namespace MH.ActorControllers
                         return;
                     }
                     this.nextAttackType = x.AttackType;
-                    this.stateController.ChangeRequest(State.Attack);
+                    this.Change(State.Attack);
                 })
                 .AddTo(scope);
 
@@ -274,7 +274,7 @@ namespace MH.ActorControllers
                     {
                         return;
                     }
-                    this.ForceChange(State.RecoveryBegin);
+                    this.Change(State.RecoveryBegin);
                 })
                 .AddTo(scope);
 
@@ -283,7 +283,7 @@ namespace MH.ActorControllers
             this.actor.PostureController.CanRotation = true;
             if (!this.actor.PostureController.IsMoving)
             {
-                this.stateController.ChangeRequest(State.Idle);
+                this.Change(State.Idle);
             }
 
             string GetAnimationName()
@@ -314,7 +314,7 @@ namespace MH.ActorControllers
                     }
 
                     this.nextAttackType = x.AttackType;
-                    this.stateController.ChangeRequest(State.Attack);
+                    this.Change(State.Attack);
                 })
                 .AddTo(scope);
 
@@ -326,7 +326,7 @@ namespace MH.ActorControllers
                         return;
                     }
                     this.actor.DodgeController.Ready(x.Data);
-                    this.stateController.ChangeRequest(State.Dodge);
+                    this.Change(State.Dodge);
                 })
                 .AddTo(scope);
 
@@ -364,7 +364,7 @@ namespace MH.ActorControllers
                     }
 
                     this.nextAttackType = x.AttackType;
-                    this.stateController.ChangeRequest(State.Attack);
+                    this.Change(State.Attack);
                 })
                 .AddTo(scope);
 
@@ -376,7 +376,7 @@ namespace MH.ActorControllers
                         return;
                     }
                     this.actor.DodgeController.Ready(x.Data);
-                    this.stateController.ChangeRequest(State.Dodge);
+                    this.Change(State.Dodge);
                 })
                 .AddTo(scope);
 
@@ -473,7 +473,7 @@ namespace MH.ActorControllers
                     return !this.actor.StatusController.IsRecovering
                            || !isRequestEnd;
                 });
-                this.ForceChange(State.RecoveryEnd);
+                this.Change(State.RecoveryEnd);
             }
             catch (OperationCanceledException)
             {
@@ -510,6 +510,7 @@ namespace MH.ActorControllers
 
         private void OnEnterDead(State previousState, DisposableBagBuilder scope)
         {
+            this.stateController.IsAccept = false;
             this.actor.AnimationController.Play("Dead");
         }
     }

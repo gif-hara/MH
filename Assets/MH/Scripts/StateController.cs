@@ -24,6 +24,11 @@ namespace MH
         /// </summary>
         private bool isChanging;
 
+        /// <summary>
+        /// ステート切り替えを受け付けるか
+        /// </summary>
+        public bool IsAccept { set; get; } = true;
+
         private T nextState;
 
         public StateController(T invalidState)
@@ -55,8 +60,13 @@ namespace MH
             this.priorities.Add(value, priority);
         }
 
-        public async void ChangeRequest(T value)
+        public async UniTaskVoid ChangeRequest(T value)
         {
+            if (!this.IsAccept)
+            {
+                return;
+            }
+
             var nextStatePriority = this.priorities.ContainsKey(this.nextState) ? this.priorities[this.nextState] : 0;
             var valuePriority = this.priorities.ContainsKey(value) ? this.priorities[value] : 0;
             this.nextState = nextStatePriority > valuePriority ? this.nextState : value;

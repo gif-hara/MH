@@ -44,7 +44,7 @@ namespace MH.SceneControllers
             stateController.Set(State.LobbyHost, OnEnterLobbyHost, null);
             stateController.Set(State.LobbyClient, OnEnterLobbyClient, null);
             stateController.Set(State.SearchLobby, OnEnterSearchLobby, null);
-            stateController.ChangeRequest(State.SelectMode);
+            stateController.ChangeRequest(State.SelectMode).Forget();
         }
 
         private void OnDestroy()
@@ -61,7 +61,7 @@ namespace MH.SceneControllers
                 .Subscribe(async _ =>
                 {
                     await MultiPlayManager.BeginAsHostAsync(4);
-                    stateController.ChangeRequest(State.LobbyHost);
+                    stateController.ChangeRequest(State.LobbyHost).Forget();
                 })
                 .AddTo(scope);
 
@@ -71,7 +71,7 @@ namespace MH.SceneControllers
                     var query = await MultiPlayManager.QueryLobbies();
                     queryLobbies.Clear();
                     queryLobbies.AddRange(query.Results);
-                    stateController.ChangeRequest(State.SearchLobby);
+                    stateController.ChangeRequest(State.SearchLobby).Forget();
                 })
                 .AddTo(scope);
         }
@@ -96,7 +96,7 @@ namespace MH.SceneControllers
                     .Subscribe(async _ =>
                     {
                         await MultiPlayManager.BeginAsClientAsync(lobby.Id, lobby.Data["joinCode"].Value);
-                        stateController.ChangeRequest(State.LobbyClient);
+                        stateController.ChangeRequest(State.LobbyClient).Forget();
                     })
                     .AddTo(scope);
             }

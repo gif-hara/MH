@@ -130,12 +130,19 @@ namespace MH.BehaviourDesignerControllers
                     this.InitState(x.Seed);
                     this.DisableAllBehaviourTrees();
                     this.entryPointTree.EnableBehavior();
-                    this.owner.StateController.ForceChange(ActorStateController.State.Idle);
+                    this.owner.StateController.Change(ActorStateController.State.Idle);
                 })
                 .AddTo(ct);
 
             MessageBroker.GetSubscriber<Actor, ActorEvents.BeginFlinch>()
-                .Subscribe(this.owner, x =>
+                .Subscribe(this.owner, _ =>
+                {
+                    this.DisableAllBehaviourTrees();
+                })
+                .AddTo(ct);
+
+            MessageBroker.GetSubscriber<Actor, ActorEvents.Died>()
+                .Subscribe(this.owner, _ =>
                 {
                     this.DisableAllBehaviourTrees();
                 })
