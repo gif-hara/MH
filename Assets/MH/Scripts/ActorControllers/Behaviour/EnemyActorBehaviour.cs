@@ -76,21 +76,21 @@ namespace MH.BehaviourDesignerControllers
                 var t = this.owner.transform;
                 var lhs = (this.targetActor.transform.position - t.position).normalized;
                 var f = Vector3.Dot(lhs, t.forward);
-                if (f > 0.5f && f <= 1.0f)
+                if (f > 0.5f && f <= 1.01f)
                 {
                     return TargetDirectionType.Front;
                 }
-                if (f < -0.5f && f >= -1.0f)
+                if (f < -0.5f && f >= -1.01f)
                 {
                     return TargetDirectionType.Back;
                 }
 
                 var r = Vector3.Dot(lhs, t.right);
-                if (r > 0.5f && r <= 1.0f)
+                if (r > 0.5f && r <= 1.01f)
                 {
                     return TargetDirectionType.Right;
                 }
-                if (r < -0.5f && r >= -1.0f)
+                if (r < -0.5f && r >= -1.01f)
                 {
                     return TargetDirectionType.Left;
                 }
