@@ -523,6 +523,8 @@ namespace MH.ActorControllers
         private void OnEnterDead(State previousState, DisposableBagBuilder scope)
         {
             this.stateController.IsAccept = false;
+            this.actor.PostureController.CanMove = false;
+            this.actor.PostureController.CanRotation = false;
             this.actor.AnimationController.Play("Dead");
         }
 
