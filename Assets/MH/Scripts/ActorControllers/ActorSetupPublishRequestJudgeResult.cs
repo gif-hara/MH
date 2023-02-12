@@ -17,10 +17,25 @@ namespace MH.ActorControllers
 
         public async void Setup(Actor actor, IActorDependencyInjector actorDependencyInjector, ActorSpawnData spawnData)
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(this.waitSeconds));
+            if (!actor.NetworkController.IsOwner)
+            {
+                return;
+            }
 
-            MessageBroker.GetPublisher<BattleEvents.RequestJudgeResult>()
-                .Publish(BattleEvents.RequestJudgeResult.Get(this.result));
+            try
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(this.waitSeconds));
+
+                actor.NetworkController.NetworkBehaviour.SubmitRequestJudgeResult(this.result);
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                throw;
+            }
         }
     }
 }

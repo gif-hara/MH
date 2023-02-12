@@ -32,7 +32,14 @@ namespace MH.SceneControllers
         private BattleUIView battleUIView;
 
         [SerializeField]
-        private BattlePlayerWinUIView battlePlayerWinUIView;
+        private BattleJudgementUIView battlePlayerWinUIView;
+
+        [SerializeField]
+        private BattleJudgementUIView battlePlayerLoseUIView;
+
+        private int playerWinCount;
+
+        private int playerLoseCount;
 
         private async void Start()
         {
@@ -117,22 +124,52 @@ namespace MH.SceneControllers
                 .AddTo(ct);
 
             var playerWinUIView = UIManager.Open(this.battlePlayerWinUIView);
+            var playerLoseUIView = UIManager.Open(this.battlePlayerLoseUIView);
             MessageBroker.GetSubscriber<BattleEvents.JudgedResult>()
-                .Subscribe(async x =>
+                .Subscribe(x =>
                 {
                     if (x.Result == Define.BattleResult.PlayerWin)
                     {
-                        playerWinUIView.PlayInAnimation();
+                        this.playerWinCount++;
+                    }
+                    else
+                    {
+                        this.playerLoseCount++;
                     }
 
-                    await UniTask.Delay(TimeSpan.FromSeconds(8.0f), cancellationToken: ct);
-
-                    UIManager.Close(uiView);
-                    UIManager.Close(playerWinUIView);
-
-                    SceneManager.LoadScene("Lobby");
+                    if (this.playerWinCount >= ActorManager.Enemies.Count)
+                    {
+                        playerWinUIView.PlayInAnimation();
+                        ToLobbyAsync(8.0f).Forget();
+                    }
+                    else if (this.playerLoseCount >= ActorManager.Players.Count)
+                    {
+                        playerLoseUIView.PlayInAnimation();
+                        ToLobbyAsync(5.0f).Forget();
+                    }
                 })
                 .AddTo(ct);
+
+            async UniTaskVoid ToLobbyAsync(float delaySeconds)
+            {
+                try
+                {
+                    await UniTask.Delay(TimeSpan.FromSeconds(delaySeconds), cancellationToken: ct);
+                    UIManager.Close(uiView);
+                    UIManager.Close(playerWinUIView);
+                    UIManager.Close(playerLoseUIView);
+
+                    SceneManager.LoadScene("Lobby");
+                }
+                catch (OperationCanceledException)
+                {
+                }
+                catch (Exception e)
+                {
+                    Debug.LogException(e);
+                    throw;
+                }
+            }
 
             if (NetworkManager.Singleton.IsHost)
             {

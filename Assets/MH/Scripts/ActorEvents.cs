@@ -10,46 +10,6 @@ namespace MH
     public sealed class ActorEvents
     {
         /// <summary>
-        /// イベントの登録を行う
-        /// </summary>
-        public static void RegisterEvents(BuiltinContainerBuilder builder)
-        {
-            builder.AddMessageBroker<Actor, BeginMove>();
-            builder.AddMessageBroker<Actor, EndMove>();
-            builder.AddMessageBroker<Actor, RequestDodge>();
-            builder.AddMessageBroker<Actor, NetworkRequestDodge>();
-            builder.AddMessageBroker<Actor, BeginDodge>();
-            builder.AddMessageBroker<Actor, EndDodge>();
-            builder.AddMessageBroker<Actor, RequestAttack>();
-            builder.AddMessageBroker<Actor, BeginAttack>();
-            builder.AddMessageBroker<Actor, EndAttack>();
-            builder.AddMessageBroker<Actor, AcceptNextState>();
-            builder.AddMessageBroker<AddedActor>();
-            builder.AddMessageBroker<RemovedActor>();
-            builder.AddMessageBroker<Actor, ValidationAttackCollider>();
-            builder.AddMessageBroker<Actor, InvalidationAttackCollider>();
-            builder.AddMessageBroker<Actor, RequestSetForce>();
-            builder.AddMessageBroker<Actor, RequestUniqueMotion>();
-            builder.AddMessageBroker<Actor, NetworkRequestUniqueMotion>();
-            builder.AddMessageBroker<Actor, ChangedState>();
-            builder.AddMessageBroker<Actor, GaveDamage>();
-            builder.AddMessageBroker<Actor, ReceivedDamage>();
-            builder.AddMessageBroker<Actor, Died>();
-            builder.AddMessageBroker<Actor, RequestSubmitNewThinkData>();
-            builder.AddMessageBroker<Actor, ReceivedNewThinkData>();
-            builder.AddMessageBroker<Actor, BeginFlinch>();
-            builder.AddMessageBroker<Actor, EndFlinch>();
-            builder.AddMessageBroker<Actor, RequestBeginGuard>();
-            builder.AddMessageBroker<Actor, RequestEndGuard>();
-            builder.AddMessageBroker<Actor, BeginGuard>();
-            builder.AddMessageBroker<Actor, EndGuard>();
-            builder.AddMessageBroker<Actor, RequestBeginRecovery>();
-            builder.AddMessageBroker<Actor, RequestEndRecovery>();
-            builder.AddMessageBroker<Actor, BeginRecovery>();
-            builder.AddMessageBroker<Actor, EndRecovery>();
-        }
-
-        /// <summary>
         /// 移動を開始した際のメッセージ
         /// </summary>
         public sealed class BeginMove : Message<BeginMove>
@@ -376,6 +336,46 @@ namespace MH
         /// </summary>
         public sealed class EndRecovery : Message<EndRecovery>
         {
+        }
+
+        /// <summary>
+        /// イベントの登録を行う
+        /// </summary>
+        public static void RegisterEvents(BuiltinContainerBuilder builder)
+        {
+            builder.AddMessageBroker<Actor, BeginMove>();
+            builder.AddMessageBroker<Actor, EndMove>();
+            builder.AddMessageBroker<Actor, RequestDodge>();
+            builder.AddMessageBroker<Actor, NetworkRequestDodge>();
+            builder.AddMessageBroker<Actor, BeginDodge>();
+            builder.AddMessageBroker<Actor, EndDodge>();
+            builder.AddMessageBroker<Actor, RequestAttack>();
+            builder.AddMessageBroker<Actor, BeginAttack>();
+            builder.AddMessageBroker<Actor, EndAttack>();
+            builder.AddMessageBroker<Actor, AcceptNextState>();
+            builder.AddMessageBroker<AddedActor>();
+            builder.AddMessageBroker<RemovedActor>();
+            builder.AddMessageBroker<Actor, ValidationAttackCollider>();
+            builder.AddMessageBroker<Actor, InvalidationAttackCollider>();
+            builder.AddMessageBroker<Actor, RequestSetForce>();
+            builder.AddMessageBroker<Actor, RequestUniqueMotion>();
+            builder.AddMessageBroker<Actor, NetworkRequestUniqueMotion>();
+            builder.AddMessageBroker<Actor, ChangedState>();
+            builder.AddMessageBroker<Actor, GaveDamage>();
+            builder.AddMessageBroker<Actor, ReceivedDamage>();
+            builder.AddMessageBroker<Actor, Died>();
+            builder.AddMessageBroker<Actor, RequestSubmitNewThinkData>();
+            builder.AddMessageBroker<Actor, ReceivedNewThinkData>();
+            builder.AddMessageBroker<Actor, BeginFlinch>();
+            builder.AddMessageBroker<Actor, EndFlinch>();
+            builder.AddMessageBroker<Actor, RequestBeginGuard>();
+            builder.AddMessageBroker<Actor, RequestEndGuard>();
+            builder.AddMessageBroker<Actor, BeginGuard>();
+            builder.AddMessageBroker<Actor, EndGuard>();
+            builder.AddMessageBroker<Actor, RequestBeginRecovery>();
+            builder.AddMessageBroker<Actor, RequestEndRecovery>();
+            builder.AddMessageBroker<Actor, BeginRecovery>();
+            builder.AddMessageBroker<Actor, EndRecovery>();
         }
     }
 }

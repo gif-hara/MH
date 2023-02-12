@@ -58,7 +58,6 @@ namespace MH.NetworkSystems
             else
             {
                 this.actor.StatusController.SyncHitPoint(this.networkHitPoint);
-                Debug.Log($"OnNetworkSpawn {this.actor} hitPoint = {this.networkHitPoint.Value}");
             }
 
             this.networkHitPoint.OnValueChanged += this.OnChangedHitPoint;
@@ -104,6 +103,11 @@ namespace MH.NetworkSystems
         public void SubmitSetGuarding(bool newGuarding)
         {
             this.SubmitSetGuardingServerRpc(newGuarding);
+        }
+
+        public void SubmitRequestJudgeResult(Define.BattleResult result)
+        {
+            this.SubmitRequestJudgeResultServerRpc(result);
         }
 
         [ServerRpc]
@@ -158,6 +162,19 @@ namespace MH.NetworkSystems
         private void SubmitSetGuardingServerRpc(bool newGuarding, ServerRpcParams rpcParams = default)
         {
             this.networkGuarding.Value = newGuarding;
+        }
+
+        [ServerRpc]
+        private void SubmitRequestJudgeResultServerRpc(Define.BattleResult result, ServerRpcParams rpcParams = default)
+        {
+            this.SubmitRequestJudgeResultClientRpc(result);
+        }
+
+        [ClientRpc]
+        private void SubmitRequestJudgeResultClientRpc(Define.BattleResult result, ClientRpcParams rpcParams = default)
+        {
+            MessageBroker.GetPublisher<BattleEvents.RequestJudgeResult>()
+                .Publish(BattleEvents.RequestJudgeResult.Get(result));
         }
     }
 }
