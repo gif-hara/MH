@@ -110,6 +110,11 @@ namespace MH.NetworkSystems
             this.SubmitRequestJudgeResultServerRpc(result);
         }
 
+        public void SyncHitPoint(float hitPoint)
+        {
+            this.SubmitSyncHitPointServerRpc(hitPoint);
+        }
+
         [ServerRpc]
         private void SubmitGaveDamageServerRpc(ulong networkObjectId, int damage, Define.PartType partType, ServerRpcParams rpcParams = default)
         {
@@ -175,6 +180,12 @@ namespace MH.NetworkSystems
         {
             MessageBroker.GetPublisher<BattleEvents.RequestJudgeResult>()
                 .Publish(BattleEvents.RequestJudgeResult.Get(result));
+        }
+
+        [ServerRpc]
+        private void SubmitSyncHitPointServerRpc(float hitPoint, ServerRpcParams rpcParams = default)
+        {
+            this.networkHitPoint.Value = hitPoint;
         }
     }
 }

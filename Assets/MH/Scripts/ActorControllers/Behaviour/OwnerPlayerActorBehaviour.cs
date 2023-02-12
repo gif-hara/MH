@@ -158,6 +158,13 @@ namespace MH.ActorControllers
                 })
                 .AddTo(ct);
 
+            MessageBroker.GetSubscriber<Actor, ActorEvents.ReceivedDamage>()
+                .Subscribe(this.actor, x =>
+                {
+                    this.playerNetworkBehaviour.SyncHitPoint(this.actor.StatusController.HitPoint.Value);
+                })
+                .AddTo(ct);
+
             MessageBroker.GetSubscriber<Actor, ActorEvents.BeginGuard>()
                 .Subscribe(this.actor, x =>
                 {
