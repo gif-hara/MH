@@ -76,12 +76,13 @@ namespace MH.NetworkSystems
         {
             try
             {
-                Assert.IsNotNull(currentLobby);
+                Assert.IsNotNull(currentLobby, $"{nameof(currentLobby)} != null");
                 await Lobbies.Instance.DeleteLobbyAsync(currentLobby.Id);
                 currentLobby = null;
-                Assert.IsNotNull(lobbyScope);
+                Assert.IsNotNull(lobbyScope, $"{nameof(lobbyScope)} != null");
                 lobbyScope.Cancel();
                 lobbyScope.Dispose();
+                lobbyScope = null;
             }
             catch (Exception e)
             {

@@ -112,6 +112,7 @@ namespace MH.NetworkSystems
             try
             {
                 await LobbyManager.DeleteLobbyAsync();
+                NetworkManager.Singleton.Shutdown();
             }
             catch (Exception e)
             {

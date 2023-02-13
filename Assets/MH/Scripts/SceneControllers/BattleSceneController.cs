@@ -184,6 +184,10 @@ namespace MH.SceneControllers
                     {
                         Debug.Log("Start Delete Lobby");
                         MultiPlayManager.DeleteLobbyAsync().Forget();
+                        UIManager.Close(uiView);
+                        UIManager.Close(playerWinUIView);
+                        UIManager.Close(playerLoseUIView);
+
                         SceneManager.LoadScene("Lobby");
                         Debug.Log("Complete Delete Lobby");
                     }

@@ -36,14 +36,14 @@ namespace MH.ActorControllers
         public static void Attach(Actor actor, PlayerNetworkBehaviour playerNetworkBehaviour)
         {
             var instance = new OwnerPlayerActorBehaviour();
-            instance._Attach(actor, playerNetworkBehaviour);
+            instance._AttachAsync(actor, playerNetworkBehaviour);
         }
 
         private OwnerPlayerActorBehaviour()
         {
         }
 
-        private void _Attach(Actor actor, PlayerNetworkBehaviour playerNetworkBehaviour)
+        private async void _AttachAsync(Actor actor, PlayerNetworkBehaviour playerNetworkBehaviour)
         {
             this.actor = actor;
             this.playerNetworkBehaviour = playerNetworkBehaviour;
@@ -205,6 +205,14 @@ namespace MH.ActorControllers
                 })
                 .AddTo(ct);
 #endif
+
+            await this.actor.OnDestroyAsync();
+
+            inputActions.Player.Dodge.performed -= this.PerformedDodge;
+            inputActions.Player.AttackWeak.performed -= this.PerformedAttackWeak;
+            inputActions.Player.AttackStrong.performed -= this.PerformedAttackStrong;
+            inputActions.Player.Recovery.performed -= this.PerformedRecovery;
+            inputActions.Player.Recovery.canceled -= this.CanceledRecovery;
         }
 
         private void PerformedDodge(InputAction.CallbackContext context)
