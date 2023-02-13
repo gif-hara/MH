@@ -187,5 +187,14 @@ namespace MH.NetworkSystems
                 throw;
             }
         }
+
+#if UNITY_EDITOR
+        public static void OnEnteredPlayMode()
+        {
+            currentLobby = null;
+            lobbyScope?.Dispose();
+            lobbyScope = null;
+        }
+#endif
     }
 }
