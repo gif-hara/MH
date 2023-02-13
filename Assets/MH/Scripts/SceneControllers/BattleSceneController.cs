@@ -1,12 +1,13 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
+using Cysharp.Threading.Tasks.Triggers;
 using MessagePipe;
 using MH.ActorControllers;
 using MH.NetworkSystems;
 using MH.UISystems;
-using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 namespace MH.SceneControllers
@@ -171,10 +172,23 @@ namespace MH.SceneControllers
                 }
             }
 
-            if (NetworkManager.Singleton.IsHost)
-            {
-                Instantiate(this.enemyPrefab, this.enemySpawnPoint.position, this.enemySpawnPoint.rotation);
-            }
+            // if (NetworkManager.Singleton.IsHost)
+            // {
+            //     Instantiate(this.enemyPrefab, this.enemySpawnPoint.position, this.enemySpawnPoint.rotation);
+            // }
+
+            this.GetAsyncUpdateTrigger()
+                .Subscribe(_ =>
+                {
+                    if (Keyboard.current.qKey.wasPressedThisFrame)
+                    {
+                        Debug.Log("Start Delete Lobby");
+                        MultiPlayManager.DeleteLobbyAsync().Forget();
+                        SceneManager.LoadScene("Lobby");
+                        Debug.Log("Complete Delete Lobby");
+                    }
+                })
+                .AddTo(ct);
         }
     }
 }

@@ -105,6 +105,22 @@ namespace MH.NetworkSystems
         }
 
         /// <summary>
+        /// 現在参加しているロビーを削除する
+        /// </summary>
+        public static async UniTask DeleteLobbyAsync()
+        {
+            try
+            {
+                await LobbyManager.DeleteLobbyAsync();
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                throw;
+            }
+        }
+
+        /// <summary>
         /// クライアントが接続された際のイベント
         /// </summary>
         public static IUniTaskAsyncEnumerable<ulong> OnClientConnectedAsyncEnumerable(CancellationToken ct)

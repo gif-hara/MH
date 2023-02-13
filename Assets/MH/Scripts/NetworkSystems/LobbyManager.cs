@@ -49,6 +49,9 @@ namespace MH.NetworkSystems
             }
         }
 
+        /// <summary>
+        /// ロビーに参加する
+        /// </summary>
         public static async UniTask JoinLobbyAsync(string lobbyId, JoinLobbyByIdOptions options = null)
         {
             try
