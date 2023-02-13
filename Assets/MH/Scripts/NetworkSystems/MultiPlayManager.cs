@@ -15,7 +15,6 @@ using UnityEngine.Assertions;
 namespace MH.NetworkSystems
 {
     /// <summary>
-    ///
     /// </summary>
     public static class MultiPlayManager
     {
@@ -88,7 +87,10 @@ namespace MH.NetworkSystems
             }
         }
 
-        public static async UniTask<QueryResponse> QueryLobbies(QueryLobbiesOptions options = null)
+        /// <summary>
+        /// ロビーの検索を行う
+        /// </summary>
+        public static async UniTask<QueryResponse> QueryLobbiesAsync(QueryLobbiesOptions options = null)
         {
             try
             {
@@ -102,6 +104,9 @@ namespace MH.NetworkSystems
             }
         }
 
+        /// <summary>
+        /// クライアントが接続された際のイベント
+        /// </summary>
         public static IUniTaskAsyncEnumerable<ulong> OnClientConnectedAsyncEnumerable(CancellationToken ct)
         {
             return new ActionHandlerAsyncEnumerable<ulong>(
@@ -118,6 +123,9 @@ namespace MH.NetworkSystems
                 );
         }
 
+        /// <summary>
+        /// クライアントが接続解除された際のイベント
+        /// </summary>
         public static IUniTaskAsyncEnumerable<ulong> OnClientDisconnectAsyncEnumerable(CancellationToken ct)
         {
             return new ActionHandlerAsyncEnumerable<ulong>(

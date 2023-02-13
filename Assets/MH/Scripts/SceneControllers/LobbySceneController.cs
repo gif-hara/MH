@@ -71,7 +71,7 @@ namespace MH.SceneControllers
             lobbyUIView.SelectMode.OnClickSearchLobbyAsyncEnumerable()
                 .Subscribe(async _ =>
                 {
-                    var query = await MultiPlayManager.QueryLobbies();
+                    var query = await MultiPlayManager.QueryLobbiesAsync();
                     queryLobbies.Clear();
                     queryLobbies.AddRange(query.Results);
                     stateController.ChangeRequest(State.SearchLobby).Forget();
