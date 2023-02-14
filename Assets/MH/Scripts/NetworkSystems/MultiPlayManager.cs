@@ -38,7 +38,9 @@ namespace MH.NetworkSystems
                 options ??= new CreateLobbyOptions();
                 options.Data ??= new Dictionary<string, DataObject>();
                 options.Data.Add("joinCode", new DataObject(DataObject.VisibilityOptions.Public, joinCode));
+                options.Player = new Player(AuthenticationService.Instance.PlayerId);
                 await LobbyManager.CreateLobbyAsync(Guid.NewGuid().ToString(), 4, options);
+                var lobby = LobbyManager.Lobby;
                 NetworkManager.Singleton.GetComponent<UnityTransport>()
                     .SetRelayServerData(
                         allocation.RelayServer.IpV4,
@@ -111,14 +113,46 @@ namespace MH.NetworkSystems
         {
             try
             {
-                await LobbyManager.DeleteLobbyAsync();
                 NetworkManager.Singleton.Shutdown();
+                await LobbyManager.DeleteLobbyAsync();
             }
             catch (Exception e)
             {
                 Debug.LogException(e);
                 throw;
             }
+        }
+
+        public static async UniTask RemovePlayerAsync(string playerId)
+        {
+            try
+            {
+                await LobbyManager.RemovePlayerAsync(playerId);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                throw;
+            }
+        }
+
+        public static async UniTask RemoveMyPlayerAsync()
+        {
+            try
+            {
+                NetworkManager.Singleton.Shutdown();
+                await RemovePlayerAsync(AuthenticationService.Instance.PlayerId);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public static async UniTask WaitForDeleteLobby(CancellationToken token)
+        {
+            await LobbyManager.WaitForDeleteLobby(token);
         }
 
         /// <summary>

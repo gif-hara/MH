@@ -6,6 +6,7 @@ using MessagePipe;
 using MH.ActorControllers;
 using MH.NetworkSystems;
 using MH.UISystems;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -141,21 +142,29 @@ namespace MH.SceneControllers
                     if (this.playerWinCount >= ActorManager.Enemies.Count)
                     {
                         playerWinUIView.PlayInAnimation();
-                        ToLobbyAsync(8.0f).Forget();
+                        EndBattle(5.0f).Forget();
                     }
                     else if (this.playerLoseCount >= ActorManager.Players.Count)
                     {
                         playerLoseUIView.PlayInAnimation();
-                        ToLobbyAsync(5.0f).Forget();
+                        EndBattle(5.0f).Forget();
                     }
                 })
                 .AddTo(ct);
 
-            async UniTaskVoid ToLobbyAsync(float delaySeconds)
+            async UniTaskVoid EndBattle(float delaySeconds)
             {
                 try
                 {
                     await UniTask.Delay(TimeSpan.FromSeconds(delaySeconds), cancellationToken: ct);
+                    if (NetworkManager.Singleton.IsHost)
+                    {
+                        await MultiPlayManager.DeleteLobbyAsync();
+                    }
+                    else
+                    {
+                        await MultiPlayManager.WaitForDeleteLobby(ct);
+                    }
                     UIManager.Close(uiView);
                     UIManager.Close(playerWinUIView);
                     UIManager.Close(playerLoseUIView);
@@ -172,24 +181,35 @@ namespace MH.SceneControllers
                 }
             }
 
-            // if (NetworkManager.Singleton.IsHost)
-            // {
-            //     Instantiate(this.enemyPrefab, this.enemySpawnPoint.position, this.enemySpawnPoint.rotation);
-            // }
+            if (NetworkManager.Singleton.IsHost)
+            {
+                Instantiate(this.enemyPrefab, this.enemySpawnPoint.position, this.enemySpawnPoint.rotation);
+            }
 
             this.GetAsyncUpdateTrigger()
-                .Subscribe(_ =>
+                .Subscribe(async _ =>
                 {
                     if (Keyboard.current.qKey.wasPressedThisFrame)
                     {
                         Debug.Log("Start Delete Lobby");
-                        MultiPlayManager.DeleteLobbyAsync().Forget();
+                        await MultiPlayManager.DeleteLobbyAsync();
                         UIManager.Close(uiView);
                         UIManager.Close(playerWinUIView);
                         UIManager.Close(playerLoseUIView);
 
                         SceneManager.LoadScene("Lobby");
                         Debug.Log("Complete Delete Lobby");
+                    }
+                    if (Keyboard.current.eKey.wasPressedThisFrame)
+                    {
+                        Debug.Log("Start Remove MyPlayer");
+                        await MultiPlayManager.RemoveMyPlayerAsync();
+                        UIManager.Close(uiView);
+                        UIManager.Close(playerWinUIView);
+                        UIManager.Close(playerLoseUIView);
+
+                        SceneManager.LoadScene("Lobby");
+                        Debug.Log("Complete Remove MyPlayer");
                     }
                 })
                 .AddTo(ct);
