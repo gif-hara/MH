@@ -15,11 +15,11 @@ MonoBehaviour:
   data:
     actorStatus:
       actorType: 1
-      hitPoint: 1
+      hitPoint: 1800
       stamina: 0
       partDataList:
       - partType: 0
-        endurance: 50
+        endurance: 300
         damageRate: 1
     attackData:
       baseStrength: 0
