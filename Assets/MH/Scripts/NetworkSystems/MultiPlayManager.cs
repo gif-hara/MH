@@ -123,6 +123,9 @@ namespace MH.NetworkSystems
             }
         }
 
+        /// <summary>
+        /// プレイヤーの削除を行う
+        /// </summary>
         public static async UniTask RemovePlayerAsync(string playerId)
         {
             try
@@ -136,6 +139,9 @@ namespace MH.NetworkSystems
             }
         }
 
+        /// <summary>
+        /// 自分自身のプレイヤーの削除を行う
+        /// </summary>
         public static async UniTask RemoveMyPlayerAsync()
         {
             try
@@ -150,9 +156,20 @@ namespace MH.NetworkSystems
             }
         }
 
+        /// <summary>
+        /// ロビーが削除されるまで待つ
+        /// </summary>
         public static async UniTask WaitForDeleteLobby(CancellationToken token)
         {
             await LobbyManager.WaitForDeleteLobby(token);
+        }
+
+        /// <summary>
+        /// ロビーに参加しているか返す
+        /// </summary>
+        public static bool IsInLobby()
+        {
+            return LobbyManager.IsInLobby();
         }
 
         /// <summary>

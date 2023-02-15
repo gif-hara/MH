@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace MH
     /// <summary>
     /// <see cref="PrefabPool{T}"/>を辞書で管理するクラス
     /// </summary>
-    public sealed class PrefabPoolDictionary<T> where T : Component
+    public sealed class PrefabPoolDictionary<T> : IDisposable where T : Component
     {
         private readonly Dictionary<T, PrefabPool<T>> table = new();
 
@@ -25,6 +26,16 @@ namespace MH
             foreach (var pair in this.table)
             {
                 pair.Value.Clear();
+            }
+
+            this.table.Clear();
+        }
+
+        public void Dispose()
+        {
+            foreach (var pair in this.table)
+            {
+                pair.Value.Dispose();
             }
 
             this.table.Clear();

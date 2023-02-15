@@ -25,7 +25,8 @@ namespace MH
                 UIManager.SetupAsync(),
                 SetupNetworkSystemAsync(),
                 SetupInputActionAsync(),
-                PlayerActorCommonData.SetupAsync()
+                PlayerActorCommonData.SetupAsync(),
+                UniTask.DelayFrame(1)
                 );
 
             IsReady = UniTask.CompletedTask;

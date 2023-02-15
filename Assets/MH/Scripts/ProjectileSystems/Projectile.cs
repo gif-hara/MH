@@ -13,8 +13,6 @@ namespace MH.ProjectileSystems
     /// </summary>
     public sealed class Projectile : MonoBehaviour
     {
-        private PrefabPool<Projectile> pool;
-
         private IProjectileController[] controllers;
 
         private CancellationTokenSource onReleasePoolScope;
@@ -23,43 +21,56 @@ namespace MH.ProjectileSystems
 
         public Time Time { get; } = new(TimeManager.Game);
 
-        public async UniTaskVoid Spawn(ProjectileData data, Actor owner, Vector3 position, Quaternion rotation)
+        public void Spawn(
+            ProjectileData data,
+            Actor owner,
+            Vector3 position,
+            Quaternion rotation
+        )
         {
-#if UNITY_EDITOR
-            this.pool = null;
-#endif
-            this.pool ??= new PrefabPool<Projectile>(this);
-            var instance = this.pool.Get();
-            var t = instance.transform;
+            var pool = ProjectilePoolManager.GetPool(this);
+            var instance = pool.Get();
+            instance.Setup(data, owner, position, rotation, pool).Forget();
+        }
+
+        private async UniTaskVoid Setup(
+            ProjectileData data,
+            Actor owner,
+            Vector3 position,
+            Quaternion rotation,
+            PrefabPool<Projectile> pool
+        )
+        {
+            var t = this.transform;
             t.position = position;
             t.rotation = rotation;
-            using (instance.onReleasePoolScope = new CancellationTokenSource())
+            using (this.onReleasePoolScope = new CancellationTokenSource())
             {
-                instance.controllers ??= instance.GetComponentsInChildren<IProjectileController>();
-                foreach (var child in instance.controllers)
+                this.controllers ??= this.GetComponentsInChildren<IProjectileController>();
+                foreach (var child in this.controllers)
                 {
                     child.Setup(this, data, owner);
                 }
 
                 foreach (var decorator in data.decorators)
                 {
-                    decorator.Decorate(instance);
+                    decorator.Decorate(this);
                 }
 
-                instance.GetAsyncTriggerEnterTrigger()
+                this.GetAsyncTriggerEnterTrigger()
                     .Subscribe(async _ =>
                     {
                         // 1フレーム待たないとダメージ処理されない・・・
-                        await UniTask.NextFrame(instance.OnReleaseToken);
-                        this.pool.Release(instance);
-                        instance.onReleasePoolScope.Cancel();
-                        instance.onReleasePoolScope.Dispose();
+                        await UniTask.NextFrame(this.OnReleaseToken);
+                        pool.Release(this);
+                        this.onReleasePoolScope.Cancel();
+                        this.onReleasePoolScope.Dispose();
                     })
-                    .AddTo(instance.OnReleaseToken);
+                    .AddTo(this.OnReleaseToken);
 
-                await UniTask.Delay(TimeSpan.FromSeconds(data.durationSeconds), cancellationToken: instance.OnReleaseToken);
+                await UniTask.Delay(TimeSpan.FromSeconds(data.durationSeconds), cancellationToken: this.OnReleaseToken);
 
-                this.pool.Release(instance);
+                pool.Release(this);
             }
         }
     }

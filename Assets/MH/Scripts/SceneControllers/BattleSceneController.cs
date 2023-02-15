@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks.Triggers;
 using MessagePipe;
 using MH.ActorControllers;
 using MH.NetworkSystems;
+using MH.ProjectileSystems;
 using MH.UISystems;
 using Unity.Netcode;
 using UnityEngine;
@@ -48,6 +49,8 @@ namespace MH.SceneControllers
             await BootSystem.IsReady;
 
             var ct = this.GetCancellationTokenOnDestroy();
+
+            ProjectilePoolManager.BeginSystem();
 
             MessageBroker.GetSubscriber<BattleEvents.RequestJudgeResult>()
                 .Subscribe(x =>
@@ -159,7 +162,10 @@ namespace MH.SceneControllers
                     await UniTask.Delay(TimeSpan.FromSeconds(delaySeconds), cancellationToken: ct);
                     if (NetworkManager.Singleton.IsHost)
                     {
-                        await MultiPlayManager.DeleteLobbyAsync();
+                        if (MultiPlayManager.IsInLobby())
+                        {
+                            await MultiPlayManager.DeleteLobbyAsync();
+                        }
                     }
                     else
                     {
@@ -208,11 +214,29 @@ namespace MH.SceneControllers
                         UIManager.Close(playerWinUIView);
                         UIManager.Close(playerLoseUIView);
 
+                        // TODO: シーン管理ちゃんとしたら要らないかも
+                        ProjectilePoolManager.EndSystem();
+
                         SceneManager.LoadScene("Lobby");
                         Debug.Log("Complete Remove MyPlayer");
                     }
                 })
                 .AddTo(ct);
+
+            var isApplicationQuit = false;
+            this.GetAsyncApplicationQuitTrigger()
+                .Subscribe(_ =>
+                {
+                    isApplicationQuit = true;
+                })
+                .AddTo(ct);
+
+            await this.OnDestroyAsync();
+
+            if (!isApplicationQuit)
+            {
+                ProjectilePoolManager.EndSystem();
+            }
         }
     }
 }

@@ -1,12 +1,13 @@
+using System;
 using UnityEngine;
 using UnityEngine.Pool;
+using Object = UnityEngine.Object;
 
 namespace MH
 {
     /// <summary>
-    ///
     /// </summary>
-    public sealed class PrefabPool<T> where T : Component
+    public sealed class PrefabPool<T> : IDisposable where T : Component
     {
         private readonly ObjectPool<T> objectPool;
 
@@ -36,6 +37,11 @@ namespace MH
         public void Clear()
         {
             this.objectPool.Clear();
+        }
+
+        public void Dispose()
+        {
+            this.objectPool?.Dispose();
         }
     }
 }

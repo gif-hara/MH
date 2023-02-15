@@ -6,7 +6,7 @@ using UnityEngine;
 namespace MH
 {
     /// <summary>
-    ///
+    /// <see cref="PoolablePrefab"/>を管理するクラス
     /// </summary>
     public sealed class PoolablePrefabManager : MonoBehaviour
     {
@@ -31,7 +31,7 @@ namespace MH
             t.position = position;
             t.rotation = rotation;
 
-            await UniTask.Delay(TimeSpan.FromSeconds(prefab.PoolDelaySeconds), cancellationToken:this.GetCancellationTokenOnDestroy());
+            await UniTask.Delay(TimeSpan.FromSeconds(prefab.PoolDelaySeconds), cancellationToken: this.GetCancellationTokenOnDestroy());
 
             pool.Release(instance);
         }

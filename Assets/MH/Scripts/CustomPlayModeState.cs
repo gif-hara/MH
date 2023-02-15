@@ -1,4 +1,5 @@
 using MH.NetworkSystems;
+using MH.ProjectileSystems;
 using UnityEditor;
 
 namespace MH
@@ -19,9 +20,10 @@ namespace MH
         {
             // Enter Play Mode SettingsのDomainやSceneのリロードをオフにしているため
             // staticなものはここで初期化を行うようにしています
-            if (obj == PlayModeStateChange.EnteredPlayMode)
+            if (obj == PlayModeStateChange.ExitingPlayMode)
             {
                 LobbyManager.OnEnteredPlayMode();
+                ProjectilePoolManager.OnEnteredPlayMode();
             }
         }
     }

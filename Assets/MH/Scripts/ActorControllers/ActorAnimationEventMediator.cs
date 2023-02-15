@@ -165,7 +165,7 @@ namespace MH.ActorControllers
         {
             var data = (SpawnProjectileData)obj;
             var t = this.actor.ModelController.ModelDataHolder.GetLocator(data.SpawnLocatorName);
-            data.ProjectilePrefab.Spawn(data.Data, this.actor, t.position, t.rotation).Forget();
+            data.ProjectilePrefab.Spawn(data.Data, this.actor, t.position, t.rotation);
         }
     }
 }

@@ -261,6 +261,14 @@ namespace MH.NetworkSystems
             }
         }
 
+        /// <summary>
+        /// ロビーに入っているか返す
+        /// </summary>
+        public static bool IsInLobby()
+        {
+            return currentLobby != null;
+        }
+
 #if UNITY_EDITOR
         public static void OnEnteredPlayMode()
         {
