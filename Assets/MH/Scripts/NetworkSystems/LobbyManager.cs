@@ -270,7 +270,7 @@ namespace MH.NetworkSystems
         }
 
 #if UNITY_EDITOR
-        public static void OnEnteredPlayMode()
+        public static void OnExitingPlayMode()
         {
             currentLobby = null;
             inLobbyScope?.Dispose();

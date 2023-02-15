@@ -22,8 +22,8 @@ namespace MH
             // staticなものはここで初期化を行うようにしています
             if (obj == PlayModeStateChange.ExitingPlayMode)
             {
-                LobbyManager.OnEnteredPlayMode();
-                ProjectilePoolManager.OnEnteredPlayMode();
+                LobbyManager.OnExitingPlayMode();
+                ProjectilePoolManager.OnExitingPlayMode();
             }
         }
     }

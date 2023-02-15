@@ -28,7 +28,7 @@ namespace MH.ProjectileSystems
         }
 
 #if UNITY_EDITOR
-        public static void OnEnteredPlayMode()
+        public static void OnExitingPlayMode()
         {
             poolDictionary?.Dispose();
             poolDictionary = null;
