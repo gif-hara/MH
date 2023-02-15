@@ -175,6 +175,9 @@ namespace MH.SceneControllers
                     UIManager.Close(playerWinUIView);
                     UIManager.Close(playerLoseUIView);
 
+                    // TODO: シーン管理ちゃんとしたら要らないかも
+                    ProjectilePoolManager.EndSystem();
+
                     SceneManager.LoadScene("Lobby");
                 }
                 catch (OperationCanceledException)
@@ -213,9 +216,6 @@ namespace MH.SceneControllers
                         UIManager.Close(uiView);
                         UIManager.Close(playerWinUIView);
                         UIManager.Close(playerLoseUIView);
-
-                        // TODO: シーン管理ちゃんとしたら要らないかも
-                        ProjectilePoolManager.EndSystem();
 
                         SceneManager.LoadScene("Lobby");
                         Debug.Log("Complete Remove MyPlayer");

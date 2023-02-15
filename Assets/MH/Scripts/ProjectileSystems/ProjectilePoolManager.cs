@@ -1,4 +1,3 @@
-using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace MH.ProjectileSystems
@@ -14,7 +13,6 @@ namespace MH.ProjectileSystems
         {
             Assert.IsNull(poolDictionary, $"{nameof(poolDictionary)} == null");
             poolDictionary = new PrefabPoolDictionary<Projectile>();
-            Debug.Log("BeginSystem");
         }
 
         public static void EndSystem()
@@ -34,7 +32,6 @@ namespace MH.ProjectileSystems
         {
             poolDictionary?.Dispose();
             poolDictionary = null;
-            Debug.Log("OnEnteredPlayMode");
         }
 #endif
     }
