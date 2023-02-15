@@ -94,7 +94,7 @@ MonoBehaviour:
         blendData:
           animationClip: {fileID: 7400000, guid: ff43688af961c9e4495085edd475c3e6, type: 2}
           blendSeconds: 0.05
-      - name: Recovery.Law
+      - name: Recovery.Loop
         blendData:
           animationClip: {fileID: 7400000, guid: cb5c5c4678af071458f9bffb12e09a30, type: 2}
           blendSeconds: 0
