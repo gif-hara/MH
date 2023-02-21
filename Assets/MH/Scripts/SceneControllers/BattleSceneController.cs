@@ -29,6 +29,9 @@ namespace MH.SceneControllers
         private Transform playerSpawnPoint;
 
         [SerializeField]
+        private Transform playerWarpPoint;
+
+        [SerializeField]
         private Transform enemySpawnPoint;
 
         [SerializeField]
@@ -234,7 +237,7 @@ namespace MH.SceneControllers
             MessageBroker.GetSubscriber<BattleEvents.RequestBeginBattle>()
                 .Subscribe(_ =>
                 {
-                    Debug.Log("Begin Battle");
+                    ActorManager.OwnerActor.PostureController.Warp(this.playerWarpPoint.position);
                 })
                 .AddTo(ct);
 
