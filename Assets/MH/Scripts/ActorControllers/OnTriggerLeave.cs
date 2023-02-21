@@ -19,6 +19,10 @@ namespace MH.ActorControllers
             actor.GetAsyncTriggerStayTrigger()
                 .Subscribe(x =>
                 {
+                    if (x.CompareTag("ActorInteract"))
+                    {
+                        return;
+                    }
                     var r = x.attachedRigidbody;
                     Assert.IsNotNull(r, $"{x.name}に{typeof(Rigidbody)}がありません");
 

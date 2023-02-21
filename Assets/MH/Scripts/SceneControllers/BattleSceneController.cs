@@ -231,6 +231,13 @@ namespace MH.SceneControllers
                 })
                 .AddTo(ct);
 
+            MessageBroker.GetSubscriber<BattleEvents.RequestBeginBattle>()
+                .Subscribe(_ =>
+                {
+                    Debug.Log("Begin Battle");
+                })
+                .AddTo(ct);
+
             await this.OnDestroyAsync();
 
             if (!isApplicationQuit)

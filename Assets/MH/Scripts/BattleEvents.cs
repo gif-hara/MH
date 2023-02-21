@@ -24,12 +24,20 @@ namespace MH
         }
 
         /// <summary>
+        /// バトルの開始をリクエストするメッセージ
+        /// </summary>
+        public sealed class RequestBeginBattle : Message<RequestBeginBattle>
+        {
+        }
+
+        /// <summary>
         /// イベントを登録する
         /// </summary>
         public static void RegisterEvents(BuiltinContainerBuilder builder)
         {
             builder.AddMessageBroker<RequestJudgeResult>();
             builder.AddMessageBroker<JudgedResult>();
+            builder.AddMessageBroker<RequestBeginBattle>();
         }
     }
 }

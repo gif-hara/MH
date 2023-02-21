@@ -75,6 +75,11 @@ namespace MH.ActorControllers
             if (this.CompareTag("Player"))
             {
                 this.CreateActorController<OnTriggerLeave>(spawnData);
+
+                if (this.NetworkController.IsOwner)
+                {
+                    this.CreateActorController<OnTriggerBeginInteract>(spawnData);
+                }
             }
 
             foreach (var prefab in spawnData.extensionPrefabs)
