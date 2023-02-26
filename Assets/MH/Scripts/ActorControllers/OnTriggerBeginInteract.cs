@@ -18,7 +18,7 @@ namespace MH.ActorControllers
                 {
                     foreach (var actorInteractable in x.GetComponents<IActorInteractable>())
                     {
-                        actorInteractable.BeginInteractAsync();
+                        actorInteractable.BeginInteractAsync(actor);
                     }
                 })
                 .AddTo(ct);
@@ -27,7 +27,7 @@ namespace MH.ActorControllers
                 {
                     foreach (var actorInteractable in x.GetComponents<IActorInteractable>())
                     {
-                        actorInteractable.EndInteract();
+                        actorInteractable.EndInteract(actor);
                     }
                 })
                 .AddTo(ct);

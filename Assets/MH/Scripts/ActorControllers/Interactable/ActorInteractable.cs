@@ -12,28 +12,28 @@ namespace MH.ActorControllers.InteractableSystem
     {
         private CancellationTokenSource interactTokenSource;
 
-        public UniTaskVoid BeginInteractAsync()
+        public UniTaskVoid BeginInteractAsync(Actor actor)
         {
             Assert.IsNull(this.interactTokenSource, "Already Interacted.");
             this.interactTokenSource = new CancellationTokenSource();
-            return this.OnBeginInteractAsync(this.interactTokenSource.Token);
+            return this.OnBeginInteractAsync(actor, this.interactTokenSource.Token);
         }
 
-        public void EndInteract()
+        public void EndInteract(Actor actor)
         {
             Assert.IsNotNull(this.interactTokenSource, "Not Interacting");
-            this.OnEndInteract();
+            this.OnEndInteract(actor);
             this.interactTokenSource.Cancel();
             this.interactTokenSource.Dispose();
             this.interactTokenSource = null;
         }
 
-        protected virtual UniTaskVoid OnBeginInteractAsync(CancellationToken cancellationToken)
+        protected virtual UniTaskVoid OnBeginInteractAsync(Actor actor, CancellationToken cancellationToken)
         {
             return new UniTaskVoid();
         }
 
-        protected virtual void OnEndInteract()
+        protected virtual void OnEndInteract(Actor actor)
         {
         }
     }

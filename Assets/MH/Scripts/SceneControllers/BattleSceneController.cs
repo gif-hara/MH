@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 using Cysharp.Threading.Tasks.Triggers;
@@ -63,19 +64,76 @@ namespace MH.SceneControllers
                 })
                 .AddTo(ct);
 
+            CancellationTokenSource startBattleCancellationTokenSource = null;
+
+            void SetupPlayerActor(Actor player)
+            {
+                player.PostureController.Warp(this.playerSpawnPoint.position);
+                MessageBroker.GetSubscriber<Actor, ActorEvents.ChangedIsReadyBattle>()
+                    .Subscribe(player, x =>
+                    {
+                        if (!NetworkManager.Singleton.IsHost)
+                        {
+                            return;
+                        }
+
+                        if (x.IsReadyBattle)
+                        {
+                            foreach (var p in ActorManager.Players)
+                            {
+                                if (!p.NetworkController.NetworkBehaviour.NetworkIsReadyBattle)
+                                {
+                                    return;
+                                }
+                            }
+
+                            startBattleCancellationTokenSource?.Cancel();
+                            startBattleCancellationTokenSource?.Dispose();
+                            startBattleCancellationTokenSource = new CancellationTokenSource();
+                            StartBattleAsync(startBattleCancellationTokenSource.Token).Forget();
+                        }
+                        else
+                        {
+                            startBattleCancellationTokenSource?.Cancel();
+                            startBattleCancellationTokenSource?.Dispose();
+                            startBattleCancellationTokenSource = null;
+                        }
+                    })
+                    .AddTo(ct);
+            }
+
+            async UniTaskVoid StartBattleAsync(CancellationToken token)
+            {
+                try
+                {
+                    Debug.Log("Wait StartBattle");
+                    await UniTask.Delay(TimeSpan.FromSeconds(3.0f), cancellationToken: token);
+                    ActorManager.OwnerActor.NetworkController.NetworkBehaviour.RequestWarp(this.playerWarpPoint.position);
+                }
+                catch (OperationCanceledException)
+                {
+                    Debug.Log("Cancel StartBattle");
+                }
+                catch (Exception e)
+                {
+                    Debug.LogException(e);
+                    throw;
+                }
+            }
+
             MessageBroker.GetSubscriber<ActorEvents.AddedActor>()
                 .Subscribe(x =>
                 {
                     if (x.Actor.StatusController.BaseStatus.actorType == Define.ActorType.Player)
                     {
-                        x.Actor.PostureController.Warp(this.playerSpawnPoint.position);
+                        SetupPlayerActor(x.Actor);
                     }
                 })
                 .AddTo(ct);
 
             foreach (var player in ActorManager.Players)
             {
-                player.PostureController.Warp(this.playerSpawnPoint.position);
+                SetupPlayerActor(player);
             }
 
             if (!MultiPlayManager.IsConnecting)
@@ -241,11 +299,14 @@ namespace MH.SceneControllers
                 })
                 .AddTo(ct);
 
-            await this.OnDestroyAsync();
-
-            if (!isApplicationQuit)
+            // 終了処理
             {
-                ProjectilePoolManager.EndSystem();
+                await this.OnDestroyAsync();
+
+                if (!isApplicationQuit)
+                {
+                    ProjectilePoolManager.EndSystem();
+                }
             }
         }
     }

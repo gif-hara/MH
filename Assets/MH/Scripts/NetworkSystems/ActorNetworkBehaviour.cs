@@ -23,6 +23,8 @@ namespace MH.NetworkSystems
 
         private readonly NetworkVariable<bool> networkGuarding = new();
 
+        private readonly NetworkVariable<bool> networkIsReadyBattle = new();
+
         private NetworkList<PartDataNetworkVariable> networkPartDataList;
 
         protected Actor actor;
@@ -30,6 +32,8 @@ namespace MH.NetworkSystems
         public Vector3 NetworkPosition => this.networkPosition.Value;
 
         public float NetworkRotation => this.networkRotationY.Value;
+
+        public bool NetworkIsReadyBattle => this.networkIsReadyBattle.Value;
 
         void Awake()
         {
@@ -63,6 +67,13 @@ namespace MH.NetworkSystems
             this.networkHitPoint.OnValueChanged += this.OnChangedHitPoint;
             this.networkPartDataList.OnListChanged += this.OnChangedPartDataList;
             this.networkGuarding.OnValueChanged += this.OnChangedGuarding;
+            this.networkIsReadyBattle.OnValueChanged += this.OnChangedIsReadyBattle;
+        }
+
+        private void OnChangedIsReadyBattle(bool previousValue, bool newValue)
+        {
+            MessageBroker.GetPublisher<Actor, ActorEvents.ChangedIsReadyBattle>()
+                .Publish(this.actor, ActorEvents.ChangedIsReadyBattle.Get(newValue));
         }
 
         private void OnChangedPartDataList(NetworkListEvent<PartDataNetworkVariable> changeEvent)
@@ -113,6 +124,19 @@ namespace MH.NetworkSystems
         public void SyncHitPoint(float hitPoint)
         {
             this.SubmitSyncHitPointServerRpc(hitPoint);
+        }
+
+        public void SubmitIsReadyBattle(bool isReadyBattle)
+        {
+            this.SubmitIsReadyBattleServerRpc(isReadyBattle);
+        }
+
+        /// <summary>
+        /// ワープのリクエストを行う
+        /// </summary>
+        public void RequestWarp(Vector3 newPosition)
+        {
+            this.RequestWarpServerRpc(newPosition);
         }
 
         [ServerRpc]
@@ -186,6 +210,28 @@ namespace MH.NetworkSystems
         private void SubmitSyncHitPointServerRpc(float hitPoint, ServerRpcParams rpcParams = default)
         {
             this.networkHitPoint.Value = hitPoint;
+        }
+
+        [ServerRpc]
+        private void SubmitIsReadyBattleServerRpc(bool isReadyBattle, ServerRpcParams rpcParams = default)
+        {
+            this.networkIsReadyBattle.Value = isReadyBattle;
+        }
+
+        [ServerRpc]
+        private void RequestWarpServerRpc(Vector3 newPosition, ServerRpcParams rpcParams = default)
+        {
+            this.RequestWarpClientRpc(newPosition);
+        }
+
+        [ClientRpc]
+        private void RequestWarpClientRpc(Vector3 newPosition, ClientRpcParams rpcParams = default)
+        {
+            // TODO: 全てのActorを操作しちゃっているのよくない
+            foreach (var player in ActorManager.Players)
+            {
+                player.PostureController.Warp(newPosition);
+            }
         }
     }
 }

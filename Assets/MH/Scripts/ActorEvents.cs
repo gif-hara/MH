@@ -339,6 +339,17 @@ namespace MH
         }
 
         /// <summary>
+        /// バトル準備フラグが変更された際のメッセージ
+        /// </summary>
+        public sealed class ChangedIsReadyBattle : Message<ChangedIsReadyBattle, bool>
+        {
+            /// <summary>
+            /// 準備完了フラグ
+            /// </summary>
+            public bool IsReadyBattle => this.Param1;
+        }
+
+        /// <summary>
         /// イベントの登録を行う
         /// </summary>
         public static void RegisterEvents(BuiltinContainerBuilder builder)
@@ -376,6 +387,7 @@ namespace MH
             builder.AddMessageBroker<Actor, RequestEndRecovery>();
             builder.AddMessageBroker<Actor, BeginRecovery>();
             builder.AddMessageBroker<Actor, EndRecovery>();
+            builder.AddMessageBroker<Actor, ChangedIsReadyBattle>();
         }
     }
 }

@@ -7,8 +7,8 @@ namespace MH.ActorControllers.InteractableSystem
     /// </summary>
     public interface IActorInteractable
     {
-        UniTaskVoid BeginInteractAsync();
+        UniTaskVoid BeginInteractAsync(Actor actor);
 
-        void EndInteract();
+        void EndInteract(Actor actor);
     }
 }

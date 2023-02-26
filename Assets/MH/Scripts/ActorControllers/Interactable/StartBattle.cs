@@ -1,7 +1,5 @@
-using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 
 namespace MH.ActorControllers.InteractableSystem
 {
@@ -10,29 +8,22 @@ namespace MH.ActorControllers.InteractableSystem
     /// </summary>
     public sealed class StartBattle : ActorInteractable
     {
-        [SerializeField]
-        private float waitSeconds;
-
-        protected override async UniTaskVoid OnBeginInteractAsync(CancellationToken cancellationToken)
+        protected override UniTaskVoid OnBeginInteractAsync(Actor actor, CancellationToken cancellationToken)
         {
-            try
+            if (actor.NetworkController.IsOwner)
             {
-                Debug.Log("Wait StartBattle");
+                actor.NetworkController.NetworkBehaviour.SubmitIsReadyBattle(true);
+            }
 
-                await UniTask.Delay(TimeSpan.FromSeconds(this.waitSeconds), cancellationToken: cancellationToken);
-                MessageBroker.GetPublisher<BattleEvents.RequestBeginBattle>()
-                    .Publish(BattleEvents.RequestBeginBattle.Get());
-            }
-            catch (OperationCanceledException)
-            {
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-                throw;
-            }
+            return new UniTaskVoid();
         }
 
-
+        protected override void OnEndInteract(Actor actor)
+        {
+            if (actor.NetworkController.IsOwner)
+            {
+                actor.NetworkController.NetworkBehaviour.SubmitIsReadyBattle(false);
+            }
+        }
     }
 }
